@@ -1,5 +1,7 @@
 package com.dzebsu.acctrip;
 
+import com.dzebsu.acctrip.db.EventAccDbHelper;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +14,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		EventAccDbHelper dbHelper = new EventAccDbHelper(this);
+		dbHelper.getReadableDatabase();
 	}
 
 	@Override
