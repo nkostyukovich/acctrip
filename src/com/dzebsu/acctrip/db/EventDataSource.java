@@ -68,15 +68,20 @@ public class EventDataSource {
 	}
 
 	public List<Event> getEventList() {
-		List<Event> result = new ArrayList<Event>();
-		Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Event._ID + " DESC");
-		c.moveToFirst();
-		while (!c.isAfterLast()) {
-			result.add(ConvertUtils.cursorToEvent(c));
-			c.moveToNext();
+		open();
+		try {
+			List<Event> result = new ArrayList<Event>();
+			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Event._ID + " DESC");
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				result.add(ConvertUtils.cursorToEvent(c));
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
 		}
-		c.close();
-		return result;
 	}
 
 }
