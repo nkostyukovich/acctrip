@@ -9,6 +9,10 @@ public class Event {
 	public Event() {
 	}
 	
+	public Event(long id) {
+		this.id = id;
+	}
+
 	public Event(long id, String name, String desc) {
 		this.id = id;
 		this.name = name;

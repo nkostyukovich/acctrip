@@ -7,11 +7,15 @@
     <string name="new_event_hint">Add new event</string>
     <string name="event_list">List of events</string>
     <string name="title_activity_edit_event">Edit Event</string>
-    
     <string name="lbl_event_name">Event Name</string>
     <string name="lbl_event_desc">Event Description</string>
-    
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="new_operation">+</string>
+    <string name="operation_list">List of operations</string>
+    
+    
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
 
 </resources>

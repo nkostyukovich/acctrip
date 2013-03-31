@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.dzebsu.acctrip.db.EventDataSource;
+import com.dzebsu.acctrip.db.datasources.EventDataSource;
 
 public class EditEventActivity extends Activity {
 
