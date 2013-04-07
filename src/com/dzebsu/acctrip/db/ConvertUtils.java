@@ -22,6 +22,25 @@ public class ConvertUtils {
         return new Event(id, name, desc);
 	}
 
+	public static Category cursorToCategory(Cursor c) {
+        long id = c.getLong(c.getColumnIndex(EventAccContract.Category._ID));
+        String name = c.getString(c.getColumnIndex(EventAccContract.Event.NAME));
+        return new Category(id, name);
+	}
+
+	public static Currency cursorToCurrency(Cursor c) {
+        long id = c.getLong(c.getColumnIndex(EventAccContract.Currency._ID));
+        String name = c.getString(c.getColumnIndex(EventAccContract.Currency.NAME));
+        String code = c.getString(c.getColumnIndex(EventAccContract.Currency.CODE));        
+        return new Currency(id, name, code);
+	}
+
+	public static Place cursorToPlace(Cursor c) {
+        long id = c.getLong(c.getColumnIndex(EventAccContract.Place._ID));
+        String name = c.getString(c.getColumnIndex(EventAccContract.Place.NAME));
+        return new Place(id, name);
+	}
+
 	public static Operation cursorToOperation(Cursor c) {
 		Operation op = new Operation();
         op.setId(c.getLong(c.getColumnIndex(EventAccContract.Operation._ID)));

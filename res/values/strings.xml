@@ -13,9 +13,25 @@
     <string name="cancel">Cancel</string>
     <string name="new_operation">+</string>
     <string name="operation_list">List of operations</string>
-    
-    
     <string name="income">Income</string>
     <string name="expense">Expense</string>
 
+    <string name="title_activity_dictionaries">DictionariesActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="title_activity_place_list">PlaceListActivity</string>    
+    <string name="title_activity_dictionary">DictionaryActivity</string>
+    
+    <string name="lbl_tab_category">Categories</string>
+    <string name="lbl_tab_currency">Currencies</string>
+    <string name="lbl_tab_place">Places</string>
+    
+    <string name="open_dictionaries">Dictionaries</string>
+    
+    <string name="add_category">New Category</string>    
+    <string name="add_currency">New Currency</string>
+    <string name="add_place">New Place</string>
+    
 </resources>
