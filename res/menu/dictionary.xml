@@ -1,9 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/addCategoryMenu"
+        android:orderInCategory="10"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
-
+        android:title="@string/add_category"/>
+    <item
+        android:id="@+id/addCurrencyMenu"
+        android:orderInCategory="20"
+        android:showAsAction="never"
+        android:title="@string/add_currency"/>
+    <item
+        android:id="@+id/addPlaceMenu"
+        android:orderInCategory="30"
+        android:showAsAction="never"
+        android:title="@string/add_place"/>
+    
 </menu>

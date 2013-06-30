@@ -34,4 +34,9 @@
     <string name="add_currency">New Currency</string>
     <string name="add_place">New Place</string>
     
+    <string name="category_name">Category Name</string>    
+    <string name="currency_name">Currency Name</string>
+    <string name="currency_code">Currency Code</string>
+    <string name="place_name">Place Name</string>
+
 </resources>

@@ -9,17 +9,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
-public class DictionaryActivity extends FragmentActivity implements TabHost.OnTabChangeListener {
+import com.dzebsu.acctrip.dialogs.CategoryDialogFragment;
+import com.dzebsu.acctrip.dialogs.CategoryDialogFragment.CategoryDialogListener;
+
+public class DictionaryActivity extends FragmentActivity implements TabHost.OnTabChangeListener, CategoryDialogListener {
  
 	private TabHost tabHost;
 	private Map<String, TabInfo> mapTabInfo;
 	private TabInfo mLastTab = null;
 
 	private static final String TAG_CATEGORIES = "TagCat";
+	private static final String TAG_CATEGORIES_DLG = "TagCatDlg";
 	private static final String TAG_CURRENCIES = "TagCur";
 	private static final String TAG_PLACES = "TagPla";
 
@@ -72,7 +77,6 @@ public class DictionaryActivity extends FragmentActivity implements TabHost.OnTa
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.dictionary, menu);
 		return true;
 	}
@@ -139,5 +143,20 @@ public class DictionaryActivity extends FragmentActivity implements TabHost.OnTa
 			this.getSupportFragmentManager().executePendingTransactions();
 		}
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.addCategoryMenu:
+	        	CategoryDialogFragment dlg = new CategoryDialogFragment();
+	        	dlg.show(getSupportFragmentManager(), TAG_CATEGORIES_DLG);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 
+	@Override
+	public void onDialogPositiveClick() {
+	}
 }
