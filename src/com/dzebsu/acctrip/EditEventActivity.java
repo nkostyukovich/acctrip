@@ -56,6 +56,9 @@ public class EditEventActivity extends Activity {
 		dataSource.insert(name, desc);
 		finish();
 	}
-
+	//finishes activity when cancel clicked
+	public void onCancelBtn(View view){
+		finish();
+	}
 
 }
