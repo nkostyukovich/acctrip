@@ -23,6 +23,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView name=null;
 		public TextView desc=null;
 		public TextView operationsCnt=null;
+		public TextView eventId=null;
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -34,12 +35,15 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		      rowViewHolder.name = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.nameTextView);
 		      rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.descTextView);
 		      rowViewHolder.operationsCnt = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.opsCountTextView);
+		      rowViewHolder.eventId = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.eventIdTextView);
 		      rowView.setTag(rowViewHolder);
 		    }
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
 		holder.desc.setText(objects.get(position).getDesc());
-		holder.operationsCnt.setText("Nope haha");
+		holder.operationsCnt.setText("Operations conter");
+		holder.eventId.setText(((Long)objects.get(position).getId()).toString());
+		
 /*		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 View row = inflater.inflate(com.dzebsu.acctrip.R.layout.row_event_list, parent,false);
 		 RowViewHolder holder=(RowViewHolder) convertView.getTag();

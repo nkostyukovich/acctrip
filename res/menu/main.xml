@@ -5,5 +5,6 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/open_dictionaries"/>
+    <item android:id="@+id/delete_all_events_records" android:title="@string/delete_all_events_records" android:showAsAction="never"></item>
  
 </menu>

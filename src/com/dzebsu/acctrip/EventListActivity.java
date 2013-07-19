@@ -5,11 +5,16 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -18,7 +23,10 @@ import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
 
 public class EventListActivity extends ListActivity {
-
+	
+	//Anonymous class wanted this adapter inside itself
+	private ArrayAdapter<Event> adapterZ;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,11 +54,19 @@ public class EventListActivity extends ListActivity {
 	        case R.id.open_dictionaries:
 	            onOpenDictionaries(item.getActionView());
 	            return true;
+	        case R.id.delete_all_events_records:
+	        	onDeleteAllEventsRecords(item.getActionView());
+	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-
+	//956 event
+	public void onDeleteAllEventsRecords(View view) {
+		EventDataSource dataSource = new EventDataSource(this);
+		dataSource.deleteAllRecords(956);
+	}
+	
 	public void onNewEvent(View view) {
 		Intent intent = new Intent(this, EditEventActivity.class);
 		startActivity(intent);
@@ -66,13 +82,32 @@ public class EventListActivity extends ListActivity {
 		intent.putExtra("eventId", eventId);
 		startActivity(intent);
 	}
-
+	
 	private void fillEventList() {
 		EventDataSource dataSource = new EventDataSource(this);
 		List<Event> events = dataSource.getEventList();
-		ListAdapter adapter = new EventListViewAdapter(this,  events);
+		adapterZ= new EventListViewAdapter(this,  events);
+		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(android.R.id.list);
+		
 		listView.setAdapter(adapter);
+		
+		//add filter_Event_Edittext for events names
+	    EditText eventsFilter = (EditText) findViewById(R.id.filter_Event_EditText);
+	    eventsFilter.addTextChangedListener(new TextWatcher() {
+
+	        @Override
+	        public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+	            // When user changed the Text
+	        	EventListActivity.this.adapterZ.getFilter().filter(cs);
+	        }
+	        @Override
+	        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+	                int arg3) { }
+	        @Override
+	        public void afterTextChanged(Editable arg0) {}
+	    });
+	    //end
 	}
 
 	@Override

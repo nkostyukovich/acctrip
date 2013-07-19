@@ -10,6 +10,7 @@
     <string name="event_list">List of events</string>
     <string name="title_activity_edit_event">Edit Event</string>
     <string name="lbl_event_name">Event Name</string>
+    <string name="filter_event_name_hint">Enter event name</string>
     <string name="lbl_event_desc">Event Description</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -41,5 +42,6 @@
     <string name="currency_name">Currency Name</string>
     <string name="currency_code">Currency Code</string>
     <string name="place_name">Place Name</string>
+    <string name="delete_all_events_records">Delete all events</string>
 
 </resources>

@@ -43,7 +43,19 @@ public class EventDataSource {
 			close();
 		}
 	}
-
+//956 event
+	public void deleteAllRecords(int table){
+		open();
+		try{
+			switch(table){
+			case 956:database.execSQL("delete from "+EventAccContract.Event.TABLE_NAME);
+			}
+		}finally{
+			close();
+		}
+	}
+	
+	
 	public Event update(Long id, String name, String desc) {
 		open();
 		try {

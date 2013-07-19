@@ -15,10 +15,11 @@
 
     <TextView
         android:id="@+id/descTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/nameTextView"
+        android:layout_toLeftOf="@+id/eventIdTextView"
         android:text="353252352363467547654786589679624236346346346" />
 
     <TextView
@@ -29,6 +30,16 @@
         android:layout_alignBottom="@+id/nameTextView"
         android:layout_alignParentRight="true"
         android:text="@string/ops_text_view"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/eventIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/descTextView"
+        android:layout_alignParentRight="true"
+        android:maxLength="4"
+        android:text="9999"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
