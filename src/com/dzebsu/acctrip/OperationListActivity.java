@@ -40,7 +40,7 @@ public class OperationListActivity extends ListActivity {
 	private void fillOperationList() {
 		EventDataSource dataSource = new EventDataSource(this);
 		List<Event> events = dataSource.getEventList();
-		ListAdapter adapter = new EventListViewAdapter(this, android.R.layout.simple_list_item_1, events);
+		ListAdapter adapter = new EventListViewAdapter(this,  events);
 		ListView listView = (ListView) findViewById(android.R.id.list);
 		listView.setAdapter(adapter);		
 	}
