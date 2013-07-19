@@ -1,5 +1,6 @@
 package com.dzebsu.acctrip.adapters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -7,16 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.dzebsu.acctrip.models.Event;
 
 public class EventListViewAdapter extends ArrayAdapter<Event> {
-	private final List<Event> objects;
+	private List<Event> objects;
+	private List<Event> objectsInit;
 	private final Context context;
 	public EventListViewAdapter(Context context, List<Event> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_event_list, objects);
-		this.objects=objects;
+		this.objectsInit=objects;
+		this.objects=objectsInit;
 		this.context=context;
 	}
 	static class RowViewHolder{
@@ -25,6 +29,10 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView operationsCnt=null;
 		public TextView eventId=null;
 	}
+	@Override
+	public int getCount() {
+		return objects.size();
+	};
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
@@ -41,8 +49,8 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
 		holder.desc.setText(objects.get(position).getDesc());
-		holder.operationsCnt.setText("Operations conter");
-		holder.eventId.setText(((Long)objects.get(position).getId()).toString());
+		holder.operationsCnt.setText(com.dzebsu.acctrip.R.string.ops_text_view+"25");
+		holder.eventId.setText(com.dzebsu.acctrip.R.string.id_text_view+((Long)objects.get(position).getId()).toString());
 		
 /*		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 View row = inflater.inflate(com.dzebsu.acctrip.R.layout.row_event_list, parent,false);
@@ -50,4 +58,38 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 */		 
 		return rowView;
 	}
+	 @Override
+	    public Filter getFilter() {
+	        // TODO Auto-generated method stub
+	        return new EventFilter();
+	    }
+	 //custom filter
+	 private class EventFilter extends Filter {
+
+	        @Override
+	        protected FilterResults performFiltering(CharSequence constraint){
+	            FilterResults filter = new FilterResults();
+	            ArrayList<Event> filtered = new ArrayList<Event>();
+	            objects=objectsInit;
+	            if (constraint != null) {
+	                    for (Event g : objects) {
+	                        if (g.getName()
+	                                .toLowerCase()
+	                                .contains(constraint.toString().toLowerCase()))
+	                            filtered.add(g);
+	                    }
+	                }
+	                filter.values = filtered;
+	            
+	            return filter;
+	        }
+
+	        @Override
+	        protected void publishResults(CharSequence constraint,
+	        		FilterResults results) {
+	            objects = (ArrayList<Event>) results.values;
+	            notifyDataSetChanged();
+	        }
+
+	    }
 }

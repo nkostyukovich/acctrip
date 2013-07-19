@@ -38,6 +38,24 @@ public class EventListActivity extends ListActivity {
 				onSelectEvent(id);
 			}
 		});
+		
+		//add filter_Event_Edittext for events names
+	    EditText eventsFilter = (EditText) findViewById(R.id.filter_Event_EditText);
+	    eventsFilter.addTextChangedListener(new TextWatcher() {
+
+	        @Override
+	        public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+	            // When user changed the Text
+	        	EventListActivity.this.adapterZ.getFilter().filter(cs);
+	        }
+	        @Override
+	        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+	                int arg3) { }
+	        @Override
+	        public void afterTextChanged(Editable arg0) {}
+	    });
+	    //end
+	    
 	}
 
 	@Override
@@ -76,7 +94,7 @@ public class EventListActivity extends ListActivity {
 		Intent intent = new Intent(this, DictionaryActivity.class);
 		startActivity(intent);		
 	}
-
+//while filtering, id!=position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public void onSelectEvent(long eventId) {
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("eventId", eventId);
@@ -89,25 +107,11 @@ public class EventListActivity extends ListActivity {
 		adapterZ= new EventListViewAdapter(this,  events);
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(android.R.id.list);
-		
+		//trigger filter to it being applied on resume
+		EventListActivity.this.adapterZ.getFilter().filter(((EditText) findViewById(R.id.filter_Event_EditText)).getText());
 		listView.setAdapter(adapter);
 		
-		//add filter_Event_Edittext for events names
-	    EditText eventsFilter = (EditText) findViewById(R.id.filter_Event_EditText);
-	    eventsFilter.addTextChangedListener(new TextWatcher() {
-
-	        @Override
-	        public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-	            // When user changed the Text
-	        	EventListActivity.this.adapterZ.getFilter().filter(cs);
-	        }
-	        @Override
-	        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-	                int arg3) { }
-	        @Override
-	        public void afterTextChanged(Editable arg0) {}
-	    });
-	    //end
+		
 	}
 
 	@Override
@@ -119,6 +123,6 @@ public class EventListActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		fillEventList();
+//think itn't needed here		fillEventList();
 	}
 }

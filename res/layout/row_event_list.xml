@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="32523523523"
+        android:text="Name "
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -38,8 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/descTextView"
         android:layout_alignParentRight="true"
-        android:maxLength="4"
-        android:text="9999"
+        android:maxLength="8"
+        android:text="id: "
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
