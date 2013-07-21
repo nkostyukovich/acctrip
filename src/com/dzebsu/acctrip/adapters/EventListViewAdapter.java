@@ -29,6 +29,9 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView operationsCnt=null;
 		public TextView eventId=null;
 	}
+	public Event getEventByIdInList(int id){
+		return objects.get(id);
+	}
 	@Override
 	public int getCount() {
 		return objects.size();

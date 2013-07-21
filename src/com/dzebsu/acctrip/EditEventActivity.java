@@ -19,6 +19,8 @@ public class EditEventActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
 		// Show the Up button in the action bar.
+		String name=getIntent().getStringExtra("eventName");
+		((EditText) this.findViewById(R.id.editEventName)).setText(name);
 		setupActionBar();
 	}
 

@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:queryHint="@string/filter_event_name_hint"
-            android:iconifiedByDefault="false" >
+            android:iconifiedByDefault="false"
+             >
             
         </SearchView>
 
@@ -23,13 +24,16 @@
             android:layout_height="wrap_content"
             android:onClick="onNewEvent"
             android:text="@string/new_event" />
+         
+        
 
     </LinearLayout>
         
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+       
     </ListView>
     
 </LinearLayout>

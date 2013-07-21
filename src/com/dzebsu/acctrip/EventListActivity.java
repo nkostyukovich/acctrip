@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,10 +23,10 @@ import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
 
-public class EventListActivity extends ListActivity {
+public class EventListActivity extends Activity {
 	
 	//Anonymous class wanted this adapter inside itself
-	private ArrayAdapter<Event> adapterZ;
+	private EventListViewAdapter adapterZ;
 	//for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 	private Parcelable mListState = null;
@@ -39,11 +40,12 @@ public class EventListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_list);
+	//	getListView().addHeaderView(new SearchView(this));
 		fillEventList();
-		ListView listView = (ListView) findViewById(android.R.id.list);
+		ListView listView = (ListView) findViewById(R.id.event_list);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onSelectEvent(id);
+				onSelectEvent(adapterZ.getEventByIdInList((int)id).getId());
 			}
 		});
 		
@@ -107,6 +109,8 @@ public class EventListActivity extends ListActivity {
 	
 	public void onNewEvent(View view) {
 		Intent intent = new Intent(this, EditEventActivity.class);
+		String name=((SearchView) findViewById(R.id.event_SearchView)).getQuery().toString();
+		intent.putExtra("eventName", name);
 		startActivity(intent);
 	}
 	
@@ -114,7 +118,7 @@ public class EventListActivity extends ListActivity {
 		Intent intent = new Intent(this, DictionaryActivity.class);
 		startActivity(intent);		
 	}
-//while filtering, id!=position!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	public void onSelectEvent(long eventId) {
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("eventId", eventId);
@@ -126,7 +130,7 @@ public class EventListActivity extends ListActivity {
 		List<Event> events = dataSource.getEventList();
 		adapterZ= new EventListViewAdapter(this,  events);
 		ListAdapter adapter = adapterZ;
-		ListView listView = (ListView) findViewById(android.R.id.list);
+		ListView listView = (ListView) findViewById(R.id.event_list);
 		//trigger filter to it being applied on resume
 		EventListActivity.this.adapterZ.getFilter().filter(((SearchView) findViewById(R.id.event_SearchView)).getQuery());
 		listView.setAdapter(adapter);
@@ -147,14 +151,16 @@ public class EventListActivity extends ListActivity {
 //think itn't needed here
 		fillEventList();
 		if (mListState != null)
-			((ListView) findViewById(android.R.id.list)).onRestoreInstanceState(mListState);
+			((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
 	    mListState = null;
 	}
+	
+	
 	//scroll position saving
 	@Override
 	protected void onSaveInstanceState(Bundle state) {
 	    super.onSaveInstanceState(state);
-	    mListState = ((ListView) findViewById(android.R.id.list)).onSaveInstanceState();
+	    mListState = ((ListView) findViewById(R.id.event_list)).onSaveInstanceState();
 	    state.putParcelable(LIST_STATE, mListState);
 	}
 }

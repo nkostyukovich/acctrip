@@ -25,25 +25,33 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080000;
-        public static final int action_settings=0x7f08000c;
-        public static final int addCategoryMenu=0x7f08000d;
-        public static final int addCurrencyMenu=0x7f08000e;
-        public static final int addPlaceMenu=0x7f08000f;
-        public static final int categoryList=0x7f080005;
-        public static final int categoryNameEdit=0x7f080004;
-        public static final int create_1000_records=0x7f080012;
-        public static final int currencyList=0x7f080006;
-        public static final int descTextView=0x7f080009;
+        public static final int action_settings=0x7f080014;
+        public static final int addCategoryMenu=0x7f080015;
+        public static final int addCurrencyMenu=0x7f080016;
+        public static final int addPlaceMenu=0x7f080017;
+        public static final int categoryList=0x7f080007;
+        public static final int categoryNameEdit=0x7f080006;
+        public static final int create_1000_records=0x7f08001a;
+        public static final int currencyList=0x7f080008;
+        public static final int descTextView=0x7f080011;
         public static final int editEventDesc=0x7f080002;
         public static final int editEventName=0x7f080001;
-        public static final int eventIdTextView=0x7f08000a;
+        public static final int eventIdTextView=0x7f080012;
         public static final int event_SearchView=0x7f080003;
-        public static final int nameTextView=0x7f080008;
-        public static final int open_dictionaries=0x7f080010;
-        public static final int opsCountTextView=0x7f08000b;
-        public static final int placeList=0x7f080007;
+        public static final int event_list=0x7f080004;
+        public static final int nameTextView=0x7f080010;
+        public static final int op_all_expenses=0x7f08000b;
+        public static final int op_desc_tv=0x7f08000c;
+        public static final int op_event_id=0x7f08000d;
+        public static final int op_list=0x7f080005;
+        public static final int op_name_tv=0x7f08000a;
+        public static final int op_total_ops=0x7f08000e;
+        public static final int open_dictionaries=0x7f080018;
+        public static final int opsCountTextView=0x7f080013;
+        public static final int placeList=0x7f080009;
         public static final int realtabcontent=0x01010000;
-        public static final int recreate_all_tables=0x7f080011;
+        public static final int recreate_all_tables=0x7f080019;
+        public static final int uni_op_searchView=0x7f08000f;
     }
     public static final class layout {
         public static final int activity_dictionary=0x7f030000;
@@ -54,7 +62,8 @@ public final class R {
         public static final int fragment_category_list=0x7f030005;
         public static final int fragment_currency_list=0x7f030006;
         public static final int fragment_place_list=0x7f030007;
-        public static final int row_event_list=0x7f030008;
+        public static final int operations_header=0x7f030008;
+        public static final int row_event_list=0x7f030009;
     }
     public static final class menu {
         public static final int category=0x7f070000;
@@ -91,6 +100,12 @@ public final class R {
         public static final int new_event=0x7f050002;
         public static final int new_event_hint=0x7f050003;
         public static final int new_operation=0x7f05000d;
+        public static final int op_all_expenses=0x7f05002c;
+        public static final int op_desc_tv=0x7f050028;
+        public static final int op_event_id=0x7f050029;
+        public static final int op_filer_field=0x7f05002b;
+        public static final int op_name_tv=0x7f050027;
+        public static final int op_total_ops=0x7f05002a;
         public static final int open_dictionaries=0x7f05001d;
         public static final int operation_list=0x7f050010;
         public static final int ops_text_view=0x7f05000e;

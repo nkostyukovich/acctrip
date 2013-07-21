@@ -48,5 +48,10 @@
     <string name="erase_all_data">Erase all data</string>
     <string name="create_1000_records">Create 1000 records</string>
     
-
+    <string name="op_name_tv">Name</string>
+    <string name="op_desc_tv">Description</string>
+    <string name="op_event_id">Event id: </string>
+	<string name="op_total_ops">Total operations: </string>
+	<string name="op_filer_field">Start typing here.. </string>
+	<string name="op_all_expenses">Expenses: </string>
 </resources>
