@@ -69,5 +69,8 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
-
+	public void reCreateTable(SQLiteDatabase db,String table) {
+		db.execSQL("DROP TABLE IF EXISTS "+table);
+		onCreate(db);
+	}
 }

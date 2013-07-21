@@ -44,15 +44,8 @@ public class EventDataSource {
 		}
 	}
 //956 event
-	public void deleteAllRecords(int table){
-		open();
-		try{
-			switch(table){
-			case 956:database.execSQL("delete from "+EventAccContract.Event.TABLE_NAME);
-			}
-		}finally{
-			close();
-		}
+	public void reCreateTable(){
+		dbHelper.reCreateTable(database, EventAccContract.Event.TABLE_NAME);
 	}
 	
 	
