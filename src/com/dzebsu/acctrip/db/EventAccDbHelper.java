@@ -69,8 +69,12 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
-	public void reCreateTable(SQLiteDatabase db,String table) {
-		db.execSQL("DROP TABLE IF EXISTS "+table);
+	public void reCreateAllTables(SQLiteDatabase db) {
+		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Event.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Category.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Currency.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Place.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Operation.TABLE_NAME);
 		onCreate(db);
 	}
 }

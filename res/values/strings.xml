@@ -45,6 +45,6 @@
     <string name="currency_name">Currency Name</string>
     <string name="currency_code">Currency Code</string>
     <string name="place_name">Place Name</string>
-    <string name="delete_all_events_records">Delete all events</string>
+    <string name="erase_all_data">Erase all data</string>
 
 </resources>

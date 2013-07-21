@@ -4,21 +4,20 @@ import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
+import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
 
@@ -40,20 +39,21 @@ public class EventListActivity extends ListActivity {
 		});
 		
 		//add filter_Event_Edittext for events names
-	    EditText eventsFilter = (EditText) findViewById(R.id.filter_Event_EditText);
-	    eventsFilter.addTextChangedListener(new TextWatcher() {
-
-	        @Override
-	        public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-	            // When user changed the Text
-	        	EventListActivity.this.adapterZ.getFilter().filter(cs);
-	        }
-	        @Override
-	        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-	                int arg3) { }
-	        @Override
-	        public void afterTextChanged(Editable arg0) {}
-	    });
+	    SearchView eventsFilter = (SearchView) findViewById(R.id.event_SearchView);
+	    eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				EventListActivity.this.adapterZ.getFilter().filter(newText);
+				return true;
+			}
+		});
 	    //end
 	    
 	}
@@ -72,17 +72,19 @@ public class EventListActivity extends ListActivity {
 	        case R.id.open_dictionaries:
 	            onOpenDictionaries(item.getActionView());
 	            return true;
-	        case R.id.delete_all_events_records:
-	        	onDeleteAllEventsRecords(item.getActionView());
+	        case R.id.recreate_all_tables:
+	        	reCreateAllTables(item.getActionView());
 	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
 	//956 event
-	public void onDeleteAllEventsRecords(View view) {
-		EventDataSource dataSource = new EventDataSource(this);
-		dataSource.deleteAllRecords(956);
+	public void reCreateAllTables(View view) {
+		
+		EventAccDbHelper dbHelper=new EventAccDbHelper(this);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		dbHelper.reCreateAllTables(db);
 	}
 	
 	public void onNewEvent(View view) {
@@ -108,7 +110,7 @@ public class EventListActivity extends ListActivity {
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(android.R.id.list);
 		//trigger filter to it being applied on resume
-		EventListActivity.this.adapterZ.getFilter().filter(((EditText) findViewById(R.id.filter_Event_EditText)).getText());
+		EventListActivity.this.adapterZ.getFilter().filter(((SearchView) findViewById(R.id.event_SearchView)).getQuery());
 		listView.setAdapter(adapter);
 		
 		

@@ -8,16 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <EditText
-            android:id="@+id/filter_Event_EditText"
+<SearchView
+            android:id="@+id/event_SearchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/filter_event_name_hint"
-            android:maxLines="1" >
-
-        </EditText>
+            android:queryHint="@string/filter_event_name_hint"
+            android:iconifiedByDefault="false" >
+            
+        </SearchView>
 
         <Button
             android:layout_width="wrap_content"

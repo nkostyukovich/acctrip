@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.dzebsu.acctrip.models.Category;
@@ -57,9 +58,50 @@ public class ConvertUtils {
         return op;
 	}
 	
+	public static ContentValues getEventContent(String name, String desc){
+		ContentValues values = new ContentValues();
+		values.put(EventAccContract.Event.NAME, name);
+		values.put(EventAccContract.Event.DESC, desc);
+		return values;
+	}
+	public static ContentValues getCategoryContent(String name){
+		ContentValues values = new ContentValues();
+		values.put(EventAccContract.Category.NAME, name);
+		return values;
+	}
+	public static ContentValues getCurrencyContent(String name, String code){
+		ContentValues values = new ContentValues();
+		values.put(EventAccContract.Event.NAME, name);
+		values.put(EventAccContract.Event.DESC, code);
+		return values;
+	}
+	public static ContentValues getPlaceContent(String name, String desc){
+		ContentValues values = new ContentValues();
+		values.put(EventAccContract.Place.NAME, name);
+		return values;
+	}
+	
+	public static ContentValues getOperationContent(int categoryId, String desc, String type, double value, int currencyId, Date date, int eventId, int placeId){
+		ContentValues values = new ContentValues();
+		values.put(EventAccContract.Operation.CATEGORY_ID, categoryId);
+		values.put(EventAccContract.Operation.DESC, desc);
+		values.put(EventAccContract.Operation.TYPE, type);
+		values.put(EventAccContract.Operation.VALUE, value);
+		values.put(EventAccContract.Operation.CURRENCY_ID, currencyId);
+		values.put(EventAccContract.Operation.DATE, convertDateToLong(date));
+		values.put(EventAccContract.Operation.EVENT_ID, eventId);
+		values.put(EventAccContract.Operation.PLACE_ID, placeId);
+		return values;
+	}
+	
 	private static Date convertLongToDate(long value) {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTimeInMillis(value);
 		return cal.getTime();
+	}
+	private static long convertDateToLong(Date date) {
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTime(date);
+		return cal.getTime().getTime();
 	}
 }

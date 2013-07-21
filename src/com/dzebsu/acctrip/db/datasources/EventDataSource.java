@@ -43,10 +43,6 @@ public class EventDataSource {
 			close();
 		}
 	}
-//956 event
-	public void reCreateTable(){
-		dbHelper.reCreateTable(database, EventAccContract.Event.TABLE_NAME);
-	}
 	
 	
 	public Event update(Long id, String name, String desc) {

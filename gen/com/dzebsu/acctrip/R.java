@@ -32,17 +32,17 @@ public final class R {
         public static final int categoryList=0x7f080005;
         public static final int categoryNameEdit=0x7f080004;
         public static final int currencyList=0x7f080006;
-        public static final int delete_all_events_records=0x7f080011;
         public static final int descTextView=0x7f080009;
         public static final int editEventDesc=0x7f080002;
         public static final int editEventName=0x7f080001;
         public static final int eventIdTextView=0x7f08000a;
-        public static final int filter_Event_EditText=0x7f080003;
+        public static final int event_SearchView=0x7f080003;
         public static final int nameTextView=0x7f080008;
         public static final int open_dictionaries=0x7f080010;
         public static final int opsCountTextView=0x7f08000b;
         public static final int placeList=0x7f080007;
         public static final int realtabcontent=0x01010000;
+        public static final int recreate_all_tables=0x7f080011;
     }
     public static final class layout {
         public static final int activity_dictionary=0x7f030000;
@@ -73,7 +73,7 @@ public final class R {
         public static final int category_name=0x7f050021;
         public static final int currency_code=0x7f050023;
         public static final int currency_name=0x7f050022;
-        public static final int delete_all_events_records=0x7f050025;
+        public static final int erase_all_data=0x7f050025;
         public static final int event_description_hint=0x7f050005;
         public static final int event_list=0x7f050006;
         public static final int event_name_hint=0x7f050004;
