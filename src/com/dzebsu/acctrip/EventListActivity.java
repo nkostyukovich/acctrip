@@ -6,6 +6,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,15 @@ public class EventListActivity extends ListActivity {
 	
 	//Anonymous class wanted this adapter inside itself
 	private ArrayAdapter<Event> adapterZ;
+	//for restoring list scroll position
+	private static final String LIST_STATE = "listState";
+	private Parcelable mListState = null;
 	
+	@Override
+	protected void onRestoreInstanceState(Bundle state) {	    
+		super.onRestoreInstanceState(state);
+		mListState = state.getParcelable(LIST_STATE);
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,11 +84,20 @@ public class EventListActivity extends ListActivity {
 	        case R.id.recreate_all_tables:
 	        	reCreateAllTables(item.getActionView());
 	    		return true;
+	        case R.id.create_1000_records:
+	            create1000records(item.getActionView());
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	//956 event
+
+	public void create1000records(View view){
+		EventDataSource dataSource = new EventDataSource(this);
+		for(int i=0; i<1000; i++)
+			dataSource.insert("Record #"+Integer.toString(i), "Day before yesterday I saw a rabbit, and yesterday a deer, and today, you. I thought what I'd do was, I'd pretend I was one of those deaf-mutes.");
+	}
+	
 	public void reCreateAllTables(View view) {
 		
 		EventAccDbHelper dbHelper=new EventAccDbHelper(this);
@@ -125,6 +143,18 @@ public class EventListActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//think itn't needed here		fillEventList();
+		
+//think itn't needed here
+		fillEventList();
+		if (mListState != null)
+			((ListView) findViewById(android.R.id.list)).onRestoreInstanceState(mListState);
+	    mListState = null;
+	}
+	//scroll position saving
+	@Override
+	protected void onSaveInstanceState(Bundle state) {
+	    super.onSaveInstanceState(state);
+	    mListState = ((ListView) findViewById(android.R.id.list)).onSaveInstanceState();
+	    state.putParcelable(LIST_STATE, mListState);
 	}
 }

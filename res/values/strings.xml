@@ -46,5 +46,7 @@
     <string name="currency_code">Currency Code</string>
     <string name="place_name">Place Name</string>
     <string name="erase_all_data">Erase all data</string>
+    <string name="create_1000_records">Create 1000 records</string>
+    
 
 </resources>

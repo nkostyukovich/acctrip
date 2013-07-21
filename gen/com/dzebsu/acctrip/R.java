@@ -31,6 +31,7 @@ public final class R {
         public static final int addPlaceMenu=0x7f08000f;
         public static final int categoryList=0x7f080005;
         public static final int categoryNameEdit=0x7f080004;
+        public static final int create_1000_records=0x7f080012;
         public static final int currencyList=0x7f080006;
         public static final int descTextView=0x7f080009;
         public static final int editEventDesc=0x7f080002;
@@ -71,6 +72,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int cancel=0x7f05000c;
         public static final int category_name=0x7f050021;
+        public static final int create_1000_records=0x7f050026;
         public static final int currency_code=0x7f050023;
         public static final int currency_name=0x7f050022;
         public static final int erase_all_data=0x7f050025;
