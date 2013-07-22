@@ -49,7 +49,9 @@ public class ConvertUtils {
         op.setCategory(new Category(c.getLong(c.getColumnIndex(EventAccContract.Category.ALIAS_ID)), c.getString(c.getColumnIndex(EventAccContract.Category.ALIAS_NAME))));
         op.setType(OperationType.values()[c.getInt(c.getColumnIndex(EventAccContract.Operation.TYPE))]);
         op.setValue(c.getDouble(c.getColumnIndex(EventAccContract.Operation.VALUE)));
+        //TODO here! null?!
         op.setCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID)), null, c.getString(c.getColumnIndex(EventAccContract.Currency.ALIAS_CODE))));
+        
         op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
         op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID))));
         if (!c.isNull(c.getColumnIndex(EventAccContract.Place.ALIAS_ID))) {

@@ -45,7 +45,7 @@ public class EventListActivity extends Activity {
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onSelectEvent(adapterZ.getEventByIdInList((int)id).getId());
+				onSelectEvent(adapterZ.getEventByIdInList(id));
 			}
 		});
 		
@@ -149,7 +149,7 @@ public class EventListActivity extends Activity {
 		super.onResume();
 		
 //think itn't needed here
-		fillEventList();
+//		fillEventList();
 		if (mListState != null)
 			((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
 	    mListState = null;

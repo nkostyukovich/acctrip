@@ -60,15 +60,20 @@ public class EventDataSource {
 	}
 
 	public Event getEventById(long id) {
-		String whereBatch = EventAccContract.Event._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
-		Event event = null;
-		if (c.getCount() > 0) {
-			c.moveToFirst();
-			event = ConvertUtils.cursorToEvent(c);
+		open();
+		try{
+			String whereBatch = EventAccContract.Event._ID + " = ?";
+			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
+			Event event = null;
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				event = ConvertUtils.cursorToEvent(c);
+			}
+			c.close();
+			return event;
+		}finally{
+			close();
 		}
-		c.close();
-		return event;
 	}
 
 	public List<Event> getEventList() {

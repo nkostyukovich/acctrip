@@ -4,23 +4,24 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
+import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
+import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.models.Operation;
 
 public class OperationListActivity extends Activity {
 	
@@ -36,27 +37,36 @@ public class OperationListActivity extends Activity {
 
 	}
 	//Anonymous class wanted this adapter inside itself
-	private EventListViewAdapter adapterZ;
+	private OperationsListViewAdapter adapterZ;
 	//for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 	private Parcelable mListState = null;
 	
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle state) {	    
+		super.onRestoreInstanceState(state);
+		mListState = state.getParcelable(LIST_STATE);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Intent intent = getIntent();
+		eventId=getIntent().getLongExtra("eventId",0);
+		
 		 setContentView(R.layout.activity_operation_list);
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		listView.addHeaderView(createListHeader());
 		fillOperationList();
+		fillEventInfo(eventId);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//onSelectEvent(adapterZ.getEventByIdInList((int)id).getId());
+				//onSelectEvent(adapterZ.getOperationByIdInList(id).getId());
 			}
 		});
 		
 		//add filter_Event_Edittext for events names
-		/*    SearchView eventsFilter = (SearchView) findViewById(R.id.event_SearchView);
+	    SearchView eventsFilter = (SearchView) findViewById(R.id.uni_op_searchView);
 	    eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			
 			@Override
@@ -72,7 +82,7 @@ public class OperationListActivity extends Activity {
 			}
 		});
 	    //end
-		*/
+		
 	}
 
 	@Override
@@ -84,28 +94,37 @@ public class OperationListActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
+		
+//think itn't needed here
+//		fillEventList();
+		if (mListState != null)
+			((ListView) findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
+	    mListState = null;
 	}
 	
+	
+	//scroll position saving
 	@Override
-	protected void onRestart() {
-		// TODO Auto-generated method stub
-		super.onRestart();
+	protected void onSaveInstanceState(Bundle state) {
+	    super.onSaveInstanceState(state);
+	    mListState = ((ListView) findViewById(R.id.op_list)).onSaveInstanceState();
+	    state.putParcelable(LIST_STATE, mListState);
 	}
+
 	public void onNewOperation(View view) {
 //		Intent intent = new Intent(this, EditOperationActivity.class);
 //		startActivity(intent);
 	}
 
 	private void fillOperationList() {
-		EventDataSource dataSource = new EventDataSource(this);
-		List<Event> events = dataSource.getEventList();
-		adapterZ= new EventListViewAdapter(this,  events);
+		OperationDataSource dataSource = new OperationDataSource(this);
+		List<Operation> operations = dataSource.getOperationList(eventId);
+		adapterZ= new OperationsListViewAdapter(this,  operations);
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		//trigger filter to it being applied on resume
-	//	OperationListActivity.this.adapterZ.getFilter().filter(((EditText) findViewById(R.id.editText1)).getText().toString());
+		OperationListActivity.this.adapterZ.getFilter().filter(((SearchView) findViewById(R.id.uni_op_searchView)).getQuery());
 		listView.setAdapter(adapter);		
 	}
 	
@@ -133,4 +152,13 @@ public class OperationListActivity extends Activity {
 		return headerView;
 	}
 
+	public void fillEventInfo(long eventId){
+		EventDataSource dataSource = new EventDataSource(this);
+		Event ev=dataSource.getEventById(eventId);
+		((TextView)findViewById(R.id.op_name_tv)).setText(ev.getName());
+		((TextView)findViewById(R.id.op_desc_tv)).setText(ev.getDesc());
+		((TextView)findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)+String.valueOf(eventId));
+		((TextView)findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops)+"16");
+		((TextView)findViewById(R.id.op_all_expenses)).setText("-$3546");
+	}
 }

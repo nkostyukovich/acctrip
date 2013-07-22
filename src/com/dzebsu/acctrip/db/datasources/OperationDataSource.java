@@ -89,7 +89,7 @@ public class OperationDataSource {
 		open();
 		try {
 			List<Operation> result = new ArrayList<Operation>();
-			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where ev.eventId = " + eventId + " " +
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where ev._Id = " + eventId + " " +
 										 " order by " + EventAccContract.Operation._ID + " desc", null);		 
 			c.moveToFirst();
 			while (!c.isAfterLast()) {

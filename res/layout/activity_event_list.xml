@@ -3,19 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+<!-- do not focus on search view on startup -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-<SearchView
+        android:layout_height="wrap_content" 
+        android:descendantFocusability="beforeDescendants"
+		android:focusableInTouchMode="true" 
+        >
+        
+        
+	<!-- do not focus on search view on startup -->
+	<SearchView
             android:id="@+id/event_SearchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:queryHint="@string/filter_event_name_hint"
-            android:iconifiedByDefault="false"
-             >
+            android:iconifiedByDefault="false">
+            
             
         </SearchView>
 
@@ -33,7 +40,6 @@
         android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-       
     </ListView>
     
 </LinearLayout>

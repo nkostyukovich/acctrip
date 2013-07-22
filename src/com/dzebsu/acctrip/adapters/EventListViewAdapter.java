@@ -28,9 +28,10 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView desc=null;
 		public TextView operationsCnt=null;
 		public TextView eventId=null;
+		public TextView expenses=null;
 	}
-	public Event getEventByIdInList(int id){
-		return objects.get(id);
+	public long getEventByIdInList(long id){
+		return objects.get((int)id).getId();
 	}
 	@Override
 	public int getCount() {
@@ -47,14 +48,18 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		      rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.descTextView);
 		      rowViewHolder.operationsCnt = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.opsCountTextView);
 		      rowViewHolder.eventId = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.eventIdTextView);
+		      rowViewHolder.expenses = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.event_list_expenses);
 		      rowView.setTag(rowViewHolder);
 		    }
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
-		holder.desc.setText(objects.get(position).getDesc());
+		String s=objects.get(position).getDesc();
+		if(s.length()>40)
+			s=s.substring(0, 40)+"...";
+		holder.desc.setText(s);
 		holder.operationsCnt.setText(context.getString(com.dzebsu.acctrip.R.string.ops_text_view)+"25");
 		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)+((Long)objects.get(position).getId()).toString());
-		
+		holder.expenses.setText("-$6457");
 /*		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		 View row = inflater.inflate(com.dzebsu.acctrip.R.layout.row_event_list, parent,false);
 		 RowViewHolder holder=(RowViewHolder) convertView.getTag();

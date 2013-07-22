@@ -17,7 +17,7 @@
     <string name="new_operation">+</string>
     
     <string name="ops_text_view">Operations: </string> 
-    <string name="id_text_view">id: </string> 
+    <string name="id_text_view">Id: </string> 
     
     <string name="operation_list">List of operations</string>
     <string name="income">Income</string>
@@ -54,4 +54,6 @@
 	<string name="op_total_ops">Total operations: </string>
 	<string name="op_filer_field">Start typing here.. </string>
 	<string name="op_all_expenses">Expenses: </string>
+	
+	<string name="op_id_tv">Id: </string>
 </resources>

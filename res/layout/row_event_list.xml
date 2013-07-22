@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/nameTextView"
@@ -17,29 +17,36 @@
         android:id="@+id/descTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/nameTextView"
-        android:layout_toLeftOf="@+id/eventIdTextView"
-        android:text="353252352363467547654786589679624236346346346" />
-
-    <TextView
-        android:id="@+id/opsCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/nameTextView"
-        android:layout_alignBottom="@+id/nameTextView"
-        android:layout_alignParentRight="true"
-        android:text="@string/ops_text_view"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_toLeftOf="@+id/opsCountTextView"
+        android:text="11111111111ggggggg" />
 
     <TextView
         android:id="@+id/eventIdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/descTextView"
         android:layout_alignParentRight="true"
-        android:maxLength="8"
-        android:text="id: "
+        android:layout_below="@+id/event_list_expenses"
+        android:text="@string/id_text_view"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/event_list_expenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="-$6573" />
+
+    <TextView
+        android:id="@+id/opsCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/eventIdTextView"
+        android:text="@string/ops_text_view"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
