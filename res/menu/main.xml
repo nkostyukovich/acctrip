@@ -3,8 +3,8 @@
     <item
         android:id="@+id/open_dictionaries"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/open_dictionaries"/>
+        android:showAsAction="always"
+        android:title="@string/open_dictionaries" android:icon="@drawable/dictionaries"/>
     <item android:id="@+id/recreate_all_tables" android:title="@string/erase_all_data" android:showAsAction="never" android:orderInCategory="500"></item>
  	<item android:id="@+id/create_1000_records" android:title="@string/create_1000_records" android:showAsAction="never" android:orderInCategory="566"></item>
 </menu>

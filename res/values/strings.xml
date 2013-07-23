@@ -58,9 +58,9 @@
 	<string name="op_id_tv">Id: </string>
 	<string name="op_new_btn">New operation</string>
 	<string name="op_del_menu">Delete event</string>
-	<string name="enter_text">Please, at least enter name</string>
-	<string name="event_deleted">Event was deleted</string>
-	<string name="not_message">Not a message</string>
+	<string name="enter_text">Please, at least enter name.</string>
+	<string name="event_deleted">Event deleted.</string>
+	<string name="not_message">Not a message.</string>
 	
 	<string name="place_tab">Places</string>
 	<string name="category_tab">Categories</string>
@@ -70,7 +70,7 @@
 	<string name="event_title">Event</string>
 	<!-- dictionary -->
 	<!-- place -->
-	<string name="dic_place_search">Place</string>
+	<string name="dic_search">Start typing here..</string>
 	<string name="dictionary_expenses_list">Total:</string>
 	<string name="dictionary_ops_list">Total ops:</string>
 	<string name="dictionary_id_list">Place id:</string>

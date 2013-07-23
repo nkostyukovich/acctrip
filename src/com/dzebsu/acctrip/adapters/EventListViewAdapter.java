@@ -60,10 +60,6 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		holder.operationsCnt.setText(context.getString(com.dzebsu.acctrip.R.string.ops_text_view)+"25");
 		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)+((Long)objects.get(position).getId()).toString());
 		holder.expenses.setText("-$6457");
-/*		 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		 View row = inflater.inflate(com.dzebsu.acctrip.R.layout.row_event_list, parent,false);
-		 RowViewHolder holder=(RowViewHolder) convertView.getTag();
-*/		 
 		return rowView;
 	}
 	 @Override

@@ -11,6 +11,9 @@ import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.dzebsu.acctrip.dictionary.*;
@@ -18,7 +21,7 @@ import com.dzebsu.acctrip.models.Category;
 import com.dzebsu.acctrip.models.Place;
 
 
-public class DictionaryActivity extends Activity {
+public class DictionaryActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,8 @@ public class DictionaryActivity extends Activity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			int i=1;
+			setContentView(R.layout.activity_dictionary);
 			ActionBar ab =getActionBar();
 			ab.setDisplayHomeAsUpEnabled(false);
 			ab.setDisplayShowTitleEnabled(false);
@@ -54,6 +59,21 @@ public class DictionaryActivity extends Activity {
 			        .setTabListener(new TabListener<DictionaryListFragment>(this, "Currency", DictionaryListFragment.class));
 			    ab.addTab(tab);
 		}
+		ViewPager mViewPager = (ViewPager) findViewById(R.id.dic_pager);
+		 FragmentManager fm = getSupportFragmentManager();
+		 DictionaryPagerAdapter pagerAdapter = new DictionaryPagerAdapter(fm);
+		 mViewPager.setAdapter(pagerAdapter);
+		    mViewPager.setOnPageChangeListener(
+		            new ViewPager.SimpleOnPageChangeListener() {
+		                @Override
+		                public void onPageSelected(int position) {
+		                    // When swiping between pages, select the
+		                    // corresponding tab.
+		                    getActionBar().setSelectedNavigationItem(position);
+		                }
+		            });
+
+	        
 	}
 	
 	@Override

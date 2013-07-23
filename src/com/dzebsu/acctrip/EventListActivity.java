@@ -18,7 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
-
+import android.support.*;
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
