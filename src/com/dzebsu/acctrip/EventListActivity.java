@@ -1,9 +1,10 @@
 package com.dzebsu.acctrip;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,15 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
+import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
+import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.models.OperationType;
 
 public class EventListActivity extends Activity {
 	
@@ -66,7 +72,9 @@ public class EventListActivity extends Activity {
 			}
 		});
 	    //end
-	    
+	    Intent intent = getIntent();
+	    if(intent.hasExtra("toast"))
+	    	Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -96,8 +104,18 @@ public class EventListActivity extends Activity {
 
 	public void create1000records(View view){
 		EventDataSource dataSource = new EventDataSource(this);
-		for(int i=0; i<1000; i++)
-			dataSource.insert("Record #"+Integer.toString(i), "Day before yesterday I saw a rabbit, and yesterday a deer, and today, you. I thought what I'd do was, I'd pretend I was one of those deaf-mutes.");
+		OperationDataSource dataSource2 = new OperationDataSource(this);
+		PlaceDataSource dataSource3 = new PlaceDataSource(this);
+		CategoryDataSource dataSource4 = new CategoryDataSource(this);
+		CurrencyDataSource dataSource5 = new CurrencyDataSource(this);
+		dataSource3.insert("Tokyo Tower");
+		dataSource4.insert("Exposition");
+		dataSource5.insert("Dollar", "USD");
+		Calendar cal = GregorianCalendar.getInstance();
+			dataSource.insert("Record #"+Integer.toString(1), "Day before yesterday I saw a rabbit, and yesterday a deer, and today, you. I thought what I'd do was, I'd pretend I was one of those deaf-mutes.");
+
+			dataSource2.insert(cal.getTime(), "Day before yesterday I saw a rabbit, and yesterday a deer, and today, you.", Math.random()*100, OperationType.EXPENSE, 1, 1, 1, 1);
+
 	}
 	
 	public void reCreateAllTables(View view) {
@@ -111,6 +129,7 @@ public class EventListActivity extends Activity {
 		Intent intent = new Intent(this, EditEventActivity.class);
 		String name=((SearchView) findViewById(R.id.event_SearchView)).getQuery().toString();
 		intent.putExtra("eventName", name);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 	
@@ -141,7 +160,7 @@ public class EventListActivity extends Activity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		fillEventList();
+//		fillEventList();
 	}
 
 	@Override
@@ -149,7 +168,7 @@ public class EventListActivity extends Activity {
 		super.onResume();
 		
 //think itn't needed here
-//		fillEventList();
+		fillEventList();
 		if (mListState != null)
 			((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
 	    mListState = null;

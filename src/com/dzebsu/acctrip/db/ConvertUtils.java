@@ -66,7 +66,7 @@ public class ConvertUtils {
 		cal.setTimeInMillis(value);
 		return cal.getTime();
 	}
-	private static long convertDateToLong(Date date) {
+	public static long convertDateToLong(Date date) {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(date);
 		return cal.getTime().getTime();

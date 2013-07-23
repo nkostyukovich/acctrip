@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
+import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Event;
 
 public class CurrencyDataSource {
@@ -18,7 +19,7 @@ public class CurrencyDataSource {
 	private SQLiteDatabase database;
 	private EventAccDbHelper dbHelper;
 
-	private String[] selectedColumns = { EventAccContract.Event._ID, EventAccContract.Event.NAME, EventAccContract.Event.DESC };
+	private String[] selectedColumns = { EventAccContract.Currency._ID, EventAccContract.Currency.NAME, EventAccContract.Currency.CODE };
 
 	public CurrencyDataSource(Context ctx) {
 		dbHelper = new EventAccDbHelper(ctx);
@@ -32,52 +33,52 @@ public class CurrencyDataSource {
 		database.close();
 	}
 	
-	public long insert(String name, String desc) {
+	public long insert(String name, String code) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Event.NAME, name);
-			values.put(EventAccContract.Event.DESC, desc);		 
-			return database.insert(EventAccContract.Event.TABLE_NAME, null, values);
+			values.put(EventAccContract.Currency.NAME, name);
+			values.put(EventAccContract.Currency.CODE, code);		 
+			return database.insert(EventAccContract.Currency.TABLE_NAME, null, values);
 		} finally {
 			close();
 		}
 	}
 
-	public Event update(Long id, String name, String desc) {
+	public Currency update(Long id, String name, String code) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Event.NAME, name);
-			values.put(EventAccContract.Event.DESC, desc);
-			String whereClause = EventAccContract.Event._ID + " = ?";
-			database.update(EventAccContract.Event.TABLE_NAME, values, whereClause, new String[] { Long.toString(id) });
-			return getEventById(id);
+			values.put(EventAccContract.Currency.NAME, name);
+			values.put(EventAccContract.Currency.CODE, code);
+			String whereClause = EventAccContract.Currency._ID + " = ?";
+			database.update(EventAccContract.Currency.TABLE_NAME, values, whereClause, new String[] { Long.toString(id) });
+			return getCurrencyById(id);
 		} finally {
 			close();
 		}
 	}
 
-	public Event getEventById(long id) {
-		String whereBatch = EventAccContract.Event._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
-		Event event = null;
+	public Currency getCurrencyById(long id) {
+		String whereBatch = EventAccContract.Currency._ID + " = ?";
+		Cursor c = database.query(EventAccContract.Currency.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
+		Currency cur = null;
 		if (c.getCount() > 0) {
 			c.moveToFirst();
-			event = ConvertUtils.cursorToEvent(c);
+			cur = ConvertUtils.cursorToCurrency(c);
 		}
 		c.close();
-		return event;
+		return cur;
 	}
 
-	public List<Event> getEventList() {
+	public List<Currency> getEventList() {
 		open();
 		try {
-			List<Event> result = new ArrayList<Event>();
-			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Event._ID + " DESC");
+			List<Currency> result = new ArrayList<Currency>();
+			Cursor c = database.query(EventAccContract.Currency.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Currency._ID + " DESC");
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
-				result.add(ConvertUtils.cursorToEvent(c));
+				result.add(ConvertUtils.cursorToCurrency(c));
 				c.moveToNext();
 			}
 			c.close();

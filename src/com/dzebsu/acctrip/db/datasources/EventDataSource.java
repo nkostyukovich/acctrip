@@ -92,5 +92,15 @@ public class EventDataSource {
 			close();
 		}
 	}
+	
+	public long delete(Long id) {
+		open();
+		try {
+			String whereClause = EventAccContract.Event._ID + " = ?";
+			return database.delete(EventAccContract.Event.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+		} finally {
+			close();
+		}
+	}
 
 }

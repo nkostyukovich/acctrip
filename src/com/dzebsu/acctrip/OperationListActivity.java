@@ -3,11 +3,15 @@ package com.dzebsu.acctrip;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -16,7 +20,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
@@ -91,13 +94,42 @@ public class OperationListActivity extends Activity {
 		getMenuInflater().inflate(R.menu.operation_list, menu);
 		return true;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+			case R.id.delete_event:
+				onDeleteEvent(item.getActionView());
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		 }
+	}
+	
+	public void onDeleteEvent(View view){
+		new AlertDialog.Builder(this)
+		.setMessage("Delete this Event?")
+		.setIcon(android.R.drawable.ic_dialog_alert)
+		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+		    public void onClick(DialogInterface dialog, int whichButton) {
+				EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
+				dataSource.delete(eventId);
+				Intent intent = new Intent(OperationListActivity.this, EventListActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+//				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("toast", R.string.event_deleted);
+				startActivity(intent);
+		    }})
+		 .setNegativeButton(android.R.string.no, null).show();
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-//think itn't needed here
-//		fillEventList();
+		fillOperationList();
 		if (mListState != null)
 			((ListView) findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
 	    mListState = null;
@@ -160,5 +192,10 @@ public class OperationListActivity extends Activity {
 		((TextView)findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)+String.valueOf(eventId));
 		((TextView)findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops)+"16");
 		((TextView)findViewById(R.id.op_all_expenses)).setText("-$3546");
+		OperationDataSource dataSource1 = new OperationDataSource(this);
+	//	Operation ev1=dataSource1.getOperationById(1);
+		((TextView)findViewById(R.id.op_all_expenses)).setText(String.valueOf(dataSource1.getCount()));
 	}
+	
+	
 }

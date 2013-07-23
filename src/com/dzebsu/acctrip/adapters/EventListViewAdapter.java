@@ -54,8 +54,8 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
 		String s=objects.get(position).getDesc();
-		if(s.length()>40)
-			s=s.substring(0, 40)+"...";
+		if(s.length()>60)
+			s=s.substring(0, 60)+"...";
 		holder.desc.setText(s);
 		holder.operationsCnt.setText(context.getString(com.dzebsu.acctrip.R.string.ops_text_view)+"25");
 		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)+((Long)objects.get(position).getId()).toString());
