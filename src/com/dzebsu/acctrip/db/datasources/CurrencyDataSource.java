@@ -71,7 +71,7 @@ public class CurrencyDataSource {
 		return cur;
 	}
 
-	public List<Currency> getEventList() {
+	public List<Currency> getCurrencyList() {
 		open();
 		try {
 			List<Currency> result = new ArrayList<Currency>();

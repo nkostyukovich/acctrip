@@ -14,6 +14,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.dzebsu.acctrip.dictionary.*;
+import com.dzebsu.acctrip.models.Category;
+import com.dzebsu.acctrip.models.Place;
+
+
 public class DictionaryActivity extends Activity {
 
 	@Override
@@ -36,20 +40,18 @@ public class DictionaryActivity extends Activity {
 			
 			Tab tab = ab.newTab()
 		            .setText(R.string.place_tab)
-		            .setTabListener(new TabListener<PlaceListFragment>(
-		                    this, "Place", PlaceListFragment.class));
+		            .setTabListener(
+		            		new TabListener<DictionaryListFragment>(this, "Place", DictionaryListFragment.class));
 		    ab.addTab(tab);
 
 		    tab = ab.newTab()
 		        .setText(R.string.category_tab)
-		        .setTabListener(new TabListener<CategoryListFragment>(
-		                this, "Category", CategoryListFragment.class));
+		        .setTabListener(new TabListener<DictionaryListFragment>(this, "Category", DictionaryListFragment.class));
 		    ab.addTab(tab);
 		    
 		    tab = ab.newTab()
 			        .setText(R.string.currency_tab)
-			        .setTabListener(new TabListener<CurrencyListFragment>(
-			                this, "Currency", CurrencyListFragment.class));
+			        .setTabListener(new TabListener<DictionaryListFragment>(this, "Currency", DictionaryListFragment.class));
 			    ab.addTab(tab);
 		}
 	}

@@ -1,6 +1,8 @@
 package com.dzebsu.acctrip.models;
 
-public class Place {
+import com.dzebsu.acctrip.dictionary.WrappedObject;
+
+public class Place implements WrappedObject{
 	
 	private long id;
 	private String name;

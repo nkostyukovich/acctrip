@@ -1,6 +1,8 @@
 package com.dzebsu.acctrip.models;
 
-public class Currency {
+import com.dzebsu.acctrip.dictionary.WrappedObject;
+
+public class Currency implements WrappedObject{
 	
 	private long id;
 	private String name;

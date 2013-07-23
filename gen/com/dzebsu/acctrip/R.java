@@ -35,36 +35,36 @@ public final class R {
         public static final int create_1000_records=0x7f080029;
         public static final int currencyList=0x7f080009;
         public static final int delete_event=0x7f08002a;
-        public static final int descTextView=0x7f080015;
+        public static final int descTextView=0x7f080019;
         public static final int dic_category_search=0x7f080007;
         public static final int dic_place_search=0x7f08000a;
+        public static final int dictionary_expenses_list=0x7f080015;
+        public static final int dictionary_id_list=0x7f080017;
+        public static final int dictionary_name_list=0x7f080014;
+        public static final int dictionary_ops_list=0x7f080016;
+        public static final int dictionarylist=0x7f08000b;
         public static final int editEventDesc=0x7f080002;
         public static final int editEventName=0x7f080001;
-        public static final int eventIdTextView=0x7f080017;
+        public static final int eventIdTextView=0x7f08001b;
         public static final int event_SearchView=0x7f080003;
         public static final int event_list=0x7f080004;
-        public static final int event_list_expenses=0x7f080018;
+        public static final int event_list_expenses=0x7f08001c;
         public static final int lin_lay=0x7f080012;
-        public static final int nameTextView=0x7f080014;
+        public static final int nameTextView=0x7f080018;
         public static final int op_all_expenses=0x7f08000d;
         public static final int op_desc_tv=0x7f08000e;
         public static final int op_event_id=0x7f08000f;
         public static final int op_list=0x7f080005;
-        public static final int op_list_category=0x7f08001d;
-        public static final int op_list_date_tv=0x7f080019;
-        public static final int op_list_desc_tv=0x7f08001c;
-        public static final int op_list_expenses=0x7f08001b;
-        public static final int op_list_id_tv=0x7f08001a;
-        public static final int op_list_place=0x7f08001e;
+        public static final int op_list_category=0x7f080021;
+        public static final int op_list_date_tv=0x7f08001d;
+        public static final int op_list_desc_tv=0x7f080020;
+        public static final int op_list_expenses=0x7f08001f;
+        public static final int op_list_id_tv=0x7f08001e;
+        public static final int op_list_place=0x7f080022;
         public static final int op_name_tv=0x7f08000c;
         public static final int op_total_ops=0x7f080010;
         public static final int open_dictionaries=0x7f080027;
-        public static final int opsCountTextView=0x7f080016;
-        public static final int place_expenses_list=0x7f080020;
-        public static final int place_id_list=0x7f080022;
-        public static final int place_name_list=0x7f08001f;
-        public static final int place_ops_list=0x7f080021;
-        public static final int placelist=0x7f08000b;
+        public static final int opsCountTextView=0x7f08001a;
         public static final int recreate_all_tables=0x7f080028;
         public static final int uni_op_searchView=0x7f080011;
     }
@@ -75,12 +75,12 @@ public final class R {
         public static final int dialog_category=0x7f030003;
         public static final int fragment_category_list=0x7f030004;
         public static final int fragment_currency_list=0x7f030005;
-        public static final int fragment_place_list=0x7f030006;
+        public static final int fragment_dictionary_list=0x7f030006;
         public static final int operations_header=0x7f030007;
         public static final int row_category_list=0x7f030008;
-        public static final int row_event_list=0x7f030009;
-        public static final int row_operation_list=0x7f03000a;
-        public static final int row_place_list=0x7f03000b;
+        public static final int row_dictionary_list=0x7f030009;
+        public static final int row_event_list=0x7f03000a;
+        public static final int row_operation_list=0x7f03000b;
     }
     public static final class menu {
         public static final int category=0x7f070000;
@@ -110,6 +110,9 @@ public final class R {
  place 
          */
         public static final int dic_place_search=0x7f050038;
+        public static final int dictionary_expenses_list=0x7f050039;
+        public static final int dictionary_id_list=0x7f05003b;
+        public static final int dictionary_ops_list=0x7f05003a;
         public static final int enter_text=0x7f050030;
         public static final int erase_all_data=0x7f050025;
         public static final int event_deleted=0x7f050031;
@@ -143,10 +146,7 @@ public final class R {
         public static final int open_dictionaries=0x7f05001d;
         public static final int operation_list=0x7f050010;
         public static final int ops_text_view=0x7f05000e;
-        public static final int place_expenses_list=0x7f050039;
-        public static final int place_id_list=0x7f05003b;
         public static final int place_name=0x7f050024;
-        public static final int place_ops_list=0x7f05003a;
         public static final int place_tab=0x7f050033;
         public static final int save=0x7f05000b;
         public static final int title_activity_category=0x7f050017;

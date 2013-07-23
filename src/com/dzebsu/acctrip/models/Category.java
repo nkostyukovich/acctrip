@@ -1,6 +1,8 @@
 package com.dzebsu.acctrip.models;
 
-public class Category {
+import com.dzebsu.acctrip.dictionary.WrappedObject;
+
+public class Category implements WrappedObject{
 	
 	private long id;
 	private String name;
