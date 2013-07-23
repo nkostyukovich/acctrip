@@ -22,6 +22,7 @@ public class EditEventActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
+		
 		// Show the Up button in the action bar.
 		String name=getIntent().getStringExtra("eventName");
 		((EditText) this.findViewById(R.id.editEventName)).setText(name);
@@ -36,6 +37,7 @@ public class EditEventActivity extends Activity {
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setTitle(R.string.event_edit_act_title);
 		}
 	}
 

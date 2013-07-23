@@ -2,11 +2,13 @@ package com.dzebsu.acctrip;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -29,16 +31,6 @@ import com.dzebsu.acctrip.models.Operation;
 public class OperationListActivity extends Activity {
 	
 	private long eventId;
-	static class HeaderViewHolder{
-
-		public TextView name=null;
-		public TextView desc=null;
-		public TextView eventId=null;
-		public TextView totalOps=null;
-		public TextView expenses=null;
-		public SearchView uni_filter=null;
-
-	}
 	//Anonymous class wanted this adapter inside itself
 	private OperationsListViewAdapter adapterZ;
 	//for restoring list scroll position
@@ -99,6 +91,11 @@ public class OperationListActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
+			case android.R.id.home:
+				Intent intent = new Intent(this, EventListActivity.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+				return true;
 			case R.id.delete_event:
 				onDeleteEvent(item.getActionView());
 				return true;
@@ -152,6 +149,10 @@ public class OperationListActivity extends Activity {
 	private void fillOperationList() {
 		OperationDataSource dataSource = new OperationDataSource(this);
 		List<Operation> operations = dataSource.getOperationList(eventId);
+		//total operations
+		OperationDataSource opdata=new OperationDataSource(this);
+		
+		//end
 		adapterZ= new OperationsListViewAdapter(this,  operations);
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.op_list);
@@ -161,32 +162,19 @@ public class OperationListActivity extends Activity {
 	}
 	
 	public View createListHeader(){
-		View headerView=null;
-		if (headerView == null) {
-			LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			headerView = inflater.inflate(com.dzebsu.acctrip.R.layout.operations_header, null,false);
-		      HeaderViewHolder headerViewHolder = new HeaderViewHolder();
-		      headerViewHolder.name = (TextView) headerView.findViewById(com.dzebsu.acctrip.R.id.op_name_tv);
-		      headerViewHolder.desc = (TextView) headerView.findViewById(com.dzebsu.acctrip.R.id.op_desc_tv);
-		      headerViewHolder.eventId = (TextView) headerView.findViewById(com.dzebsu.acctrip.R.id.op_event_id);
-		      headerViewHolder.totalOps = (TextView) headerView.findViewById(com.dzebsu.acctrip.R.id.op_total_ops);
-		      headerViewHolder.expenses = (TextView) headerView.findViewById(com.dzebsu.acctrip.R.id.op_all_expenses);
-		      headerViewHolder.uni_filter = (SearchView) headerView.findViewById(com.dzebsu.acctrip.R.id.uni_op_searchView);
-		      headerView.setTag(headerViewHolder);
-		    }
-		HeaderViewHolder holder = (HeaderViewHolder) headerView.getTag();
-		holder.name.setText("123");
-		holder.desc.setText("1234");
-		holder.eventId.setText("12345");
-		holder.totalOps.setText("123456");
-		holder.expenses.setText("1234567");
-		holder.desc.setText("12345678");
-		return headerView;
+		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		return inflater.inflate(com.dzebsu.acctrip.R.layout.operations_header, null,false);
 	}
-
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setupActionBar() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
 	public void fillEventInfo(long eventId){
 		EventDataSource dataSource = new EventDataSource(this);
 		Event ev=dataSource.getEventById(eventId);
+		getActionBar().setTitle(R.string.event_title);
 		((TextView)findViewById(R.id.op_name_tv)).setText(ev.getName());
 		((TextView)findViewById(R.id.op_desc_tv)).setText(ev.getDesc());
 		((TextView)findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)+String.valueOf(eventId));

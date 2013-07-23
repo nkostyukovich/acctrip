@@ -61,4 +61,21 @@
 	<string name="enter_text">Please, at least enter name</string>
 	<string name="event_deleted">Event was deleted</string>
 	<string name="not_message">Not a message</string>
+	
+	<string name="place_tab">Places</string>
+	<string name="category_tab">Categories</string>
+	<string name="currency_tab">Currencies</string>
+	
+	<string name="event_edit_act_title">Edit event</string>
+	<string name="event_title">Event</string>
+	<!-- dictionary -->
+	<!-- place -->
+	<string name="dic_place_search">Place</string>
+	<string name="place_expenses_list">Total:</string>
+	<string name="place_ops_list">Total ops:</string>
+	<string name="place_id_list">Place id:</string>
+	
+	<!-- category -->
+	<string name="dic_category_search">Category</string>
+	
 </resources>

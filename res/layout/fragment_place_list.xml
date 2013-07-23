@@ -2,10 +2,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context=".dictionary.PlaceListFragment" 
+    android:descendantFocusability="beforeDescendants"
+		android:focusableInTouchMode="true" >
+
+    <SearchView
+        android:id="@+id/dic_place_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/dic_place_search" >
+    </SearchView>
 
     <ListView
-        android:id="@+id/placeList"
+        android:id="@+id/placelist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>
