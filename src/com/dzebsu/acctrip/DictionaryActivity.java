@@ -3,6 +3,8 @@
  */
 package com.dzebsu.acctrip;
 
+import com.dzebsu.acctrip.R;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.dzebsu.acctrip.dictionary.*;
 
 public class DictionaryActivity extends Activity {
 
