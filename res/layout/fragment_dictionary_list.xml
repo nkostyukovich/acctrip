@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".dictionary.DictionaryListFragment" >
+
+    <SearchView
+        android:id="@+id/dic_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/dic_new"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/dic_search" >
+
+    </SearchView>
+
+    <ListView
+        android:id="@+id/dictionarylist"
+        android:layout_below="@+id/dic_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+     <ImageButton
+            android:id="@+id/dic_new"
+            android:contentDescription="@string/add_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dic_new"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+      
+    
+</RelativeLayout>
