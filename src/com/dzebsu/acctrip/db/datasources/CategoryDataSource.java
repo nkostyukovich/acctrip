@@ -31,7 +31,7 @@ public class CategoryDataSource {
 	public void close() {
 		database.close();
 	}
-	
+
 	public long insert(String name) {
 		open();
 		try {
@@ -49,7 +49,8 @@ public class CategoryDataSource {
 			ContentValues values = new ContentValues();
 			values.put(EventAccContract.Category.NAME, name);
 			String whereClause = EventAccContract.Category._ID + " = ?";
-			database.update(EventAccContract.Category.TABLE_NAME, values, whereClause, new String[] { Long.toString(id) });
+			database.update(EventAccContract.Category.TABLE_NAME, values, whereClause,
+					new String[] { Long.toString(id) });
 			return getCategoryById(id);
 		} finally {
 			close();
@@ -58,7 +59,8 @@ public class CategoryDataSource {
 
 	public Category getCategoryById(long id) {
 		String whereBatch = EventAccContract.Category._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
+		Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, whereBatch,
+				new String[] { Long.toString(id) }, null, null, null);
 		Category category = null;
 		if (c.getCount() > 0) {
 			c.moveToFirst();
@@ -72,7 +74,8 @@ public class CategoryDataSource {
 		open();
 		try {
 			List<Category> result = new ArrayList<Category>();
-			Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Category._ID + " DESC");
+			Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, null, null, null, null,
+					EventAccContract.Category._ID + " DESC");
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				result.add(ConvertUtils.cursorToCategory(c));

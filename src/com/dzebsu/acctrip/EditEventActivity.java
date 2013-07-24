@@ -22,14 +22,14 @@ public class EditEventActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
-		
+
 		// Show the Up button in the action bar.
-		String name=getIntent().getStringExtra("eventName");
+		String name = getIntent().getStringExtra("eventName");
 		((EditText) this.findViewById(R.id.editEventName)).setText(name);
 		setupActionBar();
-		//TODO not works
+		// TODO not works
 	}
-	
+
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -53,43 +53,44 @@ public class EditEventActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			Intent intent = new Intent(this, EventListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void onSaveEvent(View view) {
 		String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
-		if(name.isEmpty()) {
+		if (name.isEmpty()) {
 			Toast.makeText(getApplicationContext(), R.string.enter_text, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
 		EventDataSource dataSource = new EventDataSource(this);
-		long eventId=dataSource.insert(name, desc);
-		//finish(); go right to new event
+		long eventId = dataSource.insert(name, desc);
+		// finish(); go right to new event
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("eventId", eventId);
 		startActivity(intent);
 	}
-	//finishes activity when cancel clicked
-	public void onCancelBtn(View view){
+
+	// finishes activity when cancel clicked
+	public void onCancelBtn(View view) {
 		finish();
 	}
-	
-	public void onNewOperation(View view){
-		//TODO add operation here
+
+	public void onNewOperation(View view) {
+		// TODO add operation here
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		EditText editName= (EditText) findViewById(R.id.editEventName);
+		EditText editName = (EditText) findViewById(R.id.editEventName);
 		InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
 		imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT);
-		
+
 	}
 
 }

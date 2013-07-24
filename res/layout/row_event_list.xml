@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/nameTextView"
-        android:layout_toLeftOf="@+id/opsCountTextView"
         android:text="11111111111ggggggg" />
 
     <TextView
@@ -28,25 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/event_list_expenses"
         android:text="@string/id_text_view"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/event_list_expenses"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="-$6573" />
-
-    <TextView
-        android:id="@+id/opsCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/eventIdTextView"
-        android:text="@string/ops_text_view"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

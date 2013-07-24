@@ -3,45 +3,45 @@ package com.dzebsu.acctrip.db;
 import android.provider.BaseColumns;
 
 public class EventAccContract {
-	
-	private EventAccContract() {		
+
+	private EventAccContract() {
 	}
-	
-	public static abstract class Event implements BaseColumns {		
+
+	public static abstract class Event implements BaseColumns {
 		public static final String TABLE_NAME = "event";
 		public static final String NAME = "name";
 		public static final String DESC = "description";
-		
+
 		public static final String ALIAS_ID = "event_id";
 
-	} 
-	
-	public static abstract class Category implements BaseColumns {		
+	}
+
+	public static abstract class Category implements BaseColumns {
 		public static final String TABLE_NAME = "category";
 		public static final String NAME = "name";
-		
+
 		public static final String ALIAS_ID = "cat_id";
 		public static final String ALIAS_NAME = "cat_name";
-	} 
-	
-	public static abstract class Currency implements BaseColumns {		
+	}
+
+	public static abstract class Currency implements BaseColumns {
 		public static final String TABLE_NAME = "currency";
 		public static final String NAME = "name";
-		public static final String CODE = "code";		
+		public static final String CODE = "code";
 
 		public static final String ALIAS_ID = "cur_id";
 		public static final String ALIAS_CODE = "cur_code";
-} 
-	
-	public static abstract class Place implements BaseColumns {		
+	}
+
+	public static abstract class Place implements BaseColumns {
 		public static final String TABLE_NAME = "place";
 		public static final String NAME = "name";
-		
+
 		public static final String ALIAS_ID = "place_id";
 		public static final String ALIAS_NAME = "place_name";
-	} 
+	}
 
-	public static abstract class Operation implements BaseColumns {		
+	public static abstract class Operation implements BaseColumns {
 		public static final String TABLE_NAME = "operation";
 		public static final String CATEGORY_ID = "categoryId";
 		public static final String DESC = "description";
@@ -52,6 +52,6 @@ public class EventAccContract {
 		public static final String EVENT_ID = "eventId";
 		public static final String PLACE_ID = "placeId";
 
-	}	
+	}
 
 }

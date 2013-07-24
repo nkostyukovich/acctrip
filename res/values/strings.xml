@@ -72,10 +72,19 @@
 	<!-- place -->
 	<string name="dic_search">Start typing here..</string>
 	<string name="dictionary_expenses_list">Total:</string>
-	<string name="dictionary_ops_list">Total ops:</string>
 	<string name="dictionary_id_list">Place id:</string>
-	
+	<string name="dic_del">Delete</string>
 	<!-- category -->
 	<string name="dic_category_search">Category</string>
+	
+	<string name="dic_new_place">Place name</string>
+	<string name="dic_new_place_title">New place</string>
+	
+	<string name="dic_new_category">Category name</string>
+	<string name="dic_new_category_title">New category</string>
+	
+	<string name="dic_new_currency">Currency name</string>
+	<string name="dic_new_currency_title">New currency</string>
+	<string name="dic_new_code">Currency code</string>
 	
 </resources>

@@ -31,7 +31,7 @@ public class PlaceDataSource {
 	public void close() {
 		database.close();
 	}
-	
+
 	public long insert(String name) {
 		open();
 		try {
@@ -58,7 +58,8 @@ public class PlaceDataSource {
 
 	public Place getPlaceById(long id) {
 		String whereBatch = EventAccContract.Place._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
+		Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, whereBatch,
+				new String[] { Long.toString(id) }, null, null, null);
 		Place place = null;
 		if (c.getCount() > 0) {
 			c.moveToFirst();
@@ -72,7 +73,8 @@ public class PlaceDataSource {
 		open();
 		try {
 			List<Place> result = new ArrayList<Place>();
-			Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Place._ID + " DESC");
+			Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, null, null, null, null,
+					EventAccContract.Place._ID + " DESC");
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				result.add(ConvertUtils.cursorToPlace(c));

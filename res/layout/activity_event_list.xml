@@ -26,11 +26,14 @@
             
         </SearchView>
 
-        <Button
+             <ImageButton
+            android:id="@+id/dic_new"
+            android:contentDescription="@string/add_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onNewEvent"
-            android:text="@string/new_event" />
+            android:src="@drawable/dic_new"
+			android:onClick="onNewEvent"
+            />
          
         
 
