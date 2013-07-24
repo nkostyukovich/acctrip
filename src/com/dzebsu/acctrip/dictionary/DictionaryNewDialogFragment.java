@@ -3,11 +3,13 @@ package com.dzebsu.acctrip.dictionary;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,12 +44,12 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		view = inflater.inflate(R.layout.dictonary_new_dialog, null);
-		builder.setView(view);
 		Bundle args=getArguments();
 		obj=args.getInt("objType");
 		int nameTV=args.getInt("name_tv");
@@ -60,17 +62,36 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		}
 		
 		((TextView)view.findViewById(R.id.dic_new_name_tv)).setText(nameTV);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(view);
 		builder.setTitle(title).setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				onSaveElement();
+				//We will override
 			}
 		}).setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				DictionaryNewDialogFragment.this.getDialog().cancel();
+				DictionaryNewDialogFragment.this.getDialog().dismiss();
 			}
 		});
 		// Create the AlertDialog object and return it
-		return builder.create();
+		final AlertDialog al=builder.create();
+		//to prevent from closing when name="" and show toast
+		al.setOnShowListener(new DialogInterface.OnShowListener() {
+		    @Override
+		    public void onShow(DialogInterface dialog) {
+
+		        Button b = al.getButton(AlertDialog.BUTTON_POSITIVE);
+		        b.setOnClickListener(new View.OnClickListener() {
+
+		            @Override
+		            public void onClick(View view) {
+		                onSaveElement();
+		                
+		            }
+		        });
+		    }
+		});
+		return al;
 	}
 
 	public void onSaveElement() {
@@ -86,7 +107,7 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 			args.putString("code", ((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString());
 
 		saveListener.onSaveBtnDialog(args);
-		DictionaryNewDialogFragment.this.getDialog().hide();
+		this.dismiss();
 	}
 
 }
