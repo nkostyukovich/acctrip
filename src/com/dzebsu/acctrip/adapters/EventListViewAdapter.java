@@ -17,12 +17,14 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 	private List<Event> objects;
 	private List<Event> objectsInit;
 	private final Context context;
+	private LayoutInflater inflater;
 
 	public EventListViewAdapter(Context context, List<Event> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_event_list, objects);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
 		this.context = context;
+		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	static class RowViewHolder {
@@ -31,8 +33,15 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView eventId = null;
 	}
 
-	public long getEventByIdInList(long id) {
-		return objects.get((int) id).getId();
+	@Override
+	public boolean hasStableIds() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return objects.get(position).getId();
 	}
 
 	@Override
@@ -44,7 +53,6 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 		if (rowView == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			rowView = inflater.inflate(com.dzebsu.acctrip.R.layout.row_event_list, parent, false);
 			RowViewHolder rowViewHolder = new RowViewHolder();
 			rowViewHolder.name = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.nameTextView);

@@ -21,15 +21,9 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 
 	
 	
-	static DictionaryNewDialogFragment newInstance(int num) {
+	static DictionaryNewDialogFragment newInstance(Bundle data) {
 		DictionaryNewDialogFragment f = new DictionaryNewDialogFragment();
-
-        // Supply num input as an argument.
-		//1,2,3 place cat, cur
-        Bundle args = new Bundle();
-        args.putInt("objVer", num);
-        f.setArguments(args);
-
+        f.setArguments(data);
         return f;
     }
 
@@ -51,34 +45,26 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		obj=getArguments().getInt("objVer");
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		view = inflater.inflate(R.layout.dictonary_new_dialog, null);
 		builder.setView(view);
-		int title=1,name=1;
-		switch(obj){
-			case 1:
-				title=R.string.dic_new_place_title;
-				name=R.string.dic_new_place;
-				break;
-			case 2:
-				title=R.string.dic_new_category_title;
-				name=R.string.dic_new_category;
-				break;
-			case 3:
-				title=R.string.dic_new_currency_title;
-				name=R.string.dic_new_currency;
-				((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.VISIBLE);
-				((TextView) view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.VISIBLE);
-				break;
+		Bundle args=getArguments();
+		obj=args.getInt("objType");
+		int nameTV=args.getInt("name_tv");
+		int title=args.getInt("title");
+		int positiveBtn=args.getInt("positiveBtn");
+		int negativeBtn=args.getInt("negativeBtn");
+		if(obj==3){
+			((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.VISIBLE);
+			((TextView) view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.VISIBLE);
 		}
-		((TextView)view.findViewById(R.id.dic_new_name_tv)).setText(name);
 		
-		builder.setTitle(title).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+		((TextView)view.findViewById(R.id.dic_new_name_tv)).setText(nameTV);
+		builder.setTitle(title).setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				onSaveElement();
 			}
-		}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		}).setNegativeButton(negativeBtn, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				DictionaryNewDialogFragment.this.getDialog().cancel();
 			}
@@ -94,20 +80,12 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 			Toast.makeText(this.getActivity().getApplicationContext(), R.string.enter_text, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
-		switch(obj){
-		case 1:
-			new PlaceDataSource(getActivity()).insert(name);
-			break;
-		case 2:
-			new CategoryDataSource(getActivity()).insert(name);
-			break;
-		case 3:
-			String code=((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString();
-			new CurrencyDataSource(getActivity()).insert(name,code);
-			break;
-	}
-		saveListener.onSaveBtnDialog();
+		Bundle args=new Bundle();
+		args.putString("name", name);
+		if(obj==3)
+			args.putString("code", ((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString());
+
+		saveListener.onSaveBtnDialog(args);
 		DictionaryNewDialogFragment.this.getDialog().hide();
 	}
 

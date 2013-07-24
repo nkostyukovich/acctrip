@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.EditEventActivity;
@@ -33,7 +35,7 @@ public class DictionaryListFragment extends Fragment implements onSaveElementLis
 	private DictionaryListViewAdapter adapterZ;
 	// private Class<T> type;
 	private int obj;
-
+//1place 2cat 3cur
 	public DictionaryListFragment() {
 		// TODO Auto-generated constructor stub
 	}
@@ -105,9 +107,32 @@ public class DictionaryListFragment extends Fragment implements onSaveElementLis
 	
 	
 	public void onNewElement(){
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.newInstance(obj);
+		Bundle args = new Bundle();
+	    args.putInt("objType", obj);
+	    int title=1,name=1;
+		switch(obj){
+			case 1:
+				title=R.string.dic_new_place_title;
+				name=R.string.dic_new_place;
+				break;
+			case 2:
+				title=R.string.dic_new_category_title;
+				name=R.string.dic_new_category;
+				break;
+			case 3:
+				title=R.string.dic_new_currency_title;
+				name=R.string.dic_new_currency;
+				
+				break;
+		}
+		args.putInt("name_tv",name);
+		args.putInt("title", title);
+		args.putInt("positiveBtn", R.string.save);
+		args.putInt("negativeBtn", R.string.cancel);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.newInstance(args);
 	    newFragment.show(getFragmentManager(), "dialog");
 	    newFragment.setOnSaveElementListener(this);
+	    
 	}
 	
 	
@@ -151,7 +176,19 @@ public class DictionaryListFragment extends Fragment implements onSaveElementLis
 
 
 	@Override
-	public void onSaveBtnDialog() {
+	public void onSaveBtnDialog(Bundle args) {
+		String name=args.getString("name");
+		switch(obj){
+		case 1:
+			new PlaceDataSource(getActivity()).insert(name);
+			break;
+		case 2:
+			new CategoryDataSource(getActivity()).insert(name);
+			break;
+		case 3:
+			new CurrencyDataSource(getActivity()).insert(name,args.getString("code"));
+			break;
+	}
 		fillList();
 		
 	}

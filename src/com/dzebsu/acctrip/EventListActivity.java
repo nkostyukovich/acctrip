@@ -52,7 +52,7 @@ public class EventListActivity extends Activity {
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onSelectEvent(adapterZ.getEventByIdInList(id));
+				onSelectEvent(id);
 			}
 		});
 
