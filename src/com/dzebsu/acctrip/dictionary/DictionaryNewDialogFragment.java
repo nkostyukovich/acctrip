@@ -54,7 +54,7 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		Bundle args=getArguments();
 		obj=args.getInt("objType");
 		int nameTV=args.getInt("name_tv");
-		int title=args.getInt("title");
+		String title=args.getString("title");
 		int positiveBtn=args.getInt("positiveBtn");
 		int negativeBtn=args.getInt("negativeBtn");
 		String mode=args.getString("mode");
@@ -71,15 +71,10 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 			if(mode.equals("delete")){
 				((EditText) view.findViewById(R.id.dic_new_name_et)).setVisibility(View.GONE);
 				((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.GONE);
+				((TextView)view.findViewById(R.id.dic_new_name_tv)).setVisibility(View.GONE);
+				((TextView)view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.GONE);
 				builder.setIcon(android.R.drawable.ic_delete);
 				
-				((TextView) view.findViewById(R.id.dic_delete_name_tv1)).setVisibility(View.VISIBLE);
-				((TextView) view.findViewById(R.id.dic_delete_name_tv2)).setVisibility(View.VISIBLE);
-				
-				((TextView)view.findViewById(R.id.dic_delete_name_tv1)).setText(args.getString("name"));
-				if(obj==3){
-				((TextView)view.findViewById(R.id.dic_delete_name_tv2)).setText(args.getString("code"));
-				}
 			}
 		
 		

@@ -96,7 +96,7 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
 			
-//			(ArrayList<WrappedObject>) results.values;
+			objects=(ArrayList<WrappedObject>) results.values;
 			notifyDataSetChanged();
 		}
 
