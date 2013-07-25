@@ -58,16 +58,21 @@ public class CategoryDataSource {
 	}
 
 	public Category getCategoryById(long id) {
-		String whereBatch = EventAccContract.Category._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, whereBatch,
-				new String[] { Long.toString(id) }, null, null, null);
-		Category category = null;
-		if (c.getCount() > 0) {
-			c.moveToFirst();
-			category = ConvertUtils.cursorToCategory(c);
+		open();
+		try{
+			String whereBatch = EventAccContract.Category._ID + " = ?";
+			Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, whereBatch,
+					new String[] { Long.toString(id) }, null, null, null);
+			Category category = null;
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				category = ConvertUtils.cursorToCategory(c);
+			}
+			c.close();
+			return category;
+		} finally{
+			close();
 		}
-		c.close();
-		return category;
 	}
 
 	public List<Category> getCategoryList() {
@@ -83,6 +88,15 @@ public class CategoryDataSource {
 			}
 			c.close();
 			return result;
+		} finally {
+			close();
+		}
+	}
+	public long delete(Long id) {
+		open();
+		try {
+			String whereClause = EventAccContract.Category._ID + " = ?";
+			return database.delete(EventAccContract.Category.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

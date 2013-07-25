@@ -57,16 +57,21 @@ public class PlaceDataSource {
 	}
 
 	public Place getPlaceById(long id) {
-		String whereBatch = EventAccContract.Place._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, whereBatch,
-				new String[] { Long.toString(id) }, null, null, null);
-		Place place = null;
-		if (c.getCount() > 0) {
-			c.moveToFirst();
-			place = ConvertUtils.cursorToPlace(c);
+		open();
+		try{
+			String whereBatch = EventAccContract.Place._ID + " = ?";
+			Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, whereBatch,
+					new String[] { Long.toString(id) }, null, null, null);
+			Place place = null;
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				place = ConvertUtils.cursorToPlace(c);
+			}
+			c.close();
+			return place;
+		}finally{
+			close();
 		}
-		c.close();
-		return place;
 	}
 
 	public List<Place> getPlaceList() {
@@ -86,5 +91,13 @@ public class PlaceDataSource {
 			close();
 		}
 	}
-
+	public long delete(Long id) {
+		open();
+		try {
+			String whereClause = EventAccContract.Place._ID + " = ?";
+			return database.delete(EventAccContract.Place.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+		} finally {
+			close();
+		}
+	}
 }

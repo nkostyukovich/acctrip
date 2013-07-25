@@ -121,11 +121,62 @@ public class OperationDataSource {
 		return i;
 	}
 
-	public List<Operation> getOperationList(long eventId) {
+	public List<Operation> getOperationListByEventId(long eventId) {
 		open();
 		try {
 			List<Operation> result = new ArrayList<Operation>();
 			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where ev._Id = " + eventId + " order by "
+					+ EventAccContract.Operation._ID + " desc", null);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				result.add(ConvertUtils.cursorToOperation(c));
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
+		}
+	}
+	public List<Operation> getOperationListByPlaceId(long placeId) {
+		open();
+		try {
+			List<Operation> result = new ArrayList<Operation>();
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where pl._Id = " + placeId + " order by "
+					+ EventAccContract.Operation._ID + " desc", null);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				result.add(ConvertUtils.cursorToOperation(c));
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
+		}
+	}
+	public List<Operation> getOperationListByCategoryId(long categoryId) {
+		open();
+		try {
+			List<Operation> result = new ArrayList<Operation>();
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where cat._Id = " + categoryId + " order by "
+					+ EventAccContract.Operation._ID + " desc", null);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				result.add(ConvertUtils.cursorToOperation(c));
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
+		}
+	}
+	public List<Operation> getOperationListByCurrencyId(long currencyId) {
+		open();
+		try {
+			List<Operation> result = new ArrayList<Operation>();
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where cur._Id = " + currencyId + " order by "
 					+ EventAccContract.Operation._ID + " desc", null);
 			c.moveToFirst();
 			while (!c.isAfterLast()) {

@@ -7,28 +7,49 @@
     <TextView
         android:id="@+id/dic_new_name_tv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
         android:text="@string/dic_new_code"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-    	android:layout_alignParentTop="true"/>
-
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+	<TextView
+        android:id="@+id/dic_delete_name_tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/dic_new_name_tv"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	
     <EditText
         android:id="@+id/dic_new_name_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text" 
-        android:layout_below="@+id/dic_new_name_tv">
+        android:layout_below="@+id/dic_delete_name_tv1">
     <requestFocus />
     </EditText>
     <TextView
         android:id="@+id/dic_new_name_tv2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
         android:visibility="gone"
         android:text="@string/dic_new_code"
         android:layout_below="@+id/dic_new_name_et"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    
+    <TextView
+        android:id="@+id/dic_delete_name_tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/dic_new_name_tv2"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
     
      <EditText
         android:id="@+id/dic_new_name_et2"
@@ -36,7 +57,7 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:ems="10" 
-        android:layout_below="@+id/dic_new_name_tv2"
+        android:layout_below="@+id/dic_delete_name_tv2"
         android:visibility="gone">
         
 

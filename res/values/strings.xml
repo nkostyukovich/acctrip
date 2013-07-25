@@ -79,12 +79,28 @@
 	
 	<string name="dic_new_place">Place name</string>
 	<string name="dic_new_place_title">New place</string>
+	<string name="dic_edit_place_title">Edit place</string>
+	<string name="dic_delete_place_title">Delete place</string>
 	
 	<string name="dic_new_category">Category name</string>
 	<string name="dic_new_category_title">New category</string>
+	<string name="dic_edit_category_title">Edit category</string>
+	<string name="dic_delete_category_title">Delete category</string>
 	
 	<string name="dic_new_currency">Currency name</string>
 	<string name="dic_new_currency_title">New currency</string>
+	<string name="dic_edit_currency_title">Edit currency</string>
+	<string name="dic_delete_currency_title">Delete currency</string>
 	<string name="dic_new_code">Currency code</string>
+	<string name="dic_edit">Edit</string>
+	<string name="save_edit_btn">Save changes</string>
+	
+	<string name="confirm_del">Are you sure?</string>
+	<string name="ops">operations.</string>
+	<string name="warning">Warning</string>
+	<string name="okay">Okay</string>
+	<string name="pl_used_by_ops">Sorry, you can\'t delete this place.\nIt used by</string>
+	<string name="cat_used_by_ops">Sorry, you can\'t delete this category.\nIt used by</string>
+	<string name="cur_used_by_ops">Sorry, you can\'t delete this currency.\nIt used by</string>
 	
 </resources>

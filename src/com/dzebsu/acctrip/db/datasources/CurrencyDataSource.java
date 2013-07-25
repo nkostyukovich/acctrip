@@ -62,16 +62,21 @@ public class CurrencyDataSource {
 	}
 
 	public Currency getCurrencyById(long id) {
-		String whereBatch = EventAccContract.Currency._ID + " = ?";
-		Cursor c = database.query(EventAccContract.Currency.TABLE_NAME, selectedColumns, whereBatch,
-				new String[] { Long.toString(id) }, null, null, null);
-		Currency cur = null;
-		if (c.getCount() > 0) {
-			c.moveToFirst();
-			cur = ConvertUtils.cursorToCurrency(c);
+		open();
+		try{
+			String whereBatch = EventAccContract.Currency._ID + " = ?";
+			Cursor c = database.query(EventAccContract.Currency.TABLE_NAME, selectedColumns, whereBatch,
+					new String[] { Long.toString(id) }, null, null, null);
+			Currency cur = null;
+			if (c.getCount() > 0) {
+				c.moveToFirst();
+				cur = ConvertUtils.cursorToCurrency(c);
+			}
+			c.close();
+			return cur;
+		}finally{
+			close();
 		}
-		c.close();
-		return cur;
 	}
 
 	public List<Currency> getCurrencyList() {
@@ -87,6 +92,15 @@ public class CurrencyDataSource {
 			}
 			c.close();
 			return result;
+		} finally {
+			close();
+		}
+	}
+	public long delete(Long id) {
+		open();
+		try {
+			String whereClause = EventAccContract.Currency._ID + " = ?";
+			return database.delete(EventAccContract.Currency.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

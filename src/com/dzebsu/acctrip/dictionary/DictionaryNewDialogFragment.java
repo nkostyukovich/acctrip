@@ -29,12 +29,12 @@ public class DictionaryNewDialogFragment extends DialogFragment {
         return f;
     }
 
-	private onSaveElementListener saveListener;
+	private onPositiveBtnListener saveListener;
 	private View view; 
 	private int obj;
 
 
-	public void setOnSaveElementListener(onSaveElementListener listener){
+	public void setOnPositiveBtnListener(onPositiveBtnListener listener){
 		saveListener=listener;
 	}
 	
@@ -47,7 +47,8 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setIcon(android.R.drawable.ic_input_add);
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		view = inflater.inflate(R.layout.dictonary_new_dialog, null);
 		Bundle args=getArguments();
@@ -56,13 +57,32 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		int title=args.getInt("title");
 		int positiveBtn=args.getInt("positiveBtn");
 		int negativeBtn=args.getInt("negativeBtn");
+		String mode=args.getString("mode");
 		if(obj==3){
 			((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.VISIBLE);
 			((TextView) view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.VISIBLE);
 		}
-		
 		((TextView)view.findViewById(R.id.dic_new_name_tv)).setText(nameTV);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		if(mode.equals("edit")){
+			builder.setIcon(android.R.drawable.ic_menu_edit);
+			((EditText)view.findViewById(R.id.dic_new_name_et)).setText(args.getString("name"));
+			((EditText)view.findViewById(R.id.dic_new_name_et2)).setText(args.getString("code"));
+		}else
+			if(mode.equals("delete")){
+				((EditText) view.findViewById(R.id.dic_new_name_et)).setVisibility(View.GONE);
+				((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.GONE);
+				builder.setIcon(android.R.drawable.ic_delete);
+				
+				((TextView) view.findViewById(R.id.dic_delete_name_tv1)).setVisibility(View.VISIBLE);
+				((TextView) view.findViewById(R.id.dic_delete_name_tv2)).setVisibility(View.VISIBLE);
+				
+				((TextView)view.findViewById(R.id.dic_delete_name_tv1)).setText(args.getString("name"));
+				if(obj==3){
+				((TextView)view.findViewById(R.id.dic_delete_name_tv2)).setText(args.getString("code"));
+				}
+			}
+		
+		
 		builder.setView(view);
 		builder.setTitle(title).setPositiveButton(positiveBtn, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -85,7 +105,7 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 
 		            @Override
 		            public void onClick(View view) {
-		                onSaveElement();
+		                onPositiveBtn();
 		                
 		            }
 		        });
@@ -94,19 +114,28 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		return al;
 	}
 
-	public void onSaveElement() {
+	public void onPositiveBtn() {
 		//TODO all
+		Bundle args=null;
+		String mode= getArguments().getString("mode");
+		if(mode.equals("new") || mode.equals("edit")){
+		
 		String name = ((EditText) view.findViewById(R.id.dic_new_name_et)).getText().toString();
 		if (name.isEmpty()) {
 			Toast.makeText(this.getActivity().getApplicationContext(), R.string.enter_text, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Bundle args=new Bundle();
+		args=new Bundle();
 		args.putString("name", name);
 		if(obj==3)
 			args.putString("code", ((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString());
-
-		saveListener.onSaveBtnDialog(args);
+		}else
+			if(mode.equals("delete")){
+				args=new Bundle();
+			}
+		args.putString("mode", mode);
+		args.putLong("id", getArguments().getLong("id"));
+		saveListener.onPositiveBtnDialog(args);
 		this.dismiss();
 	}
 

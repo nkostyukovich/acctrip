@@ -28,7 +28,7 @@
             android:contentDescription="@string/add_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dic_new"
+            android:src="@android:drawable/ic_input_add"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"/>
       

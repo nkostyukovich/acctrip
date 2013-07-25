@@ -146,7 +146,7 @@ public class OperationListActivity extends Activity {
 
 	private void fillOperationList() {
 		OperationDataSource dataSource = new OperationDataSource(this);
-		List<Operation> operations = dataSource.getOperationList(eventId);
+		List<Operation> operations = dataSource.getOperationListByEventId(eventId);
 		// total operations
 		OperationDataSource opdata = new OperationDataSource(this);
 
