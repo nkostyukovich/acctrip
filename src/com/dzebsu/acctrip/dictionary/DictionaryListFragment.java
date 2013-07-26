@@ -143,6 +143,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	@Override
 	public void onResume() {
 		super.onResume();
+		fillList();
 		ImageButton ned = new ImageButton(this.getActivity());
 
 		((ImageButton) getView().findViewById(R.id.dic_new)).setOnClickListener(new View.OnClickListener() {
@@ -177,7 +178,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		fillList();
+		
 	}
 
 	public void onElementEdit(long id) {
@@ -311,12 +312,13 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			break;
 		}
 		adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
-		ListAdapter adapter = adapterZ;
-		ListView listView = (ListView) getView().findViewById(R.id.dictionarylist);
 		// trigger filter to it being applied on resume
 		
-		listView.setAdapter(adapter);
+		
 	}
+		ListAdapter adapter = adapterZ;
+		ListView listView = (ListView) getView().findViewById(R.id.dictionarylist);
+		listView.setAdapter(adapter);
 		this.adapterZ.getFilter().filter(((SearchView) getView().findViewById(R.id.dic_search)).getQuery());
 	}
 

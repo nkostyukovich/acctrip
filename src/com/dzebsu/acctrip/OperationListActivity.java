@@ -176,11 +176,12 @@ public class OperationListActivity extends Activity {
 		OperationDataSource dataSource = new OperationDataSource(this);
 		List<Operation> operations = dataSource.getOperationListByEventId(eventId);
 		adapterZ = new OperationsListViewAdapter(this, operations);
+		
+		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		fillEventInfo(eventId);
 		listView.setAdapter(adapter);
-		}
 		OperationListActivity.this.adapterZ.getFilter().filter(
 				((SearchView) findViewById(R.id.uni_op_searchView)).getQuery());
 	}

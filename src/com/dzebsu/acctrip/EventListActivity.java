@@ -135,11 +135,11 @@ public class EventListActivity extends Activity {
 		EventDataSource dataSource = new EventDataSource(this);
 		List<Event> events = dataSource.getEventList();
 		adapterZ = new EventListViewAdapter(this, events);
+		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		// trigger filter to it being applied on resume
 		listView.setAdapter(adapter);
-		}
 		EventListActivity.this.adapterZ.getFilter().filter(
 				((SearchView) findViewById(R.id.event_SearchView)).getQuery());
 
