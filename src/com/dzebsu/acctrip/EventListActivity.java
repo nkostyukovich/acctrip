@@ -5,7 +5,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -32,10 +34,11 @@ import com.dzebsu.acctrip.models.OperationType;
 public class EventListActivity extends Activity {
 
 	// Anonymous class wanted this adapter inside itself
-	private EventListViewAdapter adapterZ;
+	private EventListViewAdapter adapterZ=null;
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 	private Parcelable mListState = null;
+	private boolean dataChanged=false;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
@@ -62,7 +65,6 @@ public class EventListActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 
@@ -96,31 +98,9 @@ public class EventListActivity extends Activity {
 		case R.id.recreate_all_tables:
 			reCreateAllTables(item.getActionView());
 			return true;
-		case R.id.create_1000_records:
-			create1000records(item.getActionView());
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	public void create1000records(View view) {
-		EventDataSource dataSource = new EventDataSource(this);
-		OperationDataSource dataSource2 = new OperationDataSource(this);
-		PlaceDataSource dataSource3 = new PlaceDataSource(this);
-		CategoryDataSource dataSource4 = new CategoryDataSource(this);
-		CurrencyDataSource dataSource5 = new CurrencyDataSource(this);
-		dataSource3.insert("Tokyo Tower");
-		dataSource4.insert("Exposition");
-		dataSource5.insert("Dollar", "USD");
-		Calendar cal = GregorianCalendar.getInstance();
-		dataSource
-				.insert("Record #" + Integer.toString(1),
-						"Day before yesterday I saw a rabbit, and yesterday a deer, and today, you. I thought what I'd do was, I'd pretend I was one of those deaf-mutes.");
-
-		dataSource2.insert(cal.getTime(), "Day before yesterday I saw a rabbit, and yesterday a deer, and today, you.",
-				Math.random() * 100, OperationType.EXPENSE, 1, 1, 1, 1);
-
 	}
 
 	public void reCreateAllTables(View view) {
@@ -150,21 +130,25 @@ public class EventListActivity extends Activity {
 	}
 
 	private void fillEventList() {
+		if(adapterZ==null || dataChanged){
+			dataChanged=false;
 		EventDataSource dataSource = new EventDataSource(this);
 		List<Event> events = dataSource.getEventList();
 		adapterZ = new EventListViewAdapter(this, events);
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		// trigger filter to it being applied on resume
+		listView.setAdapter(adapter);
+		}
 		EventListActivity.this.adapterZ.getFilter().filter(
 				((SearchView) findViewById(R.id.event_SearchView)).getQuery());
-		listView.setAdapter(adapter);
 
 	}
 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		dataChanged=true;
 		// fillEventList();
 	}
 

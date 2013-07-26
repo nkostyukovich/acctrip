@@ -65,12 +65,11 @@
         android:layout_below="@+id/op_total_ops" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/op_new_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="@string/op_new_btn" 
-            android:onClick="onNewOperation"/>
+            android:text="@string/op_new_btn" />
 
     </LinearLayout>
 

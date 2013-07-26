@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,12 +23,12 @@ public class EditEventActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
-
-		// Show the Up button in the action bar.
-		String name = getIntent().getStringExtra("eventName");
-		((EditText) this.findViewById(R.id.editEventName)).setText(name);
+		Intent intent=getIntent();
+		((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra("eventName"));
+		if(intent.hasExtra("edit")){
+			((EditText) this.findViewById(R.id.editEventDesc)).setText(intent.getStringExtra("eventDesc"));
+		}
 		setupActionBar();
-		// TODO not works
 	}
 
 	/**
@@ -41,6 +42,8 @@ public class EditEventActivity extends Activity {
 		}
 	}
 
+	//due different ways how to get here
+	//getSupportParent
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -52,9 +55,11 @@ public class EditEventActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Intent intent = new Intent(this, EventListActivity.class);
+		//	this.
+			/*Intent intent = new Intent(this, EventListActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			startActivity(intent);*/
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -68,11 +73,17 @@ public class EditEventActivity extends Activity {
 		}
 		String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
 		EventDataSource dataSource = new EventDataSource(this);
+		Intent inthere=getIntent();
+		if(!inthere.hasExtra("edit")){
 		long eventId = dataSource.insert(name, desc);
-		// finish(); go right to new event
+		// go right to new event
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("eventId", eventId);
-		startActivity(intent);
+		startActivity(intent);}
+		else{
+			dataSource.update(inthere.getLongExtra("id",-1), name, desc);
+			finish();
+		}
 	}
 
 	// finishes activity when cancel clicked
@@ -80,9 +91,6 @@ public class EditEventActivity extends Activity {
 		finish();
 	}
 
-	public void onNewOperation(View view) {
-		// TODO add operation here
-	}
 
 	@Override
 	protected void onResume() {

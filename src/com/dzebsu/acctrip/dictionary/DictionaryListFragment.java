@@ -88,6 +88,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			}
 		}
 	};
+	private boolean dataChanged=false;
 
 	// 1place 2cat 3cur
 	public DictionaryListFragment() {
@@ -108,7 +109,6 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 		View vi = inflater.inflate(R.layout.fragment_dictionary_list, container, false);
 		final ListView list = (ListView) vi.findViewById(R.id.dictionarylist);
 		list.setLongClickable(true);
@@ -164,6 +164,8 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
+				if (mActionMode != null)
+					mActionMode.finish();
 				DictionaryListFragment.this.adapterZ.getFilter().filter(newText);
 				return true;
 			}
@@ -294,6 +296,8 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	}
 
 	private void fillList() {
+		if(adapterZ==null || dataChanged){
+			dataChanged=false;
 		List<? extends WrappedObject> objs = null;
 		switch (obj) {
 		case 1:
@@ -310,9 +314,10 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) getView().findViewById(R.id.dictionarylist);
 		// trigger filter to it being applied on resume
-		this.adapterZ.getFilter().filter(((SearchView) getView().findViewById(R.id.dic_search)).getQuery());
+		
 		listView.setAdapter(adapter);
-
+	}
+		this.adapterZ.getFilter().filter(((SearchView) getView().findViewById(R.id.dic_search)).getQuery());
 	}
 
 	@Override
@@ -362,9 +367,10 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			}
 			Toast.makeText(getActivity(), "Deleted.", Toast.LENGTH_SHORT).show();
 		}
-
+		dataChanged=true;
 		fillList();
 
 	}
 
+	
 }

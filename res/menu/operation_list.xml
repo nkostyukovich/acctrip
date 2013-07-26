@@ -6,8 +6,14 @@
         android:showAsAction="never"
         android:title="@string/action_settings"/>
     <item android:id="@+id/delete_event" 
-        android:orderInCategory="90"
+        android:orderInCategory="2"
         android:showAsAction="always"
         android:title="@string/op_del_menu" android:icon="@drawable/dic_del"/>
+    <item android:title="@string/dic_edit" 
+        android:id="@+id/event_edit" 
+        android:showAsAction="always" 
+        android:icon="@drawable/dic_edit"
+		android:orderInCategory="1">
+    </item>
 
 </menu>

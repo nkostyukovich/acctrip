@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -36,6 +38,7 @@ public class OperationListActivity extends Activity {
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 	private Parcelable mListState = null;
+	private boolean dataChanged=false;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
@@ -52,13 +55,20 @@ public class OperationListActivity extends Activity {
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		listView.addHeaderView(createListHeader());
 		fillOperationList();
-		fillEventInfo(eventId);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// onSelectEvent(adapterZ.getOperationByIdInList(id).getId());
+				// onNewOperation(id);
 			}
 		});
 
+		((Button) findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onNewOperation();
+				
+			}
+		});
 		// add filter_Event_Edittext for events names
 		SearchView eventsFilter = (SearchView) findViewById(R.id.uni_op_searchView);
 		eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,13 +108,27 @@ public class OperationListActivity extends Activity {
 		case R.id.delete_event:
 			onDeleteEvent(item.getActionView());
 			return true;
+		case R.id.event_edit:
+			onEventEdit(item.getActionView());
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	private void onEventEdit(View actionView) {
+		Event ev=new EventDataSource(this).getEventById(eventId);
+		Intent intent = new Intent(this, EditEventActivity.class);
+		intent.putExtra("edit", 0);
+		intent.putExtra("id", eventId);
+		intent.putExtra("eventName", ev.getName());
+		intent.putExtra("eventDesc", ev.getDesc());
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
+	}
+
 	public void onDeleteEvent(View view) {
-		//TODO delete all operations.. optional delete all places, currencies?
+		//TODO delete all operations.. optional delete all places, currencies? and check for places and others about being used by another events
 		new AlertDialog.Builder(this).setMessage("Delete this Event?").setIcon(android.R.drawable.ic_dialog_alert)
 				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -139,25 +163,26 @@ public class OperationListActivity extends Activity {
 		setupActionBar();
 	}
 
-	public void onNewOperation(View view) {
-		// Intent intent = new Intent(this, EditOperationActivity.class);
-		// startActivity(intent);
+	public void onNewOperation() {
+		Intent intent = new Intent(this, EditOperationActivity.class);
+		intent.putExtra("eventId", eventId);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
 	}
 
 	private void fillOperationList() {
+		if(adapterZ==null || dataChanged){
+			dataChanged=false;
 		OperationDataSource dataSource = new OperationDataSource(this);
 		List<Operation> operations = dataSource.getOperationListByEventId(eventId);
-		// total operations
-		OperationDataSource opdata = new OperationDataSource(this);
-
-		// end
 		adapterZ = new OperationsListViewAdapter(this, operations);
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.op_list);
-		// trigger filter to it being applied on resume
+		fillEventInfo(eventId);
+		listView.setAdapter(adapter);
+		}
 		OperationListActivity.this.adapterZ.getFilter().filter(
 				((SearchView) findViewById(R.id.uni_op_searchView)).getQuery());
-		listView.setAdapter(adapter);
 	}
 
 	public View createListHeader() {
@@ -173,7 +198,11 @@ public class OperationListActivity extends Activity {
 			getActionBar().setHomeButtonEnabled(true);
 		}
 	}
-
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		dataChanged=true;
+	}
 	public void fillEventInfo(long eventId) {
 		EventDataSource dataSource = new EventDataSource(this);
 		Event ev = dataSource.getEventById(eventId);

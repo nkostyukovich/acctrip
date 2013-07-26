@@ -59,6 +59,7 @@
         android:layout_weight="5">
 
         <Button
+            android:id="@+id/edit_event_save_btn"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

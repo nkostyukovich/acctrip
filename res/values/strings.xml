@@ -98,8 +98,8 @@
 	<string name="confirm_del">Are you sure want to delete %s?</string>
 	<string name="warning">Warning</string>
 	<string name="okay">Okay</string>
-	<string name="pl_used_by_ops">Sorry, you can\'t delete this place.\nIt used by %d operations.</string>
-	<string name="cat_used_by_ops">Sorry, you can\'t delete this category.\nIt used by %d operations.</string>
-	<string name="cur_used_by_ops">Sorry, you can\'t delete this currency.\nIt used by %d operations.</string>
+	<string name="pl_used_by_ops">You can\'t delete this place.\nIt used by %d operations.</string>
+	<string name="cat_used_by_ops">You can\'t delete this category.\nIt used by %d operations.</string>
+	<string name="cur_used_by_ops">You can\'t delete this currency.\nIt used by %d operations.</string>
 	
 </resources>
