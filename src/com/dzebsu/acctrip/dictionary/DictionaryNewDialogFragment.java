@@ -21,7 +21,19 @@ import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 
 public class DictionaryNewDialogFragment extends DialogFragment {
 
-	
+	static public DictionaryNewDialogFragment prepareDialog(int obj,String mode, int name, String title, int positiveBtn, String name1, String code1, long id) {
+		Bundle args = new Bundle();
+		args.putInt("objType", obj);
+		args.putString("mode", mode);
+		args.putInt("name_tv", name);
+		args.putString("title", title);
+		args.putInt("positiveBtn", positiveBtn);
+		args.putString("name", name1);
+		args.putString("code", code1);
+		args.putLong("id", id);
+		args.putInt("negativeBtn", R.string.cancel);
+		return DictionaryNewDialogFragment.newInstance(args);
+	}
 	
 	static DictionaryNewDialogFragment newInstance(Bundle data) {
 		DictionaryNewDialogFragment f = new DictionaryNewDialogFragment();

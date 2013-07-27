@@ -144,7 +144,6 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	public void onResume() {
 		super.onResume();
 		fillList();
-		ImageButton ned = new ImageButton(this.getActivity());
 
 		((ImageButton) getView().findViewById(R.id.dic_new)).setOnClickListener(new View.OnClickListener() {
 
@@ -181,6 +180,13 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 		
 	}
 
+	@Override
+	public void onPause() {
+
+		super.onPause();
+		if (mActionMode != null)
+			mActionMode.finish();
+	}
 	public void onElementEdit(long id) {
 		int title = 1, name = 1;
 		WrappedObject object = null;
@@ -207,7 +213,9 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			break;
 		}
 
-		performAction("edit", name, getString(title), R.string.save_edit_btn, name1, code1, id);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"edit", name, getString(title), R.string.save_edit_btn, name1, code1, id);
+		newFragment.show(getFragmentManager(), "dialog");
+		newFragment.setOnPositiveBtnListener(this);
 	}
 
 	public void onDeleteElement(long id) {
@@ -257,7 +265,9 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			break;
 		}
 
-		performAction("delete", name, String.format(title, name1), R.string.dic_del, "", "", id);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"delete", name, String.format(title, name1), R.string.dic_del, "", "", id);
+		newFragment.show(getFragmentManager(), "dialog");
+		newFragment.setOnPositiveBtnListener(this);
 	}
 
 	public void onNewElement() {
@@ -276,25 +286,12 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			name = R.string.dic_new_currency;
 			break;
 		}
-		performAction("new", name, getString(title), R.string.save, null, null, 0);
-
-	}
-
-	private void performAction(String mode, int name, String title, int positiveBtn, String name1, String code1, long id) {
-		Bundle args = new Bundle();
-		args.putInt("objType", obj);
-		args.putString("mode", mode);
-		args.putInt("name_tv", name);
-		args.putString("title", title);
-		args.putInt("positiveBtn", positiveBtn);
-		args.putString("name", name1);
-		args.putString("code", code1);
-		args.putLong("id", id);
-		args.putInt("negativeBtn", R.string.cancel);
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.newInstance(args);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"new", name, getString(title), R.string.save, null, null, 0);
 		newFragment.show(getFragmentManager(), "dialog");
 		newFragment.setOnPositiveBtnListener(this);
+
 	}
+
 
 	private void fillList() {
 		if(adapterZ==null || dataChanged){

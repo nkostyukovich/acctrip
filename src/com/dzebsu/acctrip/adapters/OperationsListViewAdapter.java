@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.dictionary.WrappedObject;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 
@@ -50,6 +51,11 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		return objects.get(position).getId();
 	}
 	@Override
+	public Operation getItem(int position) {
+		// TODO Auto-generated method stub
+		return objects.get(position);
+	}
+	@Override
 	public int getCount() {
 		return objects.size();
 	};
@@ -69,7 +75,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, EEE, MMM d", Locale.getDefault());
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
 		holder.date.setText(sdf.format(objects.get(position).getDate()));
 		String s = objects.get(position).getDesc();
 		if (s.length() > 80)

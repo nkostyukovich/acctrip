@@ -86,10 +86,10 @@ public class OperationDataSource {
 	// }
 	// }
 
-	public long deleteByEventId(Long id) {
+	public long deleteByEventId(long id) {
 		open();
 		try {
-			String whereClause = "where ev._Id = ?";
+			String whereClause = "eventId = ?";
 			return database.delete(EventAccContract.Operation.TABLE_NAME, whereClause,
 					new String[] { Long.toString(id) });
 		} finally {
@@ -114,13 +114,23 @@ public class OperationDataSource {
 		}
 	}
 
-	public long getCount() {
+	public long getCountByEventId(long id) {
 		open();
-		long i = DatabaseUtils.queryNumEntries(database, EventAccContract.Operation.TABLE_NAME);
-		close();
-		return i;
+		try {
+			Cursor c=database.rawQuery("select count(eventId) evcount from "+EventAccContract.Operation.TABLE_NAME+" where eventId=?", new String[] { Long.toString(id) });
+			c.moveToFirst();
+			long cnt=Long.parseLong(c.getString(c.getColumnIndex("evcount")));
+			c.close();
+			return cnt;
+		} finally {
+			close();
+		}
 	}
 
+	public Operation getLastOperationByEventId(long eventId){
+		List<Operation> ops=getOperationListByEventId(eventId);
+		return !ops.isEmpty()?ops.get(0):null;
+	}
 	public List<Operation> getOperationListByEventId(long eventId) {
 		open();
 		try {

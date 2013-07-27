@@ -1,8 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+         >
+
+    <TextView
+        android:id="@+id/op_edit_event_name"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tokyo Tover , Japan, Summer holidays"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        
+        
+        />
+
     
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/op_edit_value_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/op_edit_event_name"
+            android:text="Value:"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/op_edit_value_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/op_edit_value_tv"
+            android:ems="6"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="8dp" />
+
+        <Spinner
+            android:id="@+id/op_edit_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/op_edit_value_et"
+            android:layout_alignTop="@+id/op_edit_value_et"
+            android:layout_toRightOf="@+id/op_edit_currency_btn"
+            android:entries="@array/operation_type_spinner" />
+
+        <Button
+            android:id="@+id/op_edit_currency_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/op_edit_value_et"
+            android:layout_alignBottom="@+id/op_edit_value_et"
+            android:layout_toRightOf="@+id/op_edit_value_et"
+            android:text="USD" />
+       
+        <EditText
+            android:id="@+id/op_edit_desc_et"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lin_lay_op_edit"
+            android:layout_marginTop="8dp"
+            android:ems="30"
+            android:gravity="top"
+            android:inputType="textMultiLine" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/op_edit_date_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/op_edit_desc_et"
+            android:layout_toRightOf="@+id/op_edit_currency_btn"
+            android:layout_marginTop="8dp"
+            android:text="24/7/2013" />
+
+        <LinearLayout
+            android:id="@+id/lin_lay_op_edit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/op_edit_date_btn"
+            android:layout_below="@+id/op_edit_currency_btn"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+             >
+
+            <Button
+                android:id="@+id/op_edit_category_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Exposition" />
+
+            <Button
+                android:id="@+id/op_edit_place_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tokyo" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/op_edit_date_btn" >
+
+            <Button
+                android:id="@+id/edit_op_save_btn"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="onSaveOperation"
+                android:text="@string/save" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:onClick="onCancelBtn"
+                android:text="@string/cancel" />
+        </RelativeLayout>
+
+    </RelativeLayout>

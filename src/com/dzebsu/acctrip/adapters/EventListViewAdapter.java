@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.dictionary.WrappedObject;
 import com.dzebsu.acctrip.models.Event;
 
 public class EventListViewAdapter extends ArrayAdapter<Event> {
@@ -43,7 +44,11 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		// TODO Auto-generated method stub
 		return objects.get(position).getId();
 	}
-
+	@Override
+	public Event getItem(int position) {
+		// TODO Auto-generated method stub
+		return objects.get(position);
+	}
 	@Override
 	public int getCount() {
 		return objects.size();

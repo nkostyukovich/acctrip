@@ -128,9 +128,10 @@ public class OperationListActivity extends Activity {
 	}
 
 	public void onDeleteEvent(View view) {
-		//TODO delete all operations.. optional delete all places, currencies? and check for places and others about being used by another events
-		new AlertDialog.Builder(this).setMessage("Delete this Event?").setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		long ops=new OperationDataSource(this).getCountByEventId(eventId);
+		String message=ops>0?String.format(getString(R.string.ev_used_by_ops),new EventDataSource(this).getEventById(eventId).getName(),ops):String.format(getString(R.string.confirm_del),new EventDataSource(this).getEventById(eventId).getName() );
+		new AlertDialog.Builder(this).setTitle("Delete dialog").setMessage(message).setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(R.string.dic_del, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);

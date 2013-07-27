@@ -49,6 +49,11 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 	};
 
 	@Override
+	public WrappedObject getItem(int position) {
+		// TODO Auto-generated method stub
+		return objects.get(position);
+	}
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 		if (rowView == null) {

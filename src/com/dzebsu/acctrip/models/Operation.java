@@ -17,6 +17,7 @@ public class Operation {
 	public Operation() {
 	}
 
+	
 	public long getId() {
 		return id;
 	}

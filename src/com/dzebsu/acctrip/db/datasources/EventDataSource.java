@@ -17,11 +17,13 @@ public class EventDataSource {
 
 	private SQLiteDatabase database;
 	private EventAccDbHelper dbHelper;
+	private Context ctx;
 
 	private String[] selectedColumns = { EventAccContract.Event._ID, EventAccContract.Event.NAME, EventAccContract.Event.DESC };
 
 	public EventDataSource(Context ctx) {
 		dbHelper = new EventAccDbHelper(ctx);
+		this.ctx=ctx;
 	}
 
 	public void open() {
@@ -95,12 +97,15 @@ public class EventDataSource {
 	
 	public long delete(Long id) {
 		open();
+		long c=-1;
 		try {
 			String whereClause = EventAccContract.Event._ID + " = ?";
-			return database.delete(EventAccContract.Event.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+			c= database.delete(EventAccContract.Event.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}
+		new OperationDataSource(ctx).deleteByEventId(id);
+		return c;
 	}
 
 }
