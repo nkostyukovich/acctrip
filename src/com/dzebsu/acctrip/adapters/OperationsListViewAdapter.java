@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.dzebsu.acctrip.dictionary.WrappedObject;
-import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.models.Category;
+import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Operation;
+import com.dzebsu.acctrip.models.OperationType;
+import com.dzebsu.acctrip.models.Place;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	private List<Operation> objects;
@@ -57,6 +60,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	}
 	@Override
 	public int getCount() {
+		Log.d("tag", "Trying to get count on line !!!!!!!!!!!!!!!!! class Test");
 		return objects.size();
 	};
 
@@ -81,14 +85,22 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		if (s.length() > 80)
 			s = s.substring(0, 80) + "...";
 		holder.desc.setText(s);
-		holder.expenses.setText("-320 " + objects.get(position).getCurrency().getCode());
+		Place pl=objects.get(position).getPlace();
+		Category ca=objects.get(position).getCategory();
+		Currency cu=objects.get(position).getCurrency();
+		
+		String cur=cu==null?"?":cu.getCode();
+		String place=pl==null?"?":pl.getName();
+		String cat=ca==null?"?":ca.getName();
+
+		holder.expenses.setText((objects.get(position).getType().compareTo(OperationType.EXPENSE)==0?"-"+objects.get(position).getValue():objects.get(position).getValue()) + cur);
 		holder.opId.setText(context.getString(com.dzebsu.acctrip.R.string.op_id_tv)
 				+ ((Long) objects.get(position).getId()).toString());
-		s = objects.get(position).getPlace().getName();
+		s = place;
 		if (s.length() > 12)
 			s = s.substring(0, 12) + "...";
 		holder.place.setText(s);
-		s = objects.get(position).getCategory().getName();
+		s = cat;
 		if (s.length() > 12)
 			s = s.substring(0, 12) + "...";
 		holder.category.setText(s);
@@ -113,8 +125,8 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			if (constraint != null) {
 				for (Operation g : objects) {
 					SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-					String s = g.getDesc() + g.getId() + g.getValue() + g.getCategory().getName()
-							+ sdf.format(g.getDate()) + g.getPlace().getName();
+					String s = g.getDesc() + g.getId() + g.getValue() + (g.getCategory()!=null?g.getCategory().getName():"")
+							+ sdf.format(g.getDate()) + (g.getPlace()!=null?g.getPlace().getName():"");
 					// TODO sort by value if only numbers
 					if (s.toLowerCase().contains(constraint.toString().toLowerCase()))
 						filtered.add(g);

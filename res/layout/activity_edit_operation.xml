@@ -38,7 +38,9 @@
             android:layout_below="@+id/op_edit_value_tv"
             android:ems="6"
             android:inputType="numberDecimal"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" >
+             <requestFocus />
+             </EditText>
 
         <Spinner
             android:id="@+id/op_edit_type_spinner"
@@ -70,7 +72,7 @@
             android:gravity="top"
             android:inputType="textMultiLine" >
 
-            <requestFocus />
+           
         </EditText>
 
         <Button

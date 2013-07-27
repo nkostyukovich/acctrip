@@ -92,10 +92,11 @@ public final class R {
         public static final int activity_operation_list=0x7f030004;
         public static final int dictonary_new_dialog=0x7f030005;
         public static final int fragment_dictionary_list=0x7f030006;
-        public static final int operations_header=0x7f030007;
-        public static final int row_dictionary_list=0x7f030008;
-        public static final int row_event_list=0x7f030009;
-        public static final int row_operation_list=0x7f03000a;
+        public static final int fragment_dictionary_list2=0x7f030007;
+        public static final int operations_header=0x7f030008;
+        public static final int row_dictionary_list=0x7f030009;
+        public static final int row_event_list=0x7f03000a;
+        public static final int row_operation_list=0x7f03000b;
     }
     public static final class menu {
         public static final int category=0x7f080000;
@@ -146,6 +147,7 @@ public final class R {
         public static final int dic_search=0x7f050039;
         public static final int dictionary_expenses_list=0x7f05003a;
         public static final int dictionary_id_list=0x7f05003b;
+        public static final int enter_code=0x7f050057;
         public static final int enter_text=0x7f050031;
         public static final int enter_value=0x7f050054;
         public static final int erase_all_data=0x7f050026;

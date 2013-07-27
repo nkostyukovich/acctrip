@@ -31,6 +31,7 @@ public class EventAccContract {
 
 		public static final String ALIAS_ID = "cur_id";
 		public static final String ALIAS_CODE = "cur_code";
+		public static final String ALIAS_NAME = "cur_name";
 	}
 
 	public static abstract class Place implements BaseColumns {

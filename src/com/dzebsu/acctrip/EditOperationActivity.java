@@ -14,8 +14,11 @@ import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.onPositiveBtnListener;
+import com.dzebsu.acctrip.models.Category;
+import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
+import com.dzebsu.acctrip.models.Place;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -65,12 +68,17 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
 		Operation defOP=new OperationDataSource(this).getLastOperationByEventId(eventId);
 		if(defOP!=null){
-			place=defOP.getPlace().getName();
-			category=defOP.getCategory().getName();
-			currency=defOP.getCurrency().getCode();	
-			placeId=defOP.getPlace().getId();
-			categoryId=defOP.getCategory().getId();
-			currencyId=defOP.getCurrency().getId();
+			Place pl=defOP.getPlace();
+			Category ca=defOP.getCategory();
+			Currency cu=defOP.getCurrency();
+			
+			 currency=cu==null?"none":cu.getCode();
+			 place=pl==null?"none":pl.getName();
+			 category=ca==null?"none":ca.getName();
+			
+			placeId=pl==null?-1:pl.getId();
+			categoryId=ca==null?-1:ca.getId();
+			currencyId=cu==null?-1:cu.getId();
 		}
 		Button curBtn=((Button) findViewById(R.id.op_edit_currency_btn));
 		Button placeBtn=((Button) findViewById(R.id.op_edit_place_btn));

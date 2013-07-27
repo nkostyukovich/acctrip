@@ -211,8 +211,9 @@ public class OperationListActivity extends Activity {
 		((TextView) findViewById(R.id.op_name_tv)).setText(ev.getName());
 		((TextView) findViewById(R.id.op_desc_tv)).setText(ev.getDesc());
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id) + String.valueOf(eventId));
-		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + "16");
-		((TextView) findViewById(R.id.op_all_expenses)).setText("-3546 USD");
+		OperationDataSource opdata=new OperationDataSource(this);
+		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + opdata.getCountByEventId(eventId));
+		((TextView) findViewById(R.id.op_all_expenses)).setText(opdata.getSumByEventId(eventId)+" !glob_curr");
 	}
 
 }

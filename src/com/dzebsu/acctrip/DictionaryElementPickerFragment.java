@@ -62,7 +62,7 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 		obj=getArguments().getInt("objType");
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		view = inflater.inflate(R.layout.fragment_dictionary_list, null,false);
+		view = inflater.inflate(R.layout.fragment_dictionary_list2, null,false);
 		final ListView list = (ListView) view.findViewById(R.id.dictionarylist);
 		list.setOnItemClickListener(new OnItemClickListener() {
 

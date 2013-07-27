@@ -29,6 +29,7 @@ import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
 
 public class EventListActivity extends Activity {
@@ -58,7 +59,6 @@ public class EventListActivity extends Activity {
 				onSelectEvent(id);
 			}
 		});
-
 		// add filter_Event_Edittext for events names
 		SearchView eventsFilter = (SearchView) findViewById(R.id.event_SearchView);
 		eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -108,6 +108,7 @@ public class EventListActivity extends Activity {
 		EventAccDbHelper dbHelper = new EventAccDbHelper(this);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		dbHelper.reCreateAllTables(db);
+		db.close();
 	}
 
 	public void onNewEvent(View view) {

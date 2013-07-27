@@ -29,12 +29,17 @@ public class OperationDataSource {
 			+ EventAccContract.Operation.TYPE + ", " + "op." + EventAccContract.Operation.VALUE + " "
 			+ EventAccContract.Operation.VALUE + ", " + "cur." + EventAccContract.Currency._ID + " "
 			+ EventAccContract.Currency.ALIAS_ID + ", " + "cur." + EventAccContract.Currency.CODE + " "
-			+ EventAccContract.Currency.ALIAS_CODE + ", " + "op." + EventAccContract.Operation.DATE + " "
+			+ EventAccContract.Currency.ALIAS_CODE + ", "
+			+ 
+			
+			"cur." + EventAccContract.Currency.NAME + " "
+			+ EventAccContract.Currency.ALIAS_NAME + ", "
+			+ "op." + EventAccContract.Operation.DATE + " "
 			+ EventAccContract.Operation.DATE + ", " + "ev." + EventAccContract.Event._ID + " "
 			+ EventAccContract.Event.ALIAS_ID + ", " + "pl." + EventAccContract.Place._ID + " "
 			+ EventAccContract.Place.ALIAS_ID + ", " + "pl." + EventAccContract.Place.NAME + " "
-			+ EventAccContract.Place.ALIAS_NAME + " from operation op join event ev on (op.eventId = ev._id) "
-			+ " join category cat on (op.categoryId = cat._id) " + " join currency cur on (op.currencyId = cur._id) "
+			+ EventAccContract.Place.ALIAS_NAME + " from operation op left join event ev on (op.eventId = ev._id) "
+			+ " left join category cat on (op.categoryId = cat._id) " + " left join currency cur on (op.currencyId = cur._id) "
 			+ " left join place pl on (op.placeId = pl._id) ";
 
 	private Context ctx;
@@ -57,15 +62,24 @@ public class OperationDataSource {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Operation.CATEGORY_ID, catId);
-			values.put(EventAccContract.Operation.CURRENCY_ID, curId);
+			if(catId!=-1){
+			values.put(EventAccContract.Operation.CATEGORY_ID, catId);}
+			else {values.putNull(EventAccContract.Operation.CATEGORY_ID);}
+			if(curId!=-1)
+			{values.put(EventAccContract.Operation.CURRENCY_ID, curId);}
+			else{ values.putNull(EventAccContract.Operation.CURRENCY_ID);}
+			
 			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
-			values.put(EventAccContract.Operation.PLACE_ID, placeId);
+			if(placeId!=-1){
+			values.put(EventAccContract.Operation.PLACE_ID, placeId);}
+			else{ values.putNull(EventAccContract.Operation.PLACE_ID);}
+			
 			values.put(EventAccContract.Operation.TYPE, type.getLabel(ctx));
 			values.put(EventAccContract.Operation.VALUE, value);
-			return database.insert(EventAccContract.Operation.TABLE_NAME, null, values);
+			long ir= database.insert(EventAccContract.Operation.TABLE_NAME, null, values);
+			return ir;
 		} finally {
 			close();
 		}
@@ -114,12 +128,25 @@ public class OperationDataSource {
 		}
 	}
 
-	public long getCountByEventId(long id) {
+	public long getCountByEventId(long eventId) {
 		open();
 		try {
-			Cursor c=database.rawQuery("select count(eventId) evcount from "+EventAccContract.Operation.TABLE_NAME+" where eventId=?", new String[] { Long.toString(id) });
+			Cursor c=database.rawQuery("select count(eventId) evcount from "+EventAccContract.Operation.TABLE_NAME+" where eventId=?", new String[] { Long.toString(eventId) });
 			c.moveToFirst();
 			long cnt=Long.parseLong(c.getString(c.getColumnIndex("evcount")));
+			c.close();
+			return cnt;
+		} finally {
+			close();
+		}
+	}
+	
+	public double getSumByEventId(long eventId) {
+		open();
+		try {
+			Cursor c=database.rawQuery("select sum(value) evsum from "+EventAccContract.Operation.TABLE_NAME+" where eventId=?", new String[] { Long.toString(eventId) });
+			c.moveToFirst();
+			double cnt=c.getDouble(c.getColumnIndex("evsum"));
 			c.close();
 			return cnt;
 		} finally {

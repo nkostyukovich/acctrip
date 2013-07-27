@@ -59,7 +59,7 @@
 	<string name="op_id_tv">Id: </string>
 	<string name="op_new_btn">New operation</string>
 	<string name="op_del_menu">Delete event</string>
-	<string name="enter_text">Please, at least enter name.</string>
+	<string name="enter_text">Please enter name.</string>
 	<string name="event_deleted">Event deleted.</string>
 	<string name="not_message">Not a message.</string>
 	
@@ -110,4 +110,6 @@
    	<string name="enter_value">Please, at least enter value.</string>
    	<string name="op_created">Operation created.</string>
 	<string name="ev_used_by_ops">%1$s has %2$d operations in it. They all will be deleted along with event.\nAre you sure want to delete all this?</string>
+	<string name="enter_code">Please, ener code too.</string>
+	
 </resources>

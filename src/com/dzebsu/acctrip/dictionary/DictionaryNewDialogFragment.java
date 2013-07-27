@@ -134,8 +134,13 @@ public class DictionaryNewDialogFragment extends DialogFragment {
 		}
 		args=new Bundle();
 		args.putString("name", name);
-		if(obj==3)
-			args.putString("code", ((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString());
+		if(obj==3){
+			String code=((EditText) view.findViewById(R.id.dic_new_name_et2)).getText().toString();
+			if(code.isEmpty()){
+			Toast.makeText(this.getActivity().getApplicationContext(), R.string.enter_code, Toast.LENGTH_SHORT).show();
+			return;}
+			args.putString("code", code);
+		}
 		}else
 			if(mode.equals("delete")){
 				args=new Bundle();

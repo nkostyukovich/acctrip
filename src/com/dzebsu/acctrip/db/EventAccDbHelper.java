@@ -38,11 +38,11 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_OPERATION_TABLE =
 		    "CREATE TABLE " + EventAccContract.Operation.TABLE_NAME + " (" +
 		    EventAccContract.Operation._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-		    EventAccContract.Operation.CATEGORY_ID + " INTEGER NOT NULL, " +
+		    EventAccContract.Operation.CATEGORY_ID + " INTEGER, " +
 		    EventAccContract.Operation.DESC + " TEXT, " +
 		    EventAccContract.Operation.TYPE + " INTEGER NOT NULL, " +
 		    EventAccContract.Operation.VALUE + " REAL NOT NULL, " +
-		    EventAccContract.Operation.CURRENCY_ID + " INTEGER NOT NULL, " +
+		    EventAccContract.Operation.CURRENCY_ID + " INTEGER, " +
 		    EventAccContract.Operation.DATE + " LONG, " +
 		    EventAccContract.Operation.EVENT_ID + " INTEGER NOT NULL, " +
 		    EventAccContract.Operation.PLACE_ID + " INTEGER, " +
@@ -68,6 +68,7 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		
 	}
 	public void reCreateAllTables(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS "+EventAccContract.Event.TABLE_NAME);
