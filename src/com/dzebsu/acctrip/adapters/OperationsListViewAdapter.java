@@ -93,7 +93,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		String place=pl==null?"?":pl.getName();
 		String cat=ca==null?"?":ca.getName();
 
-		holder.expenses.setText((objects.get(position).getType().compareTo(OperationType.EXPENSE)==0?"-"+objects.get(position).getValue():objects.get(position).getValue()) + cur);
+		holder.expenses.setText(objects.get(position).getValue()+" "+ cur);
 		holder.opId.setText(context.getString(com.dzebsu.acctrip.R.string.op_id_tv)
 				+ ((Long) objects.get(position).getId()).toString());
 		s = place;

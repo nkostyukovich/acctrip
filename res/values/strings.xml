@@ -111,5 +111,7 @@
    	<string name="op_created">Operation created.</string>
 	<string name="ev_used_by_ops">%1$s has %2$d operations in it. They all will be deleted along with event.\nAre you sure want to delete all this?</string>
 	<string name="enter_code">Please, ener code too.</string>
+	<string name="save_op">Save</string>
+	<string name="cancel_op">Cancel</string>
 	
 </resources>

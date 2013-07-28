@@ -111,11 +111,19 @@ public class OperationListActivity extends Activity {
 		case R.id.event_edit:
 			onEventEdit(item.getActionView());
 			return true;
+		case R.id.open_dictionaries:
+			onOpenDictionaries();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	public void onOpenDictionaries() {
+		Intent intent = new Intent(this, DictionaryActivity.class);
+		startActivity(intent);
+	}
+	
 	private void onEventEdit(View actionView) {
 		Event ev=new EventDataSource(this).getEventById(eventId);
 		Intent intent = new Intent(this, EditEventActivity.class);

@@ -61,6 +61,12 @@ public class EditEventActivity extends Activity {
 			startActivity(intent);*/
 			finish();
 			return true;
+		case R.id.save_op:
+			onSaveEvent(item.getActionView());
+			return true;
+		case R.id.cancel_op:
+			onCancelBtn(item.getActionView());
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -1,5 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+ <item android:id="@+id/save_op" android:icon="@drawable/save_op" android:showAsAction="always" android:title="@string/save_op" android:orderInCategory="2"></item>
+    <item android:id="@+id/cancel_op" android:icon="@drawable/cancel_op" android:showAsAction="always" android:title="@string/cancel_op" android:orderInCategory="3"></item>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

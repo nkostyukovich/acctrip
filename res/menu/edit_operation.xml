@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/save_op" android:icon="@drawable/save_op" android:showAsAction="always" android:title="@string/save_op" android:orderInCategory="2"></item>
+    <item android:id="@+id/cancel_op" android:icon="@drawable/cancel_op" android:showAsAction="always" android:title="@string/cancel_op" android:orderInCategory="3"></item>
+    <item
+        android:id="@+id/open_dictionaries"
+        android:orderInCategory="1"
+        android:showAsAction="never"
+        android:title="@string/open_dictionaries" android:icon="@drawable/dictionaries"/>
+</menu>

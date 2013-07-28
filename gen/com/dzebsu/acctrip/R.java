@@ -24,19 +24,22 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int dic_del=0x7f020000;
-        public static final int dic_edit=0x7f020001;
-        public static final int dic_new=0x7f020002;
-        public static final int dictionaries=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
+        public static final int cancel_op=0x7f020000;
+        public static final int dic_del=0x7f020001;
+        public static final int dic_edit=0x7f020002;
+        public static final int dic_new=0x7f020003;
+        public static final int dictionaries=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int save_op=0x7f020006;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f090001;
-        public static final int action_settings=0x7f09002d;
-        public static final int delete_event=0x7f090032;
+        public static final int action_settings=0x7f090031;
+        public static final int cancel_op=0x7f090030;
+        public static final int delete_event=0x7f090034;
         public static final int descTextView=0x7f090025;
-        public static final int dic_del=0x7f09002f;
-        public static final int dic_edit=0x7f09002e;
+        public static final int dic_del=0x7f09002e;
+        public static final int dic_edit=0x7f09002d;
         public static final int dic_new=0x7f090011;
         public static final int dic_new_name_et=0x7f090015;
         public static final int dic_new_name_et2=0x7f090017;
@@ -52,7 +55,7 @@ public final class R {
         public static final int edit_op_save_btn=0x7f09000f;
         public static final int eventIdTextView=0x7f090026;
         public static final int event_SearchView=0x7f090010;
-        public static final int event_edit=0x7f090033;
+        public static final int event_edit=0x7f090035;
         public static final int event_list=0x7f090012;
         public static final int lin_lay=0x7f090021;
         public static final int lin_lay_op_edit=0x7f09000b;
@@ -79,9 +82,10 @@ public final class R {
         public static final int op_name_tv=0x7f09001b;
         public static final int op_new_btn=0x7f090022;
         public static final int op_total_ops=0x7f09001f;
-        public static final int open_dictionaries=0x7f090030;
-        public static final int recreate_all_tables=0x7f090031;
+        public static final int open_dictionaries=0x7f090032;
+        public static final int recreate_all_tables=0x7f090033;
         public static final int rellay_dic_list=0x7f090018;
+        public static final int save_op=0x7f09002f;
         public static final int uni_op_searchView=0x7f090020;
     }
     public static final class layout {
@@ -99,10 +103,10 @@ public final class R {
         public static final int row_operation_list=0x7f03000b;
     }
     public static final class menu {
-        public static final int category=0x7f080000;
-        public static final int context_action_bar_dictionary=0x7f080001;
-        public static final int dictionary=0x7f080002;
-        public static final int edit_event=0x7f080003;
+        public static final int context_action_bar_dictionary=0x7f080000;
+        public static final int dictionary=0x7f080001;
+        public static final int edit_event=0x7f080002;
+        public static final int edit_operation=0x7f080003;
         public static final int main=0x7f080004;
         public static final int operation_list=0x7f080005;
         public static final int place_list=0x7f080006;
@@ -114,6 +118,7 @@ public final class R {
         public static final int add_place=0x7f050021;
         public static final int app_name=0x7f050000;
         public static final int cancel=0x7f05000d;
+        public static final int cancel_op=0x7f050059;
         public static final int cat_used_by_ops=0x7f050051;
         public static final int category_name=0x7f050022;
         public static final int category_tab=0x7f050035;
@@ -191,6 +196,7 @@ public final class R {
         public static final int place_tab=0x7f050034;
         public static final int save=0x7f05000c;
         public static final int save_edit_btn=0x7f05004c;
+        public static final int save_op=0x7f050058;
         public static final int title_activity_category=0x7f050018;
         public static final int title_activity_dictionaries=0x7f050014;
         public static final int title_activity_dictionary=0x7f05001a;

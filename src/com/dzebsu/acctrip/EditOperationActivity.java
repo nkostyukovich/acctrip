@@ -139,7 +139,13 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 
 	//due different ways how to get here
 	//getSupportParent
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.edit_operation, menu);
 
+		return true;
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -150,10 +156,23 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 			startActivity(intent);*/
 			finish();
 			return true;
+		case R.id.open_dictionaries:
+			onOpenDictionaries();
+			return true;
+		case R.id.save_op:
+			onSaveOperation(item.getActionView());
+			return true;
+		case R.id.cancel_op:
+			onCancelBtn(item.getActionView());
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void onOpenDictionaries() {
+		Intent intent = new Intent(this, DictionaryActivity.class);
+		startActivity(intent);
+	}
 	public void onSaveOperation(View view) {
 		String value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
 		if (value.isEmpty()) {
@@ -164,9 +183,11 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 		OperationType opType=((Spinner)this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString().equals("Expense")?OperationType.EXPENSE:OperationType.INCOME;
 		
 		OperationDataSource dataSource = new OperationDataSource(this);
+		value=opType.compareTo(OperationType.EXPENSE)==0?"-"+value:value;
 		
 		Intent inthere=getIntent();
 		if(!inthere.hasExtra("edit")){
+		
 		dataSource.insert(date, desc, Double.parseDouble(value), opType, eventId, categoryId, currencyId, placeId);
 		// go right to new event
 		finish();

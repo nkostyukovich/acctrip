@@ -77,10 +77,10 @@
 
         <Button
             android:id="@+id/op_edit_date_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/op_edit_desc_et"
-            android:layout_toRightOf="@+id/op_edit_currency_btn"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:text="24/7/2013" />
 
