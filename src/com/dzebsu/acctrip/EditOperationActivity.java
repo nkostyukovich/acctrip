@@ -66,6 +66,7 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	private void fillDefaultValues() {
 		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this).getEventById(eventId).getName());
 		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
+		
 		Operation defOP=new OperationDataSource(this).getLastOperationByEventId(eventId);
 		if(defOP!=null){
 			Place pl=defOP.getPlace();

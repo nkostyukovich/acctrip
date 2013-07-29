@@ -85,6 +85,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		if (s.length() > 80)
 			s = s.substring(0, 80) + "...";
 		holder.desc.setText(s);
+		
 		Place pl=objects.get(position).getPlace();
 		Category ca=objects.get(position).getCategory();
 		Currency cu=objects.get(position).getCurrency();

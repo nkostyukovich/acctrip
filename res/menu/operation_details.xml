@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        <item android:id="@+id/delete_op" 
+        android:orderInCategory="5"
+        android:showAsAction="always"
+        android:title="@string/op_del_menu" android:icon="@drawable/dic_del"/>
+    <item android:title="@string/dic_edit" 
+        android:id="@+id/edit_op" 
+        android:showAsAction="always" 
+        android:icon="@drawable/dic_edit"
+		android:orderInCategory="4">
+    </item>
+
+</menu>

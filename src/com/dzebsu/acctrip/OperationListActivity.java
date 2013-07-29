@@ -23,6 +23,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
@@ -32,7 +33,7 @@ import com.dzebsu.acctrip.models.Operation;
 
 public class OperationListActivity extends Activity {
 
-	private long eventId;
+	private Event event;
 	// Anonymous class wanted this adapter inside itself
 	private OperationsListViewAdapter adapterZ;
 	// for restoring list scroll position
@@ -49,15 +50,18 @@ public class OperationListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		eventId = getIntent().getLongExtra("eventId", 0);
-
+		long eventId = getIntent().getLongExtra("eventId", 0);
+		event=new EventDataSource(this).getEventById(eventId);
 		setContentView(R.layout.activity_operation_list);
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		listView.addHeaderView(createListHeader());
 		fillOperationList();
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// onNewOperation(id);
+				Intent intent=new Intent(OperationListActivity.this,OperationDetailsActivity.class);
+				intent.putExtra("evName",event.getName());
+				intent.putExtra("opID", id);
+				startActivity(intent);
 			}
 		});
 
@@ -86,6 +90,10 @@ public class OperationListActivity extends Activity {
 		});
 		// end
 		setupActionBar();
+		Intent intent = getIntent();
+		if (intent.hasExtra("toast"))
+			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
+					Toast.LENGTH_SHORT).show();
 	}
 
 	
@@ -125,10 +133,10 @@ public class OperationListActivity extends Activity {
 	}
 	
 	private void onEventEdit(View actionView) {
-		Event ev=new EventDataSource(this).getEventById(eventId);
+		Event ev=new EventDataSource(this).getEventById(event.getId());
 		Intent intent = new Intent(this, EditEventActivity.class);
 		intent.putExtra("edit", 0);
-		intent.putExtra("id", eventId);
+		intent.putExtra("id", event.getId());
 		intent.putExtra("eventName", ev.getName());
 		intent.putExtra("eventDesc", ev.getDesc());
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -136,14 +144,14 @@ public class OperationListActivity extends Activity {
 	}
 
 	public void onDeleteEvent(View view) {
-		long ops=new OperationDataSource(this).getCountByEventId(eventId);
-		String message=ops>0?String.format(getString(R.string.ev_used_by_ops),new EventDataSource(this).getEventById(eventId).getName(),ops):String.format(getString(R.string.confirm_del),new EventDataSource(this).getEventById(eventId).getName() );
+		long ops=new OperationDataSource(this).getCountByEventId(event.getId());
+		String message=ops>0?String.format(getString(R.string.ev_used_by_ops),new EventDataSource(this).getEventById(event.getId()).getName(),ops):String.format(getString(R.string.confirm_del),new EventDataSource(this).getEventById(event.getId()).getName() );
 		new AlertDialog.Builder(this).setTitle("Delete dialog").setMessage(message).setIcon(android.R.drawable.ic_dialog_alert)
 				.setPositiveButton(R.string.dic_del, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
-						dataSource.delete(eventId);
+						dataSource.delete(event.getId());
 						Intent intent = new Intent(OperationListActivity.this, EventListActivity.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -174,7 +182,7 @@ public class OperationListActivity extends Activity {
 
 	public void onNewOperation() {
 		Intent intent = new Intent(this, EditOperationActivity.class);
-		intent.putExtra("eventId", eventId);
+		intent.putExtra("eventId", event.getId());
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
@@ -183,13 +191,13 @@ public class OperationListActivity extends Activity {
 		if(adapterZ==null || dataChanged){
 			dataChanged=false;
 		OperationDataSource dataSource = new OperationDataSource(this);
-		List<Operation> operations = dataSource.getOperationListByEventId(eventId);
+		List<Operation> operations = dataSource.getOperationListByEventId(event.getId());
 		adapterZ = new OperationsListViewAdapter(this, operations);
 		
 		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.op_list);
-		fillEventInfo(eventId);
+		fillEventInfo(event.getId());
 		listView.setAdapter(adapter);
 		OperationListActivity.this.adapterZ.getFilter().filter(
 				((SearchView) findViewById(R.id.uni_op_searchView)).getQuery());
@@ -214,10 +222,8 @@ public class OperationListActivity extends Activity {
 		dataChanged=true;
 	}
 	public void fillEventInfo(long eventId) {
-		EventDataSource dataSource = new EventDataSource(this);
-		Event ev = dataSource.getEventById(eventId);
-		((TextView) findViewById(R.id.op_name_tv)).setText(ev.getName());
-		((TextView) findViewById(R.id.op_desc_tv)).setText(ev.getDesc());
+		((TextView) findViewById(R.id.op_name_tv)).setText(event.getName());
+		((TextView) findViewById(R.id.op_desc_tv)).setText(event.getDesc());
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id) + String.valueOf(eventId));
 		OperationDataSource opdata=new OperationDataSource(this);
 		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + opdata.getCountByEventId(eventId));

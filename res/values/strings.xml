@@ -61,6 +61,7 @@
 	<string name="op_del_menu">Delete event</string>
 	<string name="enter_text">Please enter name.</string>
 	<string name="event_deleted">Event deleted.</string>
+	<string name="op_deleted">Operation deleted.</string>
 	<string name="not_message">Not a message.</string>
 	
 	<string name="place_tab">Places</string>

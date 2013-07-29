@@ -110,6 +110,17 @@ public class OperationDataSource {
 			close();
 		}
 	}
+	
+	public long deleteById(long id) {
+		open();
+		try {
+			String whereClause = "_ID = ?";
+			return database.delete(EventAccContract.Operation.TABLE_NAME, whereClause,
+					new String[] { Long.toString(id) });
+		} finally {
+			close();
+		}
+	}
 
 	public Operation getOperationById(long id) {
 		open();

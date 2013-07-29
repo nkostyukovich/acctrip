@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,13 +57,13 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 	}
 	
 	
-	
+	//TODO let user choose none value
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		obj=getArguments().getInt("objType");
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		view = inflater.inflate(R.layout.fragment_dictionary_list2, null,false);
+		view = inflater.inflate(R.layout.fragment_dictionary_list, null,false);
 		final ListView list = (ListView) view.findViewById(R.id.dictionarylist);
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -114,6 +115,9 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 	public void onResume() {
 		super.onResume();
 		fillList();
+		Window window =getDialog().getWindow();
+		//XXX attention absolute value
+		window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 400);
 		
 	}
 	private void fillList() {
