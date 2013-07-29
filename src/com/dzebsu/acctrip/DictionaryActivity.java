@@ -3,12 +3,9 @@
  */
 package com.dzebsu.acctrip;
 
-import com.dzebsu.acctrip.R;
-
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,9 +13,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.dzebsu.acctrip.dictionary.*;
-import com.dzebsu.acctrip.models.Category;
-import com.dzebsu.acctrip.models.Place;
+
+import com.dzebsu.acctrip.dictionary.DictionaryListFragment;
+import com.dzebsu.acctrip.dictionary.DictionaryPagerAdapter;
+import com.dzebsu.acctrip.dictionary.TabListener;
 
 public class DictionaryActivity extends FragmentActivity {
 
@@ -34,7 +32,6 @@ public class DictionaryActivity extends FragmentActivity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			int i = 1;
 			setContentView(R.layout.activity_dictionary);
 			ActionBar ab = getActionBar();
 			ab.setDisplayHomeAsUpEnabled(false);
@@ -84,19 +81,16 @@ public class DictionaryActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
 		super.onRestart();
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 	}
 }

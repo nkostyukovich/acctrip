@@ -1,16 +1,10 @@
 package com.dzebsu.acctrip.dictionary;
 
-import java.text.MessageFormat;
 import java.util.List;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,33 +15,33 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.EditEventActivity;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
-import com.dzebsu.acctrip.models.Category;
 import com.dzebsu.acctrip.models.Currency;
-import com.dzebsu.acctrip.models.Place;
 
 public class DictionaryListFragment extends Fragment implements onPositiveBtnListener {
 
 	private DictionaryListViewAdapter adapterZ;
+
 	private int selectionColor = android.R.color.holo_red_dark;
+
 	private int selectedItem;
+
 	// private Class<T> type;
 	private int obj;
+
 	ActionMode mActionMode;
+
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
@@ -88,7 +82,8 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			}
 		}
 	};
-	private boolean dataChanged=false;
+
+	private boolean dataChanged = false;
 
 	// 1place 2cat 3cur
 	public DictionaryListFragment() {
@@ -132,8 +127,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 
-				if (mActionMode != null)
-					mActionMode.finish();
+				if (mActionMode != null) mActionMode.finish();
 
 			}
 		});
@@ -164,8 +158,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				if (mActionMode != null)
-					mActionMode.finish();
+				if (mActionMode != null) mActionMode.finish();
 				DictionaryListFragment.this.adapterZ.getFilter().filter(newText);
 				return true;
 			}
@@ -177,16 +170,16 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
 	}
 
 	@Override
 	public void onPause() {
 
 		super.onPause();
-		if (mActionMode != null)
-			mActionMode.finish();
+		if (mActionMode != null) mActionMode.finish();
 	}
+
 	public void onElementEdit(long id) {
 		int title = 1, name = 1;
 		WrappedObject object = null;
@@ -213,7 +206,8 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			break;
 		}
 
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"edit", name, getString(title), R.string.save_edit_btn, name1, code1, id);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "edit", name,
+				getString(title), R.string.save_edit_btn, name1, code1, id);
 		newFragment.show(getFragmentManager(), "dialog");
 		newFragment.setOnPositiveBtnListener(this);
 	}
@@ -222,10 +216,10 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 		String title = getString(R.string.confirm_del);
 		int name = 1;
 		WrappedObject object = null;
-		String name1 = null, code1 = null;
+		String name1 = null;
 		OperationDataSource opDB = new OperationDataSource(getActivity());
-		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning)
-				.setIcon(android.R.drawable.stat_notify_error).setPositiveButton(R.string.okay, null);
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
+				android.R.drawable.stat_notify_error).setPositiveButton(R.string.okay, null);
 		long ops = 0;
 		switch (obj) {
 		case 1:
@@ -261,11 +255,11 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			}
 			object = db2.getCurrencyById(id);
 			name1 = object.getName();
-			code1 = ((Currency) object).getCode();
 			break;
 		}
 
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"delete", name, String.format(title, name1), R.string.dic_del, "", "", id);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "delete", name, String
+				.format(title, name1), R.string.dic_del, "", "", id);
 		newFragment.show(getFragmentManager(), "dialog");
 		newFragment.setOnPositiveBtnListener(this);
 	}
@@ -286,33 +280,32 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			name = R.string.dic_new_currency;
 			break;
 		}
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj,"new", name, getString(title), R.string.save, null, null, 0);
+		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "new", name,
+				getString(title), R.string.save, null, null, 0);
 		newFragment.show(getFragmentManager(), "dialog");
 		newFragment.setOnPositiveBtnListener(this);
 
 	}
 
-
 	private void fillList() {
-		if(adapterZ==null || dataChanged){
-			dataChanged=false;
-		List<? extends WrappedObject> objs = null;
-		switch (obj) {
-		case 1:
-			objs = new PlaceDataSource(this.getActivity()).getPlaceList();
-			break;
-		case 2:
-			objs = new CategoryDataSource(this.getActivity()).getCategoryList();
-			break;
-		case 3:
-			objs = new CurrencyDataSource(this.getActivity()).getCurrencyList();
-			break;
+		if (adapterZ == null || dataChanged) {
+			dataChanged = false;
+			List<? extends WrappedObject> objs = null;
+			switch (obj) {
+			case 1:
+				objs = new PlaceDataSource(this.getActivity()).getPlaceList();
+				break;
+			case 2:
+				objs = new CategoryDataSource(this.getActivity()).getCategoryList();
+				break;
+			case 3:
+				objs = new CurrencyDataSource(this.getActivity()).getCurrencyList();
+				break;
+			}
+			adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
+			// trigger filter to it being applied on resume
+
 		}
-		adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
-		// trigger filter to it being applied on resume
-		
-		
-	}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) getView().findViewById(R.id.dictionarylist);
 		listView.setAdapter(adapter);
@@ -366,10 +359,9 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 			}
 			Toast.makeText(getActivity(), "Deleted.", Toast.LENGTH_SHORT).show();
 		}
-		dataChanged=true;
+		dataChanged = true;
 		fillList();
 
 	}
 
-	
 }

@@ -38,7 +38,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class EditOperationActivity extends FragmentActivity implements DataPickerListener,onPositiveBtnListener,onPickFragmentListener{
+public class EditOperationActivity extends FragmentActivity implements DataPickerListener,onPositiveBtnListener,IDictionaryFragmentListener{
 
 	//1 place 2 cat 3 cur// what does user want to create now
 	private int newItemClass=0;
@@ -305,14 +305,15 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	}
 	
 	public void invokeDictionaryPicker(int itemType){
-		newItemClass=itemType;
+		newItemClass = itemType;
 		DictionaryElementPickerFragment newFragment = DictionaryElementPickerFragment.prepareDialog(newItemClass);
 		newFragment.show(getSupportFragmentManager(), "dialog");
 		newFragment.setOnPickFragmentListener(this);
 		//TODO make dialog fixed height
 	}
+	
 	@Override
-	public void onActionInDialog(Bundle args) {
+	public void onValueChanged(Bundle args) {
 		if(args.getBoolean("requestNew", false)){
 			createDictionaryEntry();
 		}else{

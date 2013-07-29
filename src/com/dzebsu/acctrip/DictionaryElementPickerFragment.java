@@ -4,8 +4,6 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,25 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
-import com.dzebsu.acctrip.dictionary.DictionaryListFragment;
 import com.dzebsu.acctrip.dictionary.WrappedObject;
-import com.dzebsu.acctrip.dictionary.onPositiveBtnListener;
 
 public class DictionaryElementPickerFragment extends DialogFragment{
 
@@ -47,12 +37,12 @@ public class DictionaryElementPickerFragment extends DialogFragment{
         return f;
     }
 
-	private onPickFragmentListener pickListener;
+	private IDictionaryFragmentListener pickListener;
 	private View view; 
 	private int obj;
 	private DictionaryListViewAdapter adapterZ;
 
-	public void setOnPickFragmentListener(onPickFragmentListener listener){
+	public void setOnPickFragmentListener(IDictionaryFragmentListener listener){
 		pickListener=listener;
 	}
 	
@@ -72,7 +62,7 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 				Bundle args=new Bundle();
 				args.putLong("pickedId",id);
 				args.putString("picked",((WrappedObject)adapterZ.getItem(pos)).getName());
-				pickListener.onActionInDialog(args);
+				pickListener.onValueChanged(args);
 				DictionaryElementPickerFragment.this.dismiss();
 
 			}
@@ -84,7 +74,7 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 			public void onClick(View v) {
 				Bundle args=new Bundle();
 				args.putBoolean("requestNew",true);
-				pickListener.onActionInDialog(args);
+				pickListener.onValueChanged(args);
 				DictionaryElementPickerFragment.this.dismiss();
 			}
 		});
