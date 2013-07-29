@@ -11,8 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
-import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class CurrencyDataSource {
 

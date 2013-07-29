@@ -1,7 +1,7 @@
 package com.dzebsu.acctrip.dictionary;
 
 import com.dzebsu.acctrip.R;
-import com.dzebsu.acctrip.models.Place;
+import com.dzebsu.acctrip.models.dictionaries.Place;
 
 import android.app.ActionBar.Tab;
 import android.app.Activity;

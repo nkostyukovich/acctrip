@@ -1,30 +1,23 @@
 package com.dzebsu.acctrip.models;
 
-public class Event {
-	
-	private long id;
+public class Event extends BaseModel {
+
 	private String name;
+
 	private String desc;
-	
+
 	public Event() {
+		super();
 	}
-	
+
 	public Event(long id) {
-		this.id = id;
+		super(id);
 	}
 
 	public Event(long id, String name, String desc) {
-		this.id = id;
+		super(id);
 		this.name = name;
 		this.desc = desc;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -42,7 +35,7 @@ public class Event {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;

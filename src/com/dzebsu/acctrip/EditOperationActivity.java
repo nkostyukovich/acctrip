@@ -14,11 +14,11 @@ import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.onPositiveBtnListener;
-import com.dzebsu.acctrip.models.Category;
-import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
-import com.dzebsu.acctrip.models.Place;
+import com.dzebsu.acctrip.models.dictionaries.Category;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

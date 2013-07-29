@@ -7,12 +7,12 @@ import java.util.GregorianCalendar;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.dzebsu.acctrip.models.Category;
-import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
-import com.dzebsu.acctrip.models.Place;
+import com.dzebsu.acctrip.models.dictionaries.Category;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class ConvertUtils {
 

@@ -15,11 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.dzebsu.acctrip.models.Category;
-import com.dzebsu.acctrip.models.Currency;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
-import com.dzebsu.acctrip.models.Place;
+import com.dzebsu.acctrip.models.dictionaries.Category;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	private List<Operation> objects;

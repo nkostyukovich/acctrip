@@ -21,59 +21,61 @@ import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
-import com.dzebsu.acctrip.dictionary.WrappedObject;
+import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 
-public class DictionaryElementPickerFragment extends DialogFragment{
+public class DictionaryElementPickerFragment extends DialogFragment {
 
 	static public DictionaryElementPickerFragment prepareDialog(int obj) {
 		Bundle args = new Bundle();
 		args.putInt("objType", obj);
 		return DictionaryElementPickerFragment.newInstance(args);
 	}
-	
+
 	static DictionaryElementPickerFragment newInstance(Bundle data) {
 		DictionaryElementPickerFragment f = new DictionaryElementPickerFragment();
-        f.setArguments(data);
-        return f;
-    }
+		f.setArguments(data);
+		return f;
+	}
 
 	private IDictionaryFragmentListener pickListener;
-	private View view; 
+
+	private View view;
+
 	private int obj;
+
 	private DictionaryListViewAdapter adapterZ;
 
-	public void setOnPickFragmentListener(IDictionaryFragmentListener listener){
-		pickListener=listener;
+	public void setOnPickFragmentListener(IDictionaryFragmentListener listener) {
+		pickListener = listener;
 	}
-	
-	
-	//TODO let user choose none value
+
+	// TODO let user choose none value
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		obj=getArguments().getInt("objType");
+		obj = getArguments().getInt("objType");
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		view = inflater.inflate(R.layout.fragment_dictionary_list, null,false);
+		view = inflater.inflate(R.layout.fragment_dictionary_list, null, false);
 		final ListView list = (ListView) view.findViewById(R.id.dictionarylist);
 		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-				Bundle args=new Bundle();
-				args.putLong("pickedId",id);
-				args.putString("picked",((WrappedObject)adapterZ.getItem(pos)).getName());
+				Bundle args = new Bundle();
+				args.putLong("pickedId", id);
+				args.putString("picked", ((BaseDictionary) adapterZ.getItem(pos)).getName());
 				pickListener.onValueChanged(args);
 				DictionaryElementPickerFragment.this.dismiss();
 
 			}
 		});
-		
+
 		((ImageButton) view.findViewById(R.id.dic_new)).setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Bundle args=new Bundle();
-				args.putBoolean("requestNew",true);
+				Bundle args = new Bundle();
+				args.putBoolean("requestNew", true);
 				pickListener.onValueChanged(args);
 				DictionaryElementPickerFragment.this.dismiss();
 			}
@@ -92,26 +94,27 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 				return true;
 			}
 		});
-		
+
 		builder.setView(view);
-	
+
 		// Create the AlertDialog object and return it
-		final AlertDialog al=builder.create();
-		//to prevent from closing when name="" and show toast
+		final AlertDialog al = builder.create();
+		// to prevent from closing when name="" and show toast
 		return al;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		fillList();
-		Window window =getDialog().getWindow();
-		//XXX attention absolute value
+		Window window = getDialog().getWindow();
+		// XXX attention absolute value
 		window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 400);
-		
+
 	}
+
 	private void fillList() {
-		List<? extends WrappedObject> objs = null;
+		List<? extends BaseDictionary> objs = null;
 		switch (obj) {
 		case 1:
 			objs = new PlaceDataSource(this.getActivity()).getPlaceList();
@@ -125,14 +128,11 @@ public class DictionaryElementPickerFragment extends DialogFragment{
 		}
 		adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
 		// trigger filter to it being applied on resume
-		
+
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) view.findViewById(R.id.dictionarylist);
 		listView.setAdapter(adapter);
 		this.adapterZ.getFilter().filter(((SearchView) view.findViewById(R.id.dic_search)).getQuery());
 	}
-	
-
-
 
 }

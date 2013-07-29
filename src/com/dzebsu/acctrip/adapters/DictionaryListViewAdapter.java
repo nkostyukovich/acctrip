@@ -10,36 +10,38 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
-import com.dzebsu.acctrip.R;
-import com.dzebsu.acctrip.dictionary.WrappedObject;
-import com.dzebsu.acctrip.models.Currency;
 
-public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAdapter<WrappedObject> {
-	private List<WrappedObject> objects;
-	private List<WrappedObject> objectsInit;
-	private final Context context;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+
+public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAdapter<BaseDictionary> {
+
+	private List<BaseDictionary> objects;
+
+	private List<BaseDictionary> objectsInit;
+
 	private LayoutInflater inflater;
 
-	public DictionaryListViewAdapter(Context context, List<WrappedObject> objects) {
+	public DictionaryListViewAdapter(Context context, List<BaseDictionary> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_dictionary_list, objects);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
-		this.context = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	static class RowViewHolder {
+
 		public TextView name = null;
 	}
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return true;
 	}
+
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position).getId();
 	}
 
@@ -49,10 +51,11 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 	};
 
 	@Override
-	public WrappedObject getItem(int position) {
+	public BaseDictionary getItem(int position) {
 		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rowView = convertView;
@@ -63,21 +66,18 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		
-		if(objects.get(position) instanceof Currency){
-			holder.name.setText(objects.get(position).getName()+" "+((Currency)objects.get(position)).getCode());
-		}
-		else holder.name.setText(objects.get(position).getName());
+
+		if (objects.get(position) instanceof Currency) {
+			holder.name.setText(objects.get(position).getName() + " " + ((Currency) objects.get(position)).getCode());
+		} else holder.name.setText(objects.get(position).getName());
 
 		return rowView;
 	}
 
 	@Override
 	public Filter getFilter() {
-		// TODO Auto-generated method stub
 		return new ObjectFilter();
 	}
-
 
 	// custom filter
 	private class ObjectFilter extends Filter {
@@ -85,12 +85,11 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			FilterResults filter = new FilterResults();
-			ArrayList<WrappedObject> filtered = new ArrayList<WrappedObject>();
+			ArrayList<BaseDictionary> filtered = new ArrayList<BaseDictionary>();
 			objects = objectsInit;
 			if (constraint != null) {
-				for (WrappedObject g : objects) {
-					if (g.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
-						filtered.add(g);
+				for (BaseDictionary g : objects) {
+					if (g.getName().toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}
 			}
 			filter.values = filtered;
@@ -100,8 +99,8 @@ public class DictionaryListViewAdapter<T extends WrappedObject> extends ArrayAda
 
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
-			
-			objects=(ArrayList<WrappedObject>) results.values;
+
+			objects = (ArrayList<BaseDictionary>) results.values;
 			notifyDataSetChanged();
 		}
 

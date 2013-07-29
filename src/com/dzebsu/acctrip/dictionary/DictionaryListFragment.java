@@ -27,13 +27,14 @@ import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
-import com.dzebsu.acctrip.models.Currency;
+import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class DictionaryListFragment extends Fragment implements onPositiveBtnListener {
 
 	private DictionaryListViewAdapter adapterZ;
 
-	private int selectionColor = android.R.color.holo_red_dark;
+	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
 
 	private int selectedItem;
 
@@ -118,7 +119,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 				mActionMode = getActivity().startActionMode(mActionModeCallback);
 				selectedItem = pos;
-				view.setBackgroundColor(getActivity().getApplication().getResources().getColor(selectionColor));
+				view.setBackgroundColor(getActivity().getApplication().getResources().getColor(SELECTION_COLOR));
 				return true;
 			}
 		});
@@ -182,7 +183,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 	public void onElementEdit(long id) {
 		int title = 1, name = 1;
-		WrappedObject object = null;
+		BaseDictionary object = null;
 		String name1 = null, code1 = null;
 		switch (obj) {
 		case 1:
@@ -215,7 +216,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	public void onDeleteElement(long id) {
 		String title = getString(R.string.confirm_del);
 		int name = 1;
-		WrappedObject object = null;
+		BaseDictionary object = null;
 		String name1 = null;
 		OperationDataSource opDB = new OperationDataSource(getActivity());
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
@@ -290,7 +291,7 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	private void fillList() {
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
-			List<? extends WrappedObject> objs = null;
+			List<? extends BaseDictionary> objs = null;
 			switch (obj) {
 			case 1:
 				objs = new PlaceDataSource(this.getActivity()).getPlaceList();

@@ -11,13 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.dzebsu.acctrip.dictionary.WrappedObject;
 import com.dzebsu.acctrip.models.Event;
 
 public class EventListViewAdapter extends ArrayAdapter<Event> {
+
 	private List<Event> objects;
+
 	private List<Event> objectsInit;
+
 	private final Context context;
+
 	private LayoutInflater inflater;
 
 	public EventListViewAdapter(Context context, List<Event> objects) {
@@ -29,8 +32,11 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 	}
 
 	static class RowViewHolder {
+
 		public TextView name = null;
+
 		public TextView desc = null;
+
 		public TextView eventId = null;
 	}
 
@@ -39,16 +45,19 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return objects.get(position).getId();
 	}
+
 	@Override
 	public Event getItem(int position) {
 		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
+
 	@Override
 	public int getCount() {
 		return objects.size();
@@ -68,8 +77,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
 		String s = objects.get(position).getDesc();
-		if (s.length() > 60)
-			s = s.substring(0, 60) + "...";
+		if (s.length() > 60) s = s.substring(0, 60) + "...";
 		holder.desc.setText(s);
 		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)
 				+ ((Long) objects.get(position).getId()).toString());
@@ -92,8 +100,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 			objects = objectsInit;
 			if (constraint != null) {
 				for (Event g : objects) {
-					if (g.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
-						filtered.add(g);
+					if (g.getName().toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}
 			}
 			filter.values = filtered;

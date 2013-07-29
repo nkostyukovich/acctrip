@@ -2,28 +2,30 @@ package com.dzebsu.acctrip.models;
 
 import java.util.Date;
 
-public class Operation {
-	
-	private long id;
+import com.dzebsu.acctrip.models.dictionaries.Category;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
+
+public class Operation extends BaseModel {
+
 	private Category category;
+
 	private String desc;
+
 	private OperationType type;
+
 	private double value;
+
 	private Currency currency;
+
 	private Date date;
+
 	private Event event;
+
 	private Place place;
-	
+
 	public Operation() {
-	}
-
-	
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
+		super();
 	}
 
 	public Category getCategory() {
