@@ -181,6 +181,7 @@ public final class R {
         public static final int not_message=0x7f050034;
         public static final int okay=0x7f050050;
         public static final int op_all_expenses=0x7f05002d;
+        public static final int op_changed=0x7f05005b;
         public static final int op_created=0x7f050056;
         public static final int op_del_menu=0x7f050030;
         public static final int op_deleted=0x7f050033;

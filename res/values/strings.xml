@@ -114,5 +114,6 @@
 	<string name="enter_code">Please, ener code too.</string>
 	<string name="save_op">Save</string>
 	<string name="cancel_op">Cancel</string>
+	<string name="op_changed">Operation changed.</string>
 	
 </resources>

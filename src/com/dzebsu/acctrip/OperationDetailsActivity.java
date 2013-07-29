@@ -71,7 +71,11 @@ public class OperationDetailsActivity extends Activity {
 	}
 
 	private void editOperationInvoke() {
-		// TODO Auto-generated method stub
+		Intent intent=new Intent(OperationDetailsActivity.this,EditOperationActivity.class);
+		intent.putExtra("eventId", operation.getEvent().getId());
+		intent.putExtra("mode", "edit");
+		intent.putExtra("opID", operation.getId());
+		startActivity(intent);
 		
 	}
 

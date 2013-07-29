@@ -139,7 +139,7 @@ public class OperationListActivity extends Activity {
 		intent.putExtra("id", event.getId());
 		intent.putExtra("eventName", ev.getName());
 		intent.putExtra("eventDesc", ev.getDesc());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 
@@ -183,7 +183,8 @@ public class OperationListActivity extends Activity {
 	public void onNewOperation() {
 		Intent intent = new Intent(this, EditOperationActivity.class);
 		intent.putExtra("eventId", event.getId());
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		intent.putExtra("mode", "new");
+	//	intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 

@@ -2,6 +2,7 @@ package com.dzebsu.acctrip.adapters;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,8 +80,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		holder.date.setText(sdf.format(objects.get(position).getDate()));
+		
 		String s = objects.get(position).getDesc();
 		if (s.length() > 80)
 			s = s.substring(0, 80) + "...";
@@ -89,11 +89,17 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		Place pl=objects.get(position).getPlace();
 		Category ca=objects.get(position).getCategory();
 		Currency cu=objects.get(position).getCurrency();
+		Date da=objects.get(position).getDate();
 		
 		String cur=cu==null?"?":cu.getCode();
 		String place=pl==null?"?":pl.getName();
 		String cat=ca==null?"?":ca.getName();
-
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
+		String date=da==null?"no date":sdf.format(objects.get(position).getDate());
+		
+		
+		holder.date.setText(date);
+		
 		holder.expenses.setText(objects.get(position).getValue()+" "+ cur);
 		holder.opId.setText(context.getString(com.dzebsu.acctrip.R.string.op_id_tv)
 				+ ((Long) objects.get(position).getId()).toString());

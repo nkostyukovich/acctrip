@@ -85,7 +85,8 @@ public class EditEventActivity extends Activity {
 		// go right to new event
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("eventId", eventId);
-		startActivity(intent);}
+		startActivity(intent);
+		finish();}
 		else{
 			dataSource.update(inthere.getLongExtra("id",-1), name, desc);
 			finish();

@@ -68,8 +68,11 @@ public class OperationDataSource {
 			if(curId!=-1)
 			{values.put(EventAccContract.Operation.CURRENCY_ID, curId);}
 			else{ values.putNull(EventAccContract.Operation.CURRENCY_ID);}
-			
-			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
+			if(date!=null){
+			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));}
+			else{
+				values.putNull(EventAccContract.Operation.DATE);
+			}
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
 			if(placeId!=-1){
@@ -85,20 +88,38 @@ public class OperationDataSource {
 		}
 	}
 
-	// public Event update(Long id, String name, String desc) {
-	// open();
-	// try {
-	// ContentValues values = new ContentValues();
-	// values.put(EventAccContract.Event.NAME, name);
-	// values.put(EventAccContract.Event.DESC, desc);
-	// String whereClause = EventAccContract.Event._ID + " = ?";
-	// database.update(EventAccContract.Event.TABLE_NAME, values, whereClause,
-	// new String[] { Long.toString(id) });
-	// return getOperationById(id);
-	// } finally {
-	// close();
-	// }
-	// }
+	 public Operation update(Long id,Date date, String desc, double value, OperationType type, long eventId, long catId, long curId,
+				long placeId) {
+	 open();
+	 try {
+		 ContentValues values = new ContentValues();
+			if(catId!=-1){
+			values.put(EventAccContract.Operation.CATEGORY_ID, catId);}
+			else {values.putNull(EventAccContract.Operation.CATEGORY_ID);}
+			if(curId!=-1)
+			{values.put(EventAccContract.Operation.CURRENCY_ID, curId);}
+			else{ values.putNull(EventAccContract.Operation.CURRENCY_ID);}
+			if(date!=null){
+			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));}
+			else{
+				values.putNull(EventAccContract.Operation.DATE);
+			}
+			values.put(EventAccContract.Operation.DESC, desc);
+			values.put(EventAccContract.Operation.EVENT_ID, eventId);
+			if(placeId!=-1){
+			values.put(EventAccContract.Operation.PLACE_ID, placeId);}
+			else{ values.putNull(EventAccContract.Operation.PLACE_ID);}
+			
+			values.put(EventAccContract.Operation.TYPE, type.getLabel(ctx));
+			values.put(EventAccContract.Operation.VALUE, value);
+	 String whereClause = EventAccContract.Operation._ID + " = ?";
+	 database.update(EventAccContract.Operation.TABLE_NAME, values, whereClause,
+	 new String[] { Long.toString(id) });
+	 return getOperationById(id);
+	 } finally {
+	 close();
+	 }
+	 }
 
 	public long deleteByEventId(long id) {
 		open();

@@ -51,7 +51,8 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	private long placeId=-1;
 	private long categoryId=-1;
 	private long currencyId=-1;
-	
+	private String mode=null;
+	private long opID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 		setContentView(R.layout.activity_edit_operation);
 		Intent intent=getIntent();
 		eventId=intent.getLongExtra("eventId",0);
+		mode=intent.getStringExtra("mode");
+		opID=intent.getLongExtra("opID",0);
 		setupActionBar();
 		fillDefaultValues();
 	}
@@ -66,16 +69,29 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	private void fillDefaultValues() {
 		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this).getEventById(eventId).getName());
 		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
+		date=Calendar.getInstance().getTime();
+		String dateS=sdf.format(date);
+		Operation defOP;
+		if(mode.equals("new")){
+			defOP=new OperationDataSource(this).getLastOperationByEventId(eventId);}
+		else{
+			defOP=new OperationDataSource(this).getOperationById(opID);
+			((Spinner)this.findViewById(R.id.op_edit_type_spinner)).setSelection(defOP.getType().compareTo(OperationType.EXPENSE)==0?0:1);
+			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
+			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
+			dateS=defOP.getDate()==null?"no date":sdf.format(defOP.getDate());
+		}
 		
-		Operation defOP=new OperationDataSource(this).getLastOperationByEventId(eventId);
+		
 		if(defOP!=null){
 			Place pl=defOP.getPlace();
 			Category ca=defOP.getCategory();
 			Currency cu=defOP.getCurrency();
 			
-			 currency=cu==null?"none":cu.getCode();
-			 place=pl==null?"none":pl.getName();
-			 category=ca==null?"none":ca.getName();
+			 currency=cu==null?"Curr$":cu.getCode();
+			 place=pl==null?"Place":pl.getName();
+			 category=ca==null?"Category":ca.getName();
 			
 			placeId=pl==null?-1:pl.getId();
 			categoryId=ca==null?-1:ca.getId();
@@ -88,9 +104,7 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 		curBtn.setText(currency);
 		catBtn.setText(category);
 		placeBtn.setText(place);
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		date=Calendar.getInstance().getTime();
-		dateBtn.setText(sdf.format(date));
+		dateBtn.setText(dateS);
 		curBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -119,7 +133,17 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 					
 					@Override
 					public void onClick(View v) {
+						//TODO get day of month from date
 						DatePickerFragment newFragment = new DatePickerFragment();
+						Bundle args=new Bundle();
+						if(mode.equals("edit") && date!=null){
+						args.putInt("def", 0);
+						args.putInt("year", 1900+date.getYear());
+						args.putInt("month", date.getMonth());
+						args.putInt("day", date.getDay());
+						}
+						args.putBoolean("dummy", false);
+						newFragment.setArguments(args);
 						newFragment.setDataPickerListener(EditOperationActivity.this);
 					    newFragment.show(getSupportFragmentManager(), "datePicker");
 						
@@ -186,17 +210,19 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 		OperationDataSource dataSource = new OperationDataSource(this);
 		value=opType.compareTo(OperationType.EXPENSE)==0?"-"+value:value;
 		
-		Intent inthere=getIntent();
-		if(!inthere.hasExtra("edit")){
+
+		if(!mode.equals("edit")){
 		
 		dataSource.insert(date, desc, Double.parseDouble(value), opType, eventId, categoryId, currencyId, placeId);
-		// go right to new event
+		// go right to event
 		finish();
 		Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
 		}
 		else{
 			//TODO update everything
+			dataSource.update(opID,date, desc, Double.parseDouble(value), opType, eventId, categoryId, currencyId, placeId);
 			finish();
+			Toast.makeText(getApplicationContext(), R.string.op_changed, Toast.LENGTH_SHORT).show();
 		}
 		
 	}

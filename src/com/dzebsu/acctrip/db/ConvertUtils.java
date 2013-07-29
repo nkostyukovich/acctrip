@@ -70,8 +70,11 @@ public class ConvertUtils {
 			op.setCurrency(null);
 		}
 		
-
-		op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
+		if(!c.isNull(c.getColumnIndex(EventAccContract.Operation.DATE))){
+		op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));}
+		else{
+			op.setDate(null);
+		}
 		
 		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID))));
 		
