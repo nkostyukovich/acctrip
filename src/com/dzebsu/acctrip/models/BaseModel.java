@@ -1,21 +1,23 @@
 package com.dzebsu.acctrip.models;
 
-public abstract class BaseModel {
+import java.io.Serializable;
 
-	private long id;
+public abstract class BaseModel implements Serializable {
+
+	private Long id;
 
 	public BaseModel() {
 	}
 
-	public BaseModel(long id) {
+	public BaseModel(Long id) {
 		this.id = id;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

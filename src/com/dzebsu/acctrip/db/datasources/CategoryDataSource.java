@@ -6,60 +6,49 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
-import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 
-public class CategoryDataSource {
-
-	private SQLiteDatabase database;
-	private EventAccDbHelper dbHelper;
+public class CategoryDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Category> {
 
 	private String[] selectedColumns = { EventAccContract.Category._ID, EventAccContract.Category.NAME };
 
 	public CategoryDataSource(Context ctx) {
-		dbHelper = new EventAccDbHelper(ctx);
+		super(ctx);
 	}
 
-	public void open() {
-		database = dbHelper.getWritableDatabase();
-	}
-
-	public void close() {
-		database.close();
-	}
-
-	public long insert(String name) {
+	@Override
+	public long insertEntity(Category entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Category.NAME, name);
+			values.put(EventAccContract.Category.NAME, entity.getName());
 			return database.insert(EventAccContract.Category.TABLE_NAME, null, values);
 		} finally {
 			close();
 		}
 	}
 
-	public Category update(Long id, String name) {
+	@Override
+	public void updateEntity(Category entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Category.NAME, name);
+			values.put(EventAccContract.Category.NAME, entity.getName());
 			String whereClause = EventAccContract.Category._ID + " = ?";
-			database.update(EventAccContract.Category.TABLE_NAME, values, whereClause,
-					new String[] { Long.toString(id) });
-			return getCategoryById(id);
+			database.update(EventAccContract.Category.TABLE_NAME, values, whereClause, new String[] { entity.getId()
+					.toString() });
 		} finally {
 			close();
 		}
 	}
 
-	public Category getCategoryById(long id) {
+	@Override
+	public Category getEntityById(long id) {
 		open();
-		try{
+		try {
 			String whereBatch = EventAccContract.Category._ID + " = ?";
 			Cursor c = database.query(EventAccContract.Category.TABLE_NAME, selectedColumns, whereBatch,
 					new String[] { Long.toString(id) }, null, null, null);
@@ -70,12 +59,13 @@ public class CategoryDataSource {
 			}
 			c.close();
 			return category;
-		} finally{
+		} finally {
 			close();
 		}
 	}
 
-	public List<Category> getCategoryList() {
+	@Override
+	public List<Category> getEntityList() {
 		open();
 		try {
 			List<Category> result = new ArrayList<Category>();
@@ -92,11 +82,13 @@ public class CategoryDataSource {
 			close();
 		}
 	}
-	public long delete(Long id) {
+
+	@Override
+	public void deleteEntity(long id) {
 		open();
 		try {
 			String whereClause = EventAccContract.Category._ID + " = ?";
-			return database.delete(EventAccContract.Category.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+			database.delete(EventAccContract.Category.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

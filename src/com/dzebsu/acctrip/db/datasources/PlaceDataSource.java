@@ -6,59 +6,49 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
-import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.models.dictionaries.Place;
 
-public class PlaceDataSource {
-
-	private SQLiteDatabase database;
-	private EventAccDbHelper dbHelper;
+public class PlaceDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Place> {
 
 	private String[] selectedColumns = { EventAccContract.Place._ID, EventAccContract.Place.NAME };
 
 	public PlaceDataSource(Context ctx) {
-		dbHelper = new EventAccDbHelper(ctx);
+		super(ctx);
 	}
 
-	public void open() {
-		database = dbHelper.getWritableDatabase();
-	}
-
-	public void close() {
-		database.close();
-	}
-
-	public long insert(String name) {
+	@Override
+	public long insertEntity(Place entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Place.NAME, name);
+			values.put(EventAccContract.Place.NAME, entity.getName());
 			return database.insert(EventAccContract.Place.TABLE_NAME, null, values);
 		} finally {
 			close();
 		}
 	}
 
-	public Place update(Long id, String name) {
+	@Override
+	public void updateEntity(Place entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Place.NAME, name);
+			values.put(EventAccContract.Place.NAME, entity.getName());
 			String whereClause = EventAccContract.Category._ID + " = ?";
-			database.update(EventAccContract.Place.TABLE_NAME, values, whereClause, new String[] { Long.toString(id) });
-			return getPlaceById(id);
+			database.update(EventAccContract.Place.TABLE_NAME, values, whereClause, new String[] { entity.getId()
+					.toString() });
 		} finally {
 			close();
 		}
 	}
 
-	public Place getPlaceById(long id) {
+	@Override
+	public Place getEntityById(long id) {
 		open();
-		try{
+		try {
 			String whereBatch = EventAccContract.Place._ID + " = ?";
 			Cursor c = database.query(EventAccContract.Place.TABLE_NAME, selectedColumns, whereBatch,
 					new String[] { Long.toString(id) }, null, null, null);
@@ -69,12 +59,13 @@ public class PlaceDataSource {
 			}
 			c.close();
 			return place;
-		}finally{
+		} finally {
 			close();
 		}
 	}
 
-	public List<Place> getPlaceList() {
+	@Override
+	public List<Place> getEntityList() {
 		open();
 		try {
 			List<Place> result = new ArrayList<Place>();
@@ -91,11 +82,13 @@ public class PlaceDataSource {
 			close();
 		}
 	}
-	public long delete(Long id) {
+
+	@Override
+	public void deleteEntity(long id) {
 		open();
 		try {
 			String whereClause = EventAccContract.Place._ID + " = ?";
-			return database.delete(EventAccContract.Place.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+			database.delete(EventAccContract.Place.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

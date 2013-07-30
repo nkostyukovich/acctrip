@@ -2,7 +2,6 @@ package com.dzebsu.acctrip.dictionary;
 
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ActionMode;
@@ -23,23 +22,23 @@ import android.widget.Toast;
 
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
-import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
-import com.dzebsu.acctrip.db.datasources.OperationDataSource;
-import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
+import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
+import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
-import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class DictionaryListFragment extends Fragment implements onPositiveBtnListener {
+public class DictionaryListFragment<T extends BaseDictionary> extends Fragment implements IDialogListener<T> {
 
-	private DictionaryListViewAdapter adapterZ;
+	private DictionaryListViewAdapter<T> adapterZ;
 
 	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
 
 	private int selectedItem;
 
-	// private Class<T> type;
-	private int obj;
+	private Class<T> clazz;
+
+	private DictionaryType dictType;
+
+	private IDictionaryDataSource<T> dataSource;
 
 	ActionMode mActionMode;
 
@@ -69,38 +68,39 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.dic_edit:
-				onElementEdit(adapterZ.getItemId(selectedItem));
-				mode.finish(); // Action picked, so close the CAB
-				return true;
-			case R.id.dic_del:
-				onDeleteElement(adapterZ.getItemId(selectedItem));
-				mode.finish(); // Action picked, so close the CAB
-				return true;
-			default:
-				return false;
-			}
+			// switch (item.getItemId()) {
+			// case R.id.dic_edit:
+			// onElementEdit(adapterZ.getItemId(selectedItem));
+			// mode.finish(); // Action picked, so close the CAB
+			// return true;
+			// case R.id.dic_del:
+			// onDeleteElement(adapterZ.getItemId(selectedItem));
+			// mode.finish(); // Action picked, so close the CAB
+			// return true;
+			// default:
+			// return false;
+			// }
+			return false;
 		}
 	};
 
 	private boolean dataChanged = false;
 
-	// 1place 2cat 3cur
 	public DictionaryListFragment() {
 
 	}
 
+	public void setDataSource(IDictionaryDataSource<T> dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// add filter_Event_Edittext for events names
-		/** Getting the arguments to the Bundle object */
 		Bundle data = getArguments();
-
-		/** Getting integer data of the key current_page from the bundle */
-		obj = data.getInt("current_page", 0);
-
+		clazz = (Class<T>) data.get("class");
+		dictType = DictUtils.getDictionaryType(clazz);
 	}
 
 	@Override
@@ -144,7 +144,11 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 
 			@Override
 			public void onClick(View v) {
-				onNewElement();
+				try {
+					onNewElement();
+				} catch (Exception e) {
+					// TODO add exception handling
+				}
 
 			}
 		});
@@ -164,8 +168,6 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 				return true;
 			}
 		});
-		// end
-
 	}
 
 	@Override
@@ -181,108 +183,99 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 		if (mActionMode != null) mActionMode.finish();
 	}
 
-	public void onElementEdit(long id) {
-		int title = 1, name = 1;
-		BaseDictionary object = null;
-		String name1 = null, code1 = null;
-		switch (obj) {
-		case 1:
-			title = R.string.dic_edit_place_title;
-			name = R.string.dic_new_place;
-			object = new PlaceDataSource(getActivity()).getPlaceById(id);
-			name1 = object.getName();
-			break;
-		case 2:
-			title = R.string.dic_edit_category_title;
-			name = R.string.dic_new_category;
-			object = new CategoryDataSource(getActivity()).getCategoryById(id);
-			name1 = object.getName();
-			break;
-		case 3:
-			title = R.string.dic_edit_currency_title;
-			name = R.string.dic_new_currency;
-			object = new CurrencyDataSource(getActivity()).getCurrencyById(id);
-			name1 = object.getName();
-			code1 = ((Currency) object).getCode();
-			break;
-		}
+	// public void onElementEdit(long id) {
+	// int title = 1, name = 1;
+	// BaseDictionary object = null;
+	// String name1 = null, code1 = null;
+	// switch (obj) {
+	// case 1:
+	// title = R.string.dic_edit_place_title;
+	// name = R.string.dic_new_place;
+	// object = new PlaceDataSource(getActivity()).getPlaceById(id);
+	// name1 = object.getName();
+	// break;
+	// case 2:
+	// title = R.string.dic_edit_category_title;
+	// name = R.string.dic_new_category;
+	// object = new CategoryDataSource(getActivity()).getCategoryById(id);
+	// name1 = object.getName();
+	// break;
+	// case 3:
+	// title = R.string.dic_edit_currency_title;
+	// name = R.string.dic_new_currency;
+	// object = new CurrencyDataSource(getActivity()).getCurrencyById(id);
+	// name1 = object.getName();
+	// code1 = ((Currency) object).getCode();
+	// break;
+	// }
 
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "edit", name,
-				getString(title), R.string.save_edit_btn, name1, code1, id);
-		newFragment.show(getFragmentManager(), "dialog");
-		newFragment.setOnPositiveBtnListener(this);
-	}
+	// DictionaryNewDialogFragment newFragment =
+	// DictionaryNewDialogFragment.prepareDialog(obj, "edit", name,
+	// getString(title), R.string.save_edit_btn, name1, code1, id);
+	// newFragment.show(getFragmentManager(), "dialog");
+	// newFragment.setOnPositiveBtnListener(this);
+	// }
 
-	public void onDeleteElement(long id) {
-		String title = getString(R.string.confirm_del);
-		int name = 1;
-		BaseDictionary object = null;
-		String name1 = null;
-		OperationDataSource opDB = new OperationDataSource(getActivity());
-		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
-				android.R.drawable.stat_notify_error).setPositiveButton(R.string.okay, null);
-		long ops = 0;
-		switch (obj) {
-		case 1:
-			name = R.string.dic_new_place;
-			PlaceDataSource db = new PlaceDataSource(getActivity());
-			ops = opDB.getOperationListByPlaceId(id).size();
-			if (ops > 0) {
-				alert.setMessage(String.format(getString(R.string.pl_used_by_ops), ops)).create().show();
-				return;
-			}
-			object = db.getPlaceById(id);
-			name1 = object.getName();
-			break;
-		case 2:
-			name = R.string.dic_new_category;
-			CategoryDataSource db1 = new CategoryDataSource(getActivity());
-			ops = opDB.getOperationListByCategoryId(id).size();
-			if (ops > 0) {
-				alert.setMessage(String.format(getString(R.string.cat_used_by_ops), ops)).create().show();
-				;
-				return;
-			}
-			object = db1.getCategoryById(id);
-			name1 = object.getName();
-			break;
-		case 3:
-			name = R.string.dic_new_currency;
-			CurrencyDataSource db2 = new CurrencyDataSource(getActivity());
-			ops = opDB.getOperationListByCurrencyId(id).size();
-			if (ops > 0) {
-				alert.setMessage(String.format(getString(R.string.cur_used_by_ops), ops)).create().show();
-				return;
-			}
-			object = db2.getCurrencyById(id);
-			name1 = object.getName();
-			break;
-		}
+	// public void onDeleteElement(long id) {
+	// String title = getString(R.string.confirm_del);
+	// int name = 1;
+	// BaseDictionary object = null;
+	// String name1 = null;
+	// OperationDataSource opDB = new OperationDataSource(getActivity());
+	// AlertDialog.Builder alert = new
+	// AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
+	// android.R.drawable.stat_notify_error).setPositiveButton(R.string.okay,
+	// null);
+	// long ops = 0;
+	// switch (obj) {
+	// case 1:
+	// name = R.string.dic_place_name_lbl;
+	// PlaceDataSource db = new PlaceDataSource(getActivity());
+	// ops = opDB.getOperationListByPlaceId(id).size();
+	// if (ops > 0) {
+	// alert.setMessage(String.format(getString(R.string.pl_used_by_ops),
+	// ops)).create().show();
+	// return;
+	// }
+	// object = db.getPlaceById(id);
+	// name1 = object.getName();
+	// break;
+	// case 2:
+	// name = R.string.dic_category_name_lbl;
+	// CategoryDataSource db1 = new CategoryDataSource(getActivity());
+	// ops = opDB.getOperationListByCategoryId(id).size();
+	// if (ops > 0) {
+	// alert.setMessage(String.format(getString(R.string.cat_used_by_ops),
+	// ops)).create().show();
+	// return;
+	// }
+	// object = db1.getCategoryById(id);
+	// name1 = object.getName();
+	// break;
+	// case 3:
+	// name = R.string.dic_currency_name_lbl;
+	// CurrencyDataSource db2 = new CurrencyDataSource(getActivity());
+	// ops = opDB.getOperationListByCurrencyId(id).size();
+	// if (ops > 0) {
+	// alert.setMessage(String.format(getString(R.string.cur_used_by_ops),
+	// ops)).create().show();
+	// return;
+	// }
+	// object = db2.getCurrencyById(id);
+	// name1 = object.getName();
+	// break;
+	// }
 
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "delete", name, String
-				.format(title, name1), R.string.dic_del, "", "", id);
-		newFragment.show(getFragmentManager(), "dialog");
-		newFragment.setOnPositiveBtnListener(this);
-	}
+	// DictionaryNewDialogFragment newFragment =
+	// DictionaryNewDialogFragment.prepareDialog(obj, "delete", name, String
+	// .format(title, name1), R.string.dic_del, "", "", id);
+	// newFragment.show(getFragmentManager(), "dialog");
+	// newFragment.setOnPositiveBtnListener(this);
+	// }
 
-	public void onNewElement() {
-		int title = 1, name = 1;
-		switch (obj) {
-		case 1:
-			title = R.string.dic_new_place_title;
-			name = R.string.dic_new_place;
-			break;
-		case 2:
-			title = R.string.dic_new_category_title;
-			name = R.string.dic_new_category;
-			break;
-		case 3:
-			title = R.string.dic_new_currency_title;
-			name = R.string.dic_new_currency;
-			break;
-		}
-		DictionaryNewDialogFragment newFragment = DictionaryNewDialogFragment.prepareDialog(obj, "new", name,
-				getString(title), R.string.save, null, null, 0);
+	public void onNewElement() throws java.lang.InstantiationException, IllegalAccessException {
+		DictionaryNewDialogFragment<T> newFragment = DictionaryNewDialogFragment.newInstance(clazz.newInstance(),
+				dictType);
 		newFragment.show(getFragmentManager(), "dialog");
 		newFragment.setOnPositiveBtnListener(this);
 
@@ -291,19 +284,8 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	private void fillList() {
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
-			List<? extends BaseDictionary> objs = null;
-			switch (obj) {
-			case 1:
-				objs = new PlaceDataSource(this.getActivity()).getPlaceList();
-				break;
-			case 2:
-				objs = new CategoryDataSource(this.getActivity()).getCategoryList();
-				break;
-			case 3:
-				objs = new CurrencyDataSource(this.getActivity()).getCurrencyList();
-				break;
-			}
-			adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
+			List<T> objs = dataSource.getEntityList();
+			adapterZ = new DictionaryListViewAdapter<T>(getActivity(), objs);
 			// trigger filter to it being applied on resume
 
 		}
@@ -314,55 +296,16 @@ public class DictionaryListFragment extends Fragment implements onPositiveBtnLis
 	}
 
 	@Override
-	public void onPositiveBtnDialog(Bundle args) {
-		String mode = args.getString("mode");
-		if (mode.equals("new")) {
-			String name = args.getString("name");
-			switch (obj) {
-			case 1:
-				new PlaceDataSource(getActivity()).insert(name);
-				break;
-			case 2:
-				new CategoryDataSource(getActivity()).insert(name);
-				break;
-			case 3:
-				new CurrencyDataSource(getActivity()).insert(name, args.getString("code"));
-				break;
-			}
+	public void onSuccess(T entity) {
+		if (entity.getId() == null) {
+			dataSource.insertEntity(entity);
 			Toast.makeText(getActivity(), "Created.", Toast.LENGTH_SHORT).show();
-		} else if (mode.equals("edit")) {
-			String name = args.getString("name");
-			long id = args.getLong("id");
-			switch (obj) {
-			case 1:
-				new PlaceDataSource(getActivity()).update(id, name);
-				break;
-			case 2:
-				new CategoryDataSource(getActivity()).update(id, name);
-				break;
-			case 3:
-				new CurrencyDataSource(getActivity()).update(id, name, args.getString("code"));
-				break;
-			}
+		} else {
+			dataSource.updateEntity(entity);
 			Toast.makeText(getActivity(), "Edited.", Toast.LENGTH_SHORT).show();
-		} else if (mode.equals("delete")) {
-			long id = args.getLong("id");
-			switch (obj) {
-			case 1:
-				new PlaceDataSource(getActivity()).delete(id);
-				break;
-			case 2:
-				new CategoryDataSource(getActivity()).delete(id);
-				break;
-			case 3:
-				new CurrencyDataSource(getActivity()).delete(id);
-				break;
-			}
-			Toast.makeText(getActivity(), "Deleted.", Toast.LENGTH_SHORT).show();
 		}
 		dataChanged = true;
 		fillList();
-
 	}
 
 }

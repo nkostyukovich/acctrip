@@ -5,28 +5,51 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
+import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
+import com.dzebsu.acctrip.models.dictionaries.Category;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
+
 public class DictionaryPagerAdapter extends FragmentPagerAdapter {
-	final int PAGE_COUNT = 3;
 
 	public DictionaryPagerAdapter(FragmentManager fm) {
 		super(fm);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Fragment getItem(int arg0) {
-		DictionaryListFragment myFragment = new DictionaryListFragment();
 		Bundle data = new Bundle();
-		data.putInt("current_page", arg0 + 1);
-		myFragment.setArguments(data);
-		return myFragment;
-
+		switch (arg0) {
+		case 0:
+			DictionaryListFragment<Place> placeFrag = new DictionaryListFragment<Place>();
+			placeFrag.setDataSource(new PlaceDataSource(placeFrag.getActivity()));
+			data.putSerializable("class", Place.class);
+			placeFrag.setArguments(data);
+			return placeFrag;
+		case 1:
+			DictionaryListFragment<Category> catFrag = new DictionaryListFragment<Category>();
+			catFrag.setDataSource(new CategoryDataSource(catFrag.getActivity()));
+			data.putSerializable("class", Category.class);
+			catFrag.setArguments(data);
+			return catFrag;
+		case 2:
+			DictionaryListFragment<Currency> curFrag = new DictionaryListFragment<Currency>();
+			curFrag.setDataSource(new CurrencyDataSource(curFrag.getActivity()));
+			data.putSerializable("class", Currency.class);
+			curFrag.setArguments(data);
+			return curFrag;
+		default:
+			break;
+		}
+		return null;
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return PAGE_COUNT;
+		return DictionaryType.values().length;
 	}
 
 }

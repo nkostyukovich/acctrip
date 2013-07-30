@@ -79,21 +79,21 @@
 	<!-- category -->
 	<string name="dic_category_search">Category</string>
 	
-	<string name="dic_new_place">Place name</string>
+	<string name="dic_place_name_lbl">Place name</string>
 	<string name="dic_new_place_title">New place</string>
 	<string name="dic_edit_place_title">Edit place</string>
 	<string name="dic_delete_place_title">Delete place</string>
 	
-	<string name="dic_new_category">Category name</string>
+	<string name="dic_category_name_lbl">Category name</string>
 	<string name="dic_new_category_title">New category</string>
 	<string name="dic_edit_category_title">Edit category</string>
 	<string name="dic_delete_category_title">Delete category</string>
 	
-	<string name="dic_new_currency">Currency name</string>
+	<string name="dic_currency_name_lbl">Currency name</string>
 	<string name="dic_new_currency_title">New currency</string>
 	<string name="dic_edit_currency_title">Edit currency</string>
 	<string name="dic_delete_currency_title">Delete currency</string>
-	<string name="dic_new_code">Currency code</string>
+	<string name="dic_currency_code_lbl">Currency code</string>
 	<string name="dic_edit">Edit</string>
 	<string name="save_edit_btn">Save changes</string>
 	

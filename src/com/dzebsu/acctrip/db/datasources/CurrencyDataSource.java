@@ -6,64 +6,52 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
-import com.dzebsu.acctrip.db.EventAccDbHelper;
-import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class CurrencyDataSource {
-
-	private SQLiteDatabase database;
-	private EventAccDbHelper dbHelper;
+public class CurrencyDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Currency> {
 
 	private String[] selectedColumns = { EventAccContract.Currency._ID, EventAccContract.Currency.NAME,
 			EventAccContract.Currency.CODE };
 
 	public CurrencyDataSource(Context ctx) {
-		dbHelper = new EventAccDbHelper(ctx);
+		super(ctx);
 	}
 
-	public void open() {
-		database = dbHelper.getWritableDatabase();
-	}
-
-	public void close() {
-		database.close();
-	}
-
-	public long insert(String name, String code) {
+	@Override
+	public long insertEntity(Currency entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Currency.NAME, name);
-			values.put(EventAccContract.Currency.CODE, code);
+			values.put(EventAccContract.Currency.NAME, entity.getName());
+			values.put(EventAccContract.Currency.CODE, entity.getCode());
 			return database.insert(EventAccContract.Currency.TABLE_NAME, null, values);
 		} finally {
 			close();
 		}
 	}
 
-	public Currency update(Long id, String name, String code) {
+	@Override
+	public void updateEntity(Currency entity) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Currency.NAME, name);
-			values.put(EventAccContract.Currency.CODE, code);
+			values.put(EventAccContract.Currency.NAME, entity.getName());
+			values.put(EventAccContract.Currency.CODE, entity.getCode());
 			String whereClause = EventAccContract.Currency._ID + " = ?";
-			database.update(EventAccContract.Currency.TABLE_NAME, values, whereClause,
-					new String[] { Long.toString(id) });
-			return getCurrencyById(id);
+			database.update(EventAccContract.Currency.TABLE_NAME, values, whereClause, new String[] { entity.getId()
+					.toString() });
 		} finally {
 			close();
 		}
 	}
 
-	public Currency getCurrencyById(long id) {
+	@Override
+	public Currency getEntityById(long id) {
 		open();
-		try{
+		try {
 			String whereBatch = EventAccContract.Currency._ID + " = ?";
 			Cursor c = database.query(EventAccContract.Currency.TABLE_NAME, selectedColumns, whereBatch,
 					new String[] { Long.toString(id) }, null, null, null);
@@ -74,12 +62,13 @@ public class CurrencyDataSource {
 			}
 			c.close();
 			return cur;
-		}finally{
+		} finally {
 			close();
 		}
 	}
 
-	public List<Currency> getCurrencyList() {
+	@Override
+	public List<Currency> getEntityList() {
 		open();
 		try {
 			List<Currency> result = new ArrayList<Currency>();
@@ -96,11 +85,13 @@ public class CurrencyDataSource {
 			close();
 		}
 	}
-	public long delete(Long id) {
+
+	@Override
+	public void deleteEntity(long id) {
 		open();
 		try {
 			String whereClause = EventAccContract.Currency._ID + " = ?";
-			return database.delete(EventAccContract.Currency.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+			database.delete(EventAccContract.Currency.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

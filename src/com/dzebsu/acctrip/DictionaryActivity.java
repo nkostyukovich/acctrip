@@ -39,23 +39,16 @@ public class DictionaryActivity extends FragmentActivity {
 			ab.setDisplayShowHomeEnabled(false);
 			ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-			Tab tab = ab
-					.newTab()
-					.setText(R.string.place_tab)
-					.setTabListener(
-							new TabListener<DictionaryListFragment>(this, "Place", DictionaryListFragment.class));
+			Tab tab = ab.newTab().setText(R.string.place_tab).setTabListener(
+					new TabListener<DictionaryListFragment>(this, "Place", DictionaryListFragment.class));
 			ab.addTab(tab);
 
-			tab = ab.newTab()
-					.setText(R.string.category_tab)
-					.setTabListener(
-							new TabListener<DictionaryListFragment>(this, "Category", DictionaryListFragment.class));
+			tab = ab.newTab().setText(R.string.category_tab).setTabListener(
+					new TabListener<DictionaryListFragment>(this, "Category", DictionaryListFragment.class));
 			ab.addTab(tab);
 
-			tab = ab.newTab()
-					.setText(R.string.currency_tab)
-					.setTabListener(
-							new TabListener<DictionaryListFragment>(this, "Currency", DictionaryListFragment.class));
+			tab = ab.newTab().setText(R.string.currency_tab).setTabListener(
+					new TabListener<DictionaryListFragment>(this, "Currency", DictionaryListFragment.class));
 			ab.addTab(tab);
 		}
 		ViewPager mViewPager = (ViewPager) findViewById(R.id.dic_pager);
@@ -63,6 +56,7 @@ public class DictionaryActivity extends FragmentActivity {
 		DictionaryPagerAdapter pagerAdapter = new DictionaryPagerAdapter(fm);
 		mViewPager.setAdapter(pagerAdapter);
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
 			@Override
 			public void onPageSelected(int position) {
 				// When swiping between pages, select the

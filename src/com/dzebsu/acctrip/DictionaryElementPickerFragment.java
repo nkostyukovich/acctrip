@@ -117,13 +117,13 @@ public class DictionaryElementPickerFragment extends DialogFragment {
 		List<? extends BaseDictionary> objs = null;
 		switch (obj) {
 		case 1:
-			objs = new PlaceDataSource(this.getActivity()).getPlaceList();
+			objs = new PlaceDataSource(this.getActivity()).getEntityList();
 			break;
 		case 2:
-			objs = new CategoryDataSource(this.getActivity()).getCategoryList();
+			objs = new CategoryDataSource(this.getActivity()).getEntityList();
 			break;
 		case 3:
-			objs = new CurrencyDataSource(this.getActivity()).getCurrencyList();
+			objs = new CurrencyDataSource(this.getActivity()).getEntityList();
 			break;
 		}
 		adapterZ = new DictionaryListViewAdapter(getActivity(), objs);

@@ -131,9 +131,12 @@ public final class R {
         public static final int currency_code=0x7f050024;
         public static final int currency_name=0x7f050023;
         public static final int currency_tab=0x7f050037;
+        public static final int dic_category_name_lbl=0x7f050043;
         /**  category 
          */
         public static final int dic_category_search=0x7f05003e;
+        public static final int dic_currency_code_lbl=0x7f05004b;
+        public static final int dic_currency_name_lbl=0x7f050047;
         public static final int dic_del=0x7f05003d;
         public static final int dic_delete_category_title=0x7f050046;
         public static final int dic_delete_currency_title=0x7f05004a;
@@ -142,13 +145,10 @@ public final class R {
         public static final int dic_edit_category_title=0x7f050045;
         public static final int dic_edit_currency_title=0x7f050049;
         public static final int dic_edit_place_title=0x7f050041;
-        public static final int dic_new_category=0x7f050043;
         public static final int dic_new_category_title=0x7f050044;
-        public static final int dic_new_code=0x7f05004b;
-        public static final int dic_new_currency=0x7f050047;
         public static final int dic_new_currency_title=0x7f050048;
-        public static final int dic_new_place=0x7f05003f;
         public static final int dic_new_place_title=0x7f050040;
+        public static final int dic_place_name_lbl=0x7f05003f;
         /**  dictionary 
  place 
          */

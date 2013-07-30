@@ -15,15 +15,15 @@ import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAdapter<BaseDictionary> {
+public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAdapter<T> {
 
-	private List<BaseDictionary> objects;
+	private List<T> objects;
 
-	private List<BaseDictionary> objectsInit;
+	private List<T> objectsInit;
 
 	private LayoutInflater inflater;
 
-	public DictionaryListViewAdapter(Context context, List<BaseDictionary> objects) {
+	public DictionaryListViewAdapter(Context context, List<T> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_dictionary_list, objects);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
@@ -51,7 +51,7 @@ public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAd
 	};
 
 	@Override
-	public BaseDictionary getItem(int position) {
+	public T getItem(int position) {
 		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
@@ -100,7 +100,7 @@ public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAd
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
 
-			objects = (ArrayList<BaseDictionary>) results.values;
+			objects = (ArrayList<T>) results.values;
 			notifyDataSetChanged();
 		}
 

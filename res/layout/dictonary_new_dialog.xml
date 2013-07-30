@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:layout_margin="8dp"
-        android:text="@string/dic_new_code"
+        android:text="@string/dic_currency_code_lbl"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 	
 	
@@ -33,7 +33,7 @@
         android:gravity="center_vertical"
         android:visibility="gone"
         android:layout_margin="8dp"
-        android:text="@string/dic_new_code"
+        android:text="@string/dic_currency_code_lbl"
         android:layout_below="@+id/dic_new_name_et"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
