@@ -100,8 +100,7 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 
 					@Override
 					public void onClick(View view) {
-						// onPositiveBtn();
-
+						onPositiveBtn();
 					}
 				});
 			}

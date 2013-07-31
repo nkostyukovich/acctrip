@@ -52,7 +52,6 @@ public class DictionaryListViewAdapter<T extends BaseDictionary> extends ArrayAd
 
 	@Override
 	public T getItem(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
 

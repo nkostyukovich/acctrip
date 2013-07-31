@@ -16,15 +16,18 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import com.dzebsu.acctrip.models.Operation;
-import com.dzebsu.acctrip.models.OperationType;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
+
 	private List<Operation> objects;
+
 	private List<Operation> objectsInit;
+
 	private final Context context;
+
 	private LayoutInflater inflater;
 
 	public OperationsListViewAdapter(Context context, List<Operation> objects) {
@@ -36,29 +39,35 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	}
 
 	static class RowViewHolder {
+
 		public TextView date = null;
+
 		public TextView desc = null;
+
 		public TextView expenses = null;
+
 		public TextView opId = null;
+
 		public TextView place = null;
+
 		public TextView category = null;
 	}
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return true;
 	}
+
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position).getId();
 	}
+
 	@Override
 	public Operation getItem(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
+
 	@Override
 	public int getCount() {
 		Log.d("tag", "Trying to get count on line !!!!!!!!!!!!!!!!! class Test");
@@ -80,36 +89,32 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		
+
 		String s = objects.get(position).getDesc();
-		if (s.length() > 80)
-			s = s.substring(0, 80) + "...";
+		if (s.length() > 80) s = s.substring(0, 80) + "...";
 		holder.desc.setText(s);
-		
-		Place pl=objects.get(position).getPlace();
-		Category ca=objects.get(position).getCategory();
-		Currency cu=objects.get(position).getCurrency();
-		Date da=objects.get(position).getDate();
-		
-		String cur=cu==null?"?":cu.getCode();
-		String place=pl==null?"?":pl.getName();
-		String cat=ca==null?"?":ca.getName();
+
+		Place pl = objects.get(position).getPlace();
+		Category ca = objects.get(position).getCategory();
+		Currency cu = objects.get(position).getCurrency();
+		Date da = objects.get(position).getDate();
+
+		String cur = cu == null ? "?" : cu.getCode();
+		String place = pl == null ? "?" : pl.getName();
+		String cat = ca == null ? "?" : ca.getName();
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		String date=da==null?"no date":sdf.format(objects.get(position).getDate());
-		
-		
+		String date = da == null ? "no date" : sdf.format(objects.get(position).getDate());
+
 		holder.date.setText(date);
-		
-		holder.expenses.setText(objects.get(position).getValue()+" "+ cur);
+
+		holder.expenses.setText(objects.get(position).getValue() + " " + cur);
 		holder.opId.setText(context.getString(com.dzebsu.acctrip.R.string.op_id_tv)
 				+ ((Long) objects.get(position).getId()).toString());
 		s = place;
-		if (s.length() > 12)
-			s = s.substring(0, 12) + "...";
+		if (s.length() > 12) s = s.substring(0, 12) + "...";
 		holder.place.setText(s);
 		s = cat;
-		if (s.length() > 12)
-			s = s.substring(0, 12) + "...";
+		if (s.length() > 12) s = s.substring(0, 12) + "...";
 		holder.category.setText(s);
 
 		return rowView;
@@ -117,7 +122,6 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 	@Override
 	public Filter getFilter() {
-		// TODO Auto-generated method stub
 		return new OperationFilter();
 	}
 
@@ -132,11 +136,11 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			if (constraint != null) {
 				for (Operation g : objects) {
 					SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-					String s = g.getDesc() + g.getId() + g.getValue() + (g.getCategory()!=null?g.getCategory().getName():"")
-							+ sdf.format(g.getDate()) + (g.getPlace()!=null?g.getPlace().getName():"");
+					String s = g.getDesc() + g.getId() + g.getValue()
+							+ (g.getCategory() != null ? g.getCategory().getName() : "") + sdf.format(g.getDate())
+							+ (g.getPlace() != null ? g.getPlace().getName() : "");
 					// TODO sort by value if only numbers
-					if (s.toLowerCase().contains(constraint.toString().toLowerCase()))
-						filtered.add(g);
+					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}
 			}
 			filter.values = filtered;

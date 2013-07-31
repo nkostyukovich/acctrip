@@ -48,7 +48,6 @@ public class DictionaryPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return DictionaryType.values().length;
 	}
 

@@ -42,19 +42,16 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position).getId();
 	}
 
 	@Override
 	public Event getItem(int position) {
-		// TODO Auto-generated method stub
 		return objects.get(position);
 	}
 
@@ -86,7 +83,6 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 
 	@Override
 	public Filter getFilter() {
-		// TODO Auto-generated method stub
 		return new EventFilter();
 	}
 
