@@ -101,6 +101,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		Bundle data = getArguments();
 		clazz = (Class<T>) data.get("class");
 		dictType = DictUtils.getDictionaryType(clazz);
+		dataSource.setContext(this.getActivity());
 	}
 
 	@Override

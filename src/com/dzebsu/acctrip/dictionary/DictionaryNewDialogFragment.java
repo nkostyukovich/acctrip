@@ -20,10 +20,6 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class DictionaryNewDialogFragment<T extends BaseDictionary> extends DialogFragment {
 
-	private final static String BUNDLE_PRM_ENTITY = "entity";
-
-	private final static String BUNDLE_PRM_TYPE = "type";
-
 	private T entity;
 
 	private IDialogListener<T> listener;
@@ -34,16 +30,20 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 
 	public static <T extends BaseDictionary> DictionaryNewDialogFragment<T> newInstance(T entity, DictionaryType type) {
 		DictionaryNewDialogFragment<T> fragment = new DictionaryNewDialogFragment<T>();
-		Bundle bundle = new Bundle();
-		if (entity != null) {
-			bundle.putSerializable(BUNDLE_PRM_ENTITY, entity);
-		}
-		bundle.putSerializable(BUNDLE_PRM_TYPE, type);
-		fragment.setArguments(bundle);
+		fragment.setEntity(entity);
+		fragment.setType(type);
 		return fragment;
 	}
 
 	public DictionaryNewDialogFragment() {
+	}
+
+	public void setEntity(T entity) {
+		this.entity = entity;
+	}
+
+	public void setType(DictionaryType type) {
+		this.type = type;
 	}
 
 	public void setOnPositiveBtnListener(IDialogListener<T> listener) {
@@ -61,9 +61,6 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 		builder.setIcon(android.R.drawable.ic_input_add);
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		view = inflater.inflate(R.layout.dictonary_new_dialog, null);
-		Bundle args = getArguments();
-		entity = (T) args.get(BUNDLE_PRM_ENTITY);
-		type = (DictionaryType) args.get(BUNDLE_PRM_TYPE);
 		if (type == DictionaryType.CURRENCY) {
 			((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.VISIBLE);
 			((TextView) view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.VISIBLE);

@@ -11,9 +11,13 @@ import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 
-public class CategoryDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Category> {
+public class CategoryDataSource extends BaseDictionaryDataSource<Category> {
 
 	private String[] selectedColumns = { EventAccContract.Category._ID, EventAccContract.Category.NAME };
+
+	public CategoryDataSource() {
+		super();
+	}
 
 	public CategoryDataSource(Context ctx) {
 		super(ctx);

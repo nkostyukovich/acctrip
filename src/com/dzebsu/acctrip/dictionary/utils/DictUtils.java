@@ -3,10 +3,10 @@ package com.dzebsu.acctrip.dictionary.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dzebsu.acctrip.db.EventAccContract.Place;
 import com.dzebsu.acctrip.dictionary.DictionaryType;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class DictUtils {
 

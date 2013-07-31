@@ -22,26 +22,26 @@ public class DictionaryPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int arg0) {
 		Bundle data = new Bundle();
 		switch (arg0) {
-		case 0:
-			DictionaryListFragment<Place> placeFrag = new DictionaryListFragment<Place>();
-			placeFrag.setDataSource(new PlaceDataSource(placeFrag.getActivity()));
-			data.putSerializable("class", Place.class);
-			placeFrag.setArguments(data);
-			return placeFrag;
-		case 1:
-			DictionaryListFragment<Category> catFrag = new DictionaryListFragment<Category>();
-			catFrag.setDataSource(new CategoryDataSource(catFrag.getActivity()));
-			data.putSerializable("class", Category.class);
-			catFrag.setArguments(data);
-			return catFrag;
-		case 2:
-			DictionaryListFragment<Currency> curFrag = new DictionaryListFragment<Currency>();
-			curFrag.setDataSource(new CurrencyDataSource(curFrag.getActivity()));
-			data.putSerializable("class", Currency.class);
-			curFrag.setArguments(data);
-			return curFrag;
-		default:
-			break;
+			case 0:
+				DictionaryListFragment<Place> placeFrag = new DictionaryListFragment<Place>();
+				placeFrag.setDataSource(new PlaceDataSource());
+				data.putSerializable("class", Place.class);
+				placeFrag.setArguments(data);
+				return placeFrag;
+			case 1:
+				DictionaryListFragment<Category> catFrag = new DictionaryListFragment<Category>();
+				catFrag.setDataSource(new CategoryDataSource());
+				data.putSerializable("class", Category.class);
+				catFrag.setArguments(data);
+				return catFrag;
+			case 2:
+				DictionaryListFragment<Currency> curFrag = new DictionaryListFragment<Currency>();
+				curFrag.setDataSource(new CurrencyDataSource());
+				data.putSerializable("class", Currency.class);
+				curFrag.setArguments(data);
+				return curFrag;
+			default:
+				break;
 		}
 		return null;
 	}

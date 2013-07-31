@@ -11,10 +11,14 @@ import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class CurrencyDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Currency> {
+public class CurrencyDataSource extends BaseDictionaryDataSource<Currency> {
 
 	private String[] selectedColumns = { EventAccContract.Currency._ID, EventAccContract.Currency.NAME,
 			EventAccContract.Currency.CODE };
+
+	public CurrencyDataSource() {
+		super();
+	}
 
 	public CurrencyDataSource(Context ctx) {
 		super(ctx);

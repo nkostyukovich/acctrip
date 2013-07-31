@@ -11,9 +11,13 @@ import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.models.dictionaries.Place;
 
-public class PlaceDataSource extends BaseDictionaryDataSource implements IDictionaryDataSource<Place> {
+public class PlaceDataSource extends BaseDictionaryDataSource<Place> {
 
 	private String[] selectedColumns = { EventAccContract.Place._ID, EventAccContract.Place.NAME };
+
+	public PlaceDataSource() {
+		super();
+	}
 
 	public PlaceDataSource(Context ctx) {
 		super(ctx);
