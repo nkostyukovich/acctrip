@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
@@ -65,7 +66,8 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 			((EditText) view.findViewById(R.id.dic_new_name_et2)).setVisibility(View.VISIBLE);
 			((TextView) view.findViewById(R.id.dic_new_name_tv2)).setVisibility(View.VISIBLE);
 		}
-		((TextView) view.findViewById(R.id.dic_new_name_tv)).setText(type.getNameFldLabel());
+		((TextView) view.findViewById(R.id.dic_new_name_tv)).setText(String.format(getString(R.string.dic_name_lbl),
+				TextUtils.asUpperCaseFirstChar(getString(type.getElementName()))));
 		if (entity.getId() != null) {
 			builder.setIcon(android.R.drawable.ic_menu_edit);
 			((EditText) view.findViewById(R.id.dic_new_name_et)).setText(entity.getName());
@@ -76,17 +78,19 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 		// TODO implement other dialog for Delete
 
 		builder.setView(view);
-		builder.setTitle(entity.getId() == null ? type.getNewDialogTitle() : type.getEditDialogTitle())
-				.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+		builder.setTitle(
+				entity.getId() == null ? String.format(getString(R.string.dic_new_title), getString(type
+						.getElementName())) : String.format(getString(R.string.dic_edit_title), getString(type
+						.getElementName()))).setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			}
+		}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int id) {
-						DictionaryNewDialogFragment.this.getDialog().dismiss();
-					}
-				});
+			public void onClick(DialogInterface dialog, int id) {
+				DictionaryNewDialogFragment.this.getDialog().dismiss();
+			}
+		});
 		// Create the AlertDialog object and return it
 		final AlertDialog al = builder.create();
 		// to prevent from closing when name="" and show toast

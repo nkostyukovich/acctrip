@@ -1,19 +1,22 @@
 package com.dzebsu.acctrip.dictionary;
 
-import com.dzebsu.acctrip.R;
-import com.dzebsu.acctrip.models.dictionaries.Place;
-
+import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
+import com.dzebsu.acctrip.R;
+
 public class TabListener<T> implements ActionBar.TabListener {
+
 	private Fragment fragment;
+
 	private final Activity hostActivity;
+
 	private final String fragmentTag;
+
 	private final Class<T> fragmentClass;
 
 	public TabListener(Activity activity, String tag, Class<T> clz) {

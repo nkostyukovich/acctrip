@@ -97,4 +97,10 @@ public class PlaceDataSource extends BaseDictionaryDataSource<Place> {
 			close();
 		}
 	}
+
+	@Override
+	protected String getEntityAliasId() {
+
+		return EventAccContract.Place.ALIAS_ID;
+	}
 }

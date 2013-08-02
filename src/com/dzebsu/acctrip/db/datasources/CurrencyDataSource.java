@@ -101,4 +101,10 @@ public class CurrencyDataSource extends BaseDictionaryDataSource<Currency> {
 		}
 	}
 
+	@Override
+	protected String getEntityAliasId() {
+
+		return EventAccContract.Currency.ALIAS_ID;
+	}
+
 }

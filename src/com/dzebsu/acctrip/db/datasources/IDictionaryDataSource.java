@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 
 public interface IDictionaryDataSource<T extends BaseDictionary> {
@@ -13,6 +14,8 @@ public interface IDictionaryDataSource<T extends BaseDictionary> {
 	void updateEntity(T entity);
 
 	T getEntityById(long id);
+
+	List<Operation> getOperationListByEntityId(long id);
 
 	List<T> getEntityList();
 

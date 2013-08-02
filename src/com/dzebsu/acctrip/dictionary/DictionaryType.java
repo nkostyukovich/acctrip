@@ -6,32 +6,23 @@ import com.dzebsu.acctrip.R;
 
 public enum DictionaryType implements Serializable {
 
-	PLACE(R.string.dic_new_place_title, R.string.dic_edit_place_title, R.string.dic_place_name_lbl),
-	CATEGORY(R.string.dic_new_category_title, R.string.dic_edit_category_title, R.string.dic_category_name_lbl),
-	CURRENCY(R.string.dic_new_currency_title, R.string.dic_edit_currency_title, R.string.dic_currency_name_lbl);
+	PLACE(R.string.place),
+	CATEGORY(R.string.category),
+	CURRENCY(R.string.currency);
 
-	private DictionaryType(int newDialogTitle, int editDialogTitle, int nameFldLabel) {
-		this.newDialogTitle = newDialogTitle;
-		this.editDialogTitle = editDialogTitle;
-		this.nameFldLabel = nameFldLabel;
+	private DictionaryType(int elementName) {
+		this.elementName = elementName;
+
 	}
 
-	private int newDialogTitle;
+	private int elementName;
 
-	private int editDialogTitle;
-
-	private int nameFldLabel;
-
-	public int getNewDialogTitle() {
-		return newDialogTitle;
+	public int getElementName() {
+		return elementName;
 	}
 
-	public int getEditDialogTitle() {
-		return editDialogTitle;
-	}
-
-	public int getNameFldLabel() {
-		return nameFldLabel;
+	public void setElementName(int elementName) {
+		this.elementName = elementName;
 	}
 
 }

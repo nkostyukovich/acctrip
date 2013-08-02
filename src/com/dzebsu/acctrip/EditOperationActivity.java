@@ -177,24 +177,24 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// this.
-			/*
-			 * Intent intent = new Intent(this, EventListActivity.class);
-			 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			 * startActivity(intent);
-			 */
-			finish();
-			return true;
-		case R.id.open_dictionaries:
-			onOpenDictionaries();
-			return true;
-		case R.id.save_op:
-			onSaveOperation(item.getActionView());
-			return true;
-		case R.id.cancel_op:
-			onCancelBtn(item.getActionView());
-			return true;
+			case android.R.id.home:
+				// this.
+				/*
+				 * Intent intent = new Intent(this, EventListActivity.class);
+				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				 * startActivity(intent);
+				 */
+				finish();
+				return true;
+			case R.id.open_dictionaries:
+				onOpenDictionaries();
+				return true;
+			case R.id.save_op:
+				onSaveOperation(item.getActionView());
+				return true;
+			case R.id.cancel_op:
+				onCancelBtn(item.getActionView());
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -245,21 +245,21 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	}
 
 	private void createDictionaryEntry() {
-		int title = 1, name = 1;
-		switch (newItemClass) {
-		case 1:
-			title = R.string.dic_new_place_title;
-			name = R.string.dic_place_name_lbl;
-			break;
-		case 2:
-			title = R.string.dic_new_category_title;
-			name = R.string.dic_category_name_lbl;
-			break;
-		case 3:
-			title = R.string.dic_new_currency_title;
-			name = R.string.dic_currency_name_lbl;
-			break;
-		}
+		/*
+		 * int title = 1, name = 1; switch (newItemClass) { case 1: title =
+		 * R.string.dic_new_place_title; name = R.string.dic_place_name_lbl;
+		 * break; case 2: title = R.string.dic_new_category_title; name =
+		 * R.string.dic_category_name_lbl; break; case 3: title =
+		 * R.string.dic_new_currency_title; name =
+		 * R.string.dic_currency_name_lbl; break; }
+		 */
+		// TODO allow create dic entry and provide response in listener
+		/*
+		 * DictionaryNewDialogFragment<T> newFragment =
+		 * DictionaryNewDialogFragment.newInstance(clazz.newInstance(),
+		 * dictType); newFragment.show(getFragmentManager(), "dialog");
+		 * newFragment.setOnPositiveBtnListener(this);
+		 */
 		// DictionaryNewDialogFragment newFragment =
 		// DictionaryNewDialogFragment.prepareDialog(newItemClass,"new", name,
 		// getString(title), R.string.save, null, null, 0);
@@ -291,21 +291,21 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 
 	private void changeBtnValue(String title, long id) {
 		switch (newItemClass) {
-		case 1:
-			place = title;
-			placeId = id;
-			((Button) findViewById(R.id.op_edit_place_btn)).setText(place);
-			break;
-		case 2:
-			category = title;
-			categoryId = id;
-			((Button) findViewById(R.id.op_edit_category_btn)).setText(category);
-			break;
-		case 3:
-			currency = title;
-			currencyId = id;
-			((Button) findViewById(R.id.op_edit_currency_btn)).setText(currency);
-			break;
+			case 1:
+				place = title;
+				placeId = id;
+				((Button) findViewById(R.id.op_edit_place_btn)).setText(place);
+				break;
+			case 2:
+				category = title;
+				categoryId = id;
+				((Button) findViewById(R.id.op_edit_category_btn)).setText(category);
+				break;
+			case 3:
+				currency = title;
+				currencyId = id;
+				((Button) findViewById(R.id.op_edit_currency_btn)).setText(currency);
+				break;
 		}
 	}
 
@@ -323,16 +323,16 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 			createDictionaryEntry();
 		} else {
 			switch (newItemClass) {
-			case 1:
-				changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
-				break;
-			case 2:
-				changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
-				break;
-			case 3:
-				changeBtnValue(new CurrencyDataSource(this).getEntityById(args.getLong("pickedId")).getCode(), args
-						.getLong("pickedId"));
-				break;
+				case 1:
+					changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
+					break;
+				case 2:
+					changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
+					break;
+				case 3:
+					changeBtnValue(new CurrencyDataSource(this).getEntityById(args.getLong("pickedId")).getCode(), args
+							.getLong("pickedId"));
+					break;
 			}
 		}
 	}

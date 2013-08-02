@@ -2,6 +2,10 @@ package com.dzebsu.acctrip.dictionary;
 
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ActionMode;
@@ -68,19 +72,18 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			// switch (item.getItemId()) {
-			// case R.id.dic_edit:
-			// onElementEdit(adapterZ.getItemId(selectedItem));
-			// mode.finish(); // Action picked, so close the CAB
-			// return true;
-			// case R.id.dic_del:
-			// onDeleteElement(adapterZ.getItemId(selectedItem));
-			// mode.finish(); // Action picked, so close the CAB
-			// return true;
-			// default:
-			// return false;
-			// }
-			return false;
+			switch (item.getItemId()) {
+				case R.id.dic_edit:
+					onElementEdit(adapterZ.getItemId(selectedItem));
+					mode.finish(); // Action picked, so close the CAB
+					return true;
+				case R.id.dic_del:
+					onDeleteElement(adapterZ.getItemId(selectedItem));
+					mode.finish(); // Action picked, so close the CAB
+					return true;
+				default:
+					return false;
+			}
 		}
 	};
 
@@ -184,95 +187,42 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		if (mActionMode != null) mActionMode.finish();
 	}
 
-	// public void onElementEdit(long id) {
-	// int title = 1, name = 1;
-	// BaseDictionary object = null;
-	// String name1 = null, code1 = null;
-	// switch (obj) {
-	// case 1:
-	// title = R.string.dic_edit_place_title;
-	// name = R.string.dic_new_place;
-	// object = new PlaceDataSource(getActivity()).getPlaceById(id);
-	// name1 = object.getName();
-	// break;
-	// case 2:
-	// title = R.string.dic_edit_category_title;
-	// name = R.string.dic_new_category;
-	// object = new CategoryDataSource(getActivity()).getCategoryById(id);
-	// name1 = object.getName();
-	// break;
-	// case 3:
-	// title = R.string.dic_edit_currency_title;
-	// name = R.string.dic_new_currency;
-	// object = new CurrencyDataSource(getActivity()).getCurrencyById(id);
-	// name1 = object.getName();
-	// code1 = ((Currency) object).getCode();
-	// break;
-	// }
+	public void onElementEdit(long id) {
+		DictionaryNewDialogFragment<T> newFragment = DictionaryNewDialogFragment.newInstance(dataSource
+				.getEntityById(id), dictType);
+		newFragment.show(getFragmentManager(), "dialog");
+		newFragment.setOnPositiveBtnListener(this);
+	}
 
-	// DictionaryNewDialogFragment newFragment =
-	// DictionaryNewDialogFragment.prepareDialog(obj, "edit", name,
-	// getString(title), R.string.save_edit_btn, name1, code1, id);
-	// newFragment.show(getFragmentManager(), "dialog");
-	// newFragment.setOnPositiveBtnListener(this);
-	// }
+	public void onDeleteElement(final long id) {
 
-	// public void onDeleteElement(long id) {
-	// String title = getString(R.string.confirm_del);
-	// int name = 1;
-	// BaseDictionary object = null;
-	// String name1 = null;
-	// OperationDataSource opDB = new OperationDataSource(getActivity());
-	// AlertDialog.Builder alert = new
-	// AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
-	// android.R.drawable.stat_notify_error).setPositiveButton(R.string.okay,
-	// null);
-	// long ops = 0;
-	// switch (obj) {
-	// case 1:
-	// name = R.string.dic_place_name_lbl;
-	// PlaceDataSource db = new PlaceDataSource(getActivity());
-	// ops = opDB.getOperationListByPlaceId(id).size();
-	// if (ops > 0) {
-	// alert.setMessage(String.format(getString(R.string.pl_used_by_ops),
-	// ops)).create().show();
-	// return;
-	// }
-	// object = db.getPlaceById(id);
-	// name1 = object.getName();
-	// break;
-	// case 2:
-	// name = R.string.dic_category_name_lbl;
-	// CategoryDataSource db1 = new CategoryDataSource(getActivity());
-	// ops = opDB.getOperationListByCategoryId(id).size();
-	// if (ops > 0) {
-	// alert.setMessage(String.format(getString(R.string.cat_used_by_ops),
-	// ops)).create().show();
-	// return;
-	// }
-	// object = db1.getCategoryById(id);
-	// name1 = object.getName();
-	// break;
-	// case 3:
-	// name = R.string.dic_currency_name_lbl;
-	// CurrencyDataSource db2 = new CurrencyDataSource(getActivity());
-	// ops = opDB.getOperationListByCurrencyId(id).size();
-	// if (ops > 0) {
-	// alert.setMessage(String.format(getString(R.string.cur_used_by_ops),
-	// ops)).create().show();
-	// return;
-	// }
-	// object = db2.getCurrencyById(id);
-	// name1 = object.getName();
-	// break;
-	// }
+		long ops = dataSource.getOperationListByEntityId(id).size();
 
-	// DictionaryNewDialogFragment newFragment =
-	// DictionaryNewDialogFragment.prepareDialog(obj, "delete", name, String
-	// .format(title, name1), R.string.dic_del, "", "", id);
-	// newFragment.show(getFragmentManager(), "dialog");
-	// newFragment.setOnPositiveBtnListener(this);
-	// }
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
+				android.R.drawable.stat_notify_error);
+		if (ops > 0) {
+			alert.setTitle(R.string.sorry_confirm_del).setMessage(
+					String.format(getString(R.string.used_by_ops), getString(dictType.getElementName()), ops))
+					.setPositiveButton(R.string.okay, null);
+
+		} else {
+			String message = String.format(getString(R.string.confirm_del), dataSource.getEntityById(id).getName());
+			alert.setTitle(R.string.delete_dialog_title).setMessage(message).setNegativeButton(R.string.cancel, null)
+					.setPositiveButton(R.string.dic_del, new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (which == Dialog.BUTTON_POSITIVE) {
+								dataSource.deleteEntity(id);
+								dataChanged = true;
+								fillList();
+							}
+
+						}
+					});
+		}
+		alert.create().show();
+	}
 
 	public void onNewElement() throws java.lang.InstantiationException, IllegalAccessException {
 		DictionaryNewDialogFragment<T> newFragment = DictionaryNewDialogFragment.newInstance(clazz.newInstance(),
