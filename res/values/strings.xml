@@ -168,7 +168,7 @@
 	<string name="apply">Apply</string>
 	<string name="unknown">unknown</string>
 	<string name="backup_subject">Backup of AccTrip</string>
-	<string name="backup_text">Backup of AccTrip here</string>
+	<string name="backup_text">Backup of AccTrip delivered</string>
 	<string name="assum_sent">Assuming, you will send it</string>
 	<string name="send">Send</string>
 	 <string name="pref_backup_database_title_email">Backup to your email</string>

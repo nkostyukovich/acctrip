@@ -29,7 +29,7 @@ public class BackupViaEmailDialogPreference extends BaseBackupConfirmDialogPrefe
 		ed.putString(KEY_DEVICE_BACKUP, DateFormat.format("dd/MM/yy", Calendar.getInstance()).toString() + "@" + s);
 		ed.commit();
 		try {
-			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(s));
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:" + s));
 		} catch (Exception e) {
 			return null;
 		}
