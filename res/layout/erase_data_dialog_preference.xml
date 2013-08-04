@@ -9,8 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/pref_erase_data_confirm_et"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:gravity="center_vertical"
+        android:layout_below="@+id/pref_erase_data_confirm_message"
         android:text="3+5="
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -18,13 +18,22 @@
         android:id="@+id/pref_erase_data_confirm_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/pref_erase_data_confirm_tv"
+          android:layout_below="@+id/pref_erase_data_confirm_message"
         android:ems="3"
         android:inputType="number"
         android:maxLength="2" >
 
         <requestFocus />
     </EditText>
+
+    <TextView
+        android:id="@+id/pref_erase_data_confirm_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/pref_recreate_database_dialog_message"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

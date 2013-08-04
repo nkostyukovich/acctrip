@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.settings.dialogs;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 
 public class EraseAllDataConfirmDialogPreference extends DialogPreference {

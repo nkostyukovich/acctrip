@@ -22,6 +22,7 @@ import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.settings.SettingsActivity;
 
 public class EventListActivity extends Activity {
 

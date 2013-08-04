@@ -124,6 +124,8 @@
 	<string name="save_op">Save</string>
 	<string name="cancel_op">Cancel</string>
 	<string name="op_changed">Operation changed.</string>
+	<string name="operation_failed">Operation failed.</string>
+	
 	<!-- PREFERENCES -->
 	<string name="pref_curr_event_mode_title">Current event mode</string>
 	<string name="pref_curr_event_mode_summary">Allowing first screen be your current event</string>
@@ -137,14 +139,49 @@
         <item>Русский</item>
     </string-array>
     <string name="pref_language_def">English</string>
-    <string name="pref_backup_database_title">Backup all your data</string>
-    <string name="pref_backup_database_summary">Save your data on sd card or inner memory</string>
+    <string name="pref_backup_database_title">Backup and restore your data</string>
+    <string name="pref_backup_database_summary">Save and restore your data on device memory or share it via email</string>
     
      <string name="pref_recreate_database_title">Erase all your data</string>
     <string name="pref_recreate_database_summary">Delete all events, operations, places, etc.</string>
      <string name="pref_recreate_database_dialog_title">Erase all data</string>
-     <string name="pref_recreate_database_dialog_message">Are you sure? These changes cannot be undone.\nHere check against occasional presses:</string>
+     <string name="pref_recreate_database_dialog_message">Are you sure?\nThese changes cannot be undone.</string>
 	<string name="pref_all_data_erased">All data erased.</string>
 	<string name="settings">Settings</string>
 	<string name="english">English</string>
+	
+	
+	 <string name="pref_backup_database_title_device">Backup to device memory</string>
+	  <string name="pref_backup_database_def">unknown@unknown</string>
+	  	    <string name="pref_backup_database_summary_def">Last backup: hasn\'t been done yet.\nData will be copied here %s</string>
+	<string name="pref_backup_database_dialog_title">Backup</string>
+	<string name="pref_backup_database_device_dialog_message">Copy your data to %s. It will appear as EventAcc.db</string> 
+	  
+	   <string name="pref_backup_database_title_sd">Backup to sd memory card</string>
+
+	<string name="pref_backup_database_inner_dialog_message">Copy your data to root inner directory. It will appear as EventAcc.db</string>
+	<string name="copy">Copy</string>
+	<string name="last_backup">Last backup: %1$s\nWas copied to: %2$s </string>
+	<string name="last_backup_half">Last backup: %s</string>
+	<string name="backup_copy_success">Successfully copied.</string>
+	<string name="backup_copy_failure">Copying failed.</string>
+	<string name="apply">Apply</string>
+	<string name="unknown">unknown</string>
+	<string name="backup_subject">Backup of AccTrip</string>
+	<string name="backup_text">Backup of AccTrip here</string>
+	<string name="assum_sent">Assuming, you will send it</string>
+	<string name="send">Send</string>
+	 <string name="pref_backup_database_title_email">Backup to your email</string>
+	<string name="pref_backup_database_email_dialog_message">Send your data via email. While process you also acquire copy on device.</string> 
+
+	
+	
+	
+	<string name="pref_default_title">Reset settings</string>
+	<string name="pref_default_dialog_title">Reset settings</string>
+	<string name="pref_default_dialog_message">Reset all settings to default?</string>
+	<string name="set_default">Reset</string>
+	
+	<string name="def_applied">Default settings applied.</string>
+
 </resources>

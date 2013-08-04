@@ -11,17 +11,51 @@
         android:dialogTitle="@string/pref_language_dialog_title"
         android:entries="@array/pref_languages"
         android:entryValues="@array/pref_languages"
-        android:defaultValue="@string/english" />
-    <Preference
-        android:title="@string/pref_backup_database_title"
-        android:summary="@string/pref_backup_database_summary" />
-    <com.dzebsu.acctrip.EraseAllDataConfirmDialogPreference
+        android:defaultValue="@string/english"
+        />
+    <PreferenceScreen
+            android:key="pref_backup"
+            android:title="@string/pref_backup_database_title"
+        android:summary="@string/pref_backup_database_summary"
+            android:persistent="false">
+            
+           <com.dzebsu.acctrip.settings.dialogs.BackupOnDeviceDialogPreference
+        android:title="@string/pref_backup_database_title_device"
+        android:key="pref_backup_device_last"
+        android:defaultValue="@string/pref_backup_database_def"
+        android:dialogIcon="@android:drawable/ic_dialog_info"        
+        android:dialogTitle="@string/pref_backup_database_dialog_title"        
+        android:dialogMessage="@string/pref_backup_database_device_dialog_message"
+        android:positiveButtonText="@string/copy"
+        android:negativeButtonText="@string/cancel"
+        />
+        <com.dzebsu.acctrip.settings.dialogs.BackupViaEmailDialogPreference
+        android:title="@string/pref_backup_database_title_email"
+        android:key="pref_backup_email_last"
+        android:defaultValue="@string/unknown"
+        android:dialogIcon="@android:drawable/ic_dialog_info"       
+        android:dialogTitle="@string/pref_backup_database_dialog_title"        
+        android:dialogMessage="@string/pref_backup_database_email_dialog_message"
+        android:positiveButtonText="@string/send"
+        android:negativeButtonText="@string/cancel"
+        />
+        
+        </PreferenceScreen>
+    <com.dzebsu.acctrip.settings.dialogs.EraseAllDataConfirmDialogPreference
         android:title="@string/pref_recreate_database_title"
         android:summary="@string/pref_recreate_database_summary"
         android:dialogIcon="@android:drawable/ic_dialog_alert"
         android:dialogTitle="@string/pref_recreate_database_dialog_title"
         android:dialogMessage="@string/pref_recreate_database_dialog_message"
         android:positiveButtonText="@string/dic_del"
+        android:negativeButtonText="@string/cancel"
+        />
+    <com.dzebsu.acctrip.settings.dialogs.MakeDefaultSettingsDialogPreference
+        android:title="@string/pref_default_title"
+        android:dialogIcon="@android:drawable/ic_dialog_alert"        
+        android:dialogTitle="@string/pref_default_dialog_title"        
+        android:dialogMessage="@string/pref_default_dialog_message"
+        android:positiveButtonText="@string/set_default"
         android:negativeButtonText="@string/cancel"
         />
 </PreferenceScreen>
