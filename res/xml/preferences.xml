@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="pref_allow_current_event_mode"
+        android:title="@string/pref_curr_event_mode_title"
+        android:summary="@string/pref_curr_event_mode_summary"
+        android:defaultValue="false" />
+    <ListPreference
+        android:key="pref_language"
+        android:title="@string/pref_language_title"
+        android:dialogTitle="@string/pref_language_dialog_title"
+        android:entries="@array/pref_languages"
+        android:entryValues="@array/pref_languages"
+        android:defaultValue="@string/english" />
+    <Preference
+        android:title="@string/pref_backup_database_title"
+        android:summary="@string/pref_backup_database_summary" />
+    <com.dzebsu.acctrip.EraseAllDataConfirmDialogPreference
+        android:title="@string/pref_recreate_database_title"
+        android:summary="@string/pref_recreate_database_summary"
+        android:dialogIcon="@android:drawable/ic_dialog_alert"
+        android:dialogTitle="@string/pref_recreate_database_dialog_title"
+        android:dialogMessage="@string/pref_recreate_database_dialog_message"
+        android:positiveButtonText="@string/dic_del"
+        android:negativeButtonText="@string/cancel"
+        />
+</PreferenceScreen>

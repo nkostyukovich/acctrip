@@ -40,6 +40,8 @@
         </activity>
         <activity android:name="com.dzebsu.acctrip.OperationDetailsActivity" >
         </activity>
+        <activity android:name="com.dzebsu.acctrip.SettingsActivity" >
+        </activity>
     </application>
 
 </manifest>

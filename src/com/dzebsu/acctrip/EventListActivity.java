@@ -1,16 +1,13 @@
 package com.dzebsu.acctrip;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,26 +17,23 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
-import android.support.*;
+
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
-import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
-import com.dzebsu.acctrip.db.datasources.OperationDataSource;
-import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.models.Event;
-import com.dzebsu.acctrip.models.Operation;
-import com.dzebsu.acctrip.models.OperationType;
 
 public class EventListActivity extends Activity {
 
 	// Anonymous class wanted this adapter inside itself
-	private EventListViewAdapter adapterZ=null;
+	private EventListViewAdapter adapterZ = null;
+
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
+
 	private Parcelable mListState = null;
-	private boolean dataChanged=false;
+
+	private boolean dataChanged = false;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
@@ -50,11 +44,14 @@ public class EventListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// to initialize default settings for the first and only time
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		setContentView(R.layout.activity_event_list);
 		// getListView().addHeaderView(new SearchView(this));
 		fillEventList();
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		listView.setOnItemClickListener(new OnItemClickListener() {
+
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				onSelectEvent(id);
 			}
@@ -92,14 +89,18 @@ public class EventListActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.open_dictionaries:
-			onOpenDictionaries(item.getActionView());
-			return true;
-		case R.id.recreate_all_tables:
-			reCreateAllTables(item.getActionView());
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case R.id.open_dictionaries:
+				onOpenDictionaries(item.getActionView());
+				return true;
+			case R.id.recreate_all_tables:
+				// TODO deprecated. delete!
+				// reCreateAllTables(item.getActionView());
+				return true;
+			case R.id.settings:
+				startActivity(new Intent(this, SettingsActivity.class));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -115,7 +116,7 @@ public class EventListActivity extends Activity {
 		Intent intent = new Intent(this, EditEventActivity.class);
 		String name = ((SearchView) findViewById(R.id.event_SearchView)).getQuery().toString();
 		intent.putExtra("eventName", name);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 
@@ -131,11 +132,11 @@ public class EventListActivity extends Activity {
 	}
 
 	private void fillEventList() {
-		if(adapterZ==null || dataChanged){
-			dataChanged=false;
-		EventDataSource dataSource = new EventDataSource(this);
-		List<Event> events = dataSource.getEventList();
-		adapterZ = new EventListViewAdapter(this, events);
+		if (adapterZ == null || dataChanged) {
+			dataChanged = false;
+			EventDataSource dataSource = new EventDataSource(this);
+			List<Event> events = dataSource.getEventList();
+			adapterZ = new EventListViewAdapter(this, events);
 		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.event_list);
@@ -149,7 +150,7 @@ public class EventListActivity extends Activity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		dataChanged=true;
+		dataChanged = true;
 		// fillEventList();
 	}
 
@@ -159,8 +160,7 @@ public class EventListActivity extends Activity {
 
 		// think itn't needed here
 		fillEventList();
-		if (mListState != null)
-			((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
+		if (mListState != null) ((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
 		mListState = null;
 	}
 
