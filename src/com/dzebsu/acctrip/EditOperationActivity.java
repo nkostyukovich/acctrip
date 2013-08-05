@@ -83,7 +83,7 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 					OperationType.EXPENSE) == 0 ? 0 : 1);
 			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
 			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
-			dateS = defOP.getDate() == null ? "no date" : sdf.format(defOP.getDate());
+			dateS = defOP.getDate() == null ? getString(R.string.date_none) : sdf.format(defOP.getDate());
 		}
 
 		if (defOP != null) {
@@ -91,9 +91,9 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 			Category ca = defOP.getCategory();
 			Currency cu = defOP.getCurrency();
 
-			currency = cu == null ? "Curr$" : cu.getCode();
-			place = pl == null ? "Place" : pl.getName();
-			category = ca == null ? "Category" : ca.getName();
+			currency = cu == null ? getString(R.string.curr_none) : cu.getCode();
+			place = pl == null ? getString(R.string.pl_none) : pl.getName();
+			category = ca == null ? getString(R.string.cat_none) : ca.getName();
 
 			placeId = pl == null ? -1 : pl.getId();
 			categoryId = ca == null ? -1 : ca.getId();

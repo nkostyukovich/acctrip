@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
@@ -70,7 +70,6 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 	@Override
 	public int getCount() {
-		Log.d("tag", "Trying to get count on line !!!!!!!!!!!!!!!!! class Test");
 		return objects.size();
 	};
 
@@ -103,7 +102,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		String place = pl == null ? "?" : pl.getName();
 		String cat = ca == null ? "?" : ca.getName();
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		String date = da == null ? "no date" : sdf.format(objects.get(position).getDate());
+		String date = da == null ? context.getString(R.string.date_none) : sdf.format(objects.get(position).getDate());
 
 		holder.date.setText(date);
 

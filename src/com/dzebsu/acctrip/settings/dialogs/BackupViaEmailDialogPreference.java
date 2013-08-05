@@ -37,7 +37,7 @@ public class BackupViaEmailDialogPreference extends BaseBackupConfirmDialogPrefe
 		Editor ed2 = this.getEditor();
 		ed2.putString(this.getKey(), DateFormat.format("dd/MM/yy", Calendar.getInstance()).toString());
 		ed2.commit();
-		cxt.startActivity(Intent.createChooser(sendIntent, "Backup:"));
+		cxt.startActivity(Intent.createChooser(sendIntent, cxt.getString(R.string.backup)));
 		return R.string.assum_sent;
 	}
 

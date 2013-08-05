@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.dzebsu.acctrip.models.Event;
@@ -42,47 +41,44 @@ public class ConvertUtils {
 		return new Place(id, name);
 	}
 
-	@SuppressWarnings("unused")
 	public static Operation cursorToOperation(Cursor c) {
 		Operation op = new Operation();
 		op.setId(c.getLong(c.getColumnIndex(EventAccContract.Operation._ID)));
-		
+
 		op.setDesc(c.getString(c.getColumnIndex(EventAccContract.Operation.DESC)));
-		
-		
-		
-		
-		if(!c.isNull(c.getColumnIndex(EventAccContract.Category.ALIAS_ID))){
-		op.setCategory(new Category(c.getLong(c.getColumnIndex(EventAccContract.Category.ALIAS_ID)), c.getString(c
-				.getColumnIndex(EventAccContract.Category.ALIAS_NAME))));}
-		else{
+
+		if (!c.isNull(c.getColumnIndex(EventAccContract.Category.ALIAS_ID))) {
+			op.setCategory(new Category(c.getLong(c.getColumnIndex(EventAccContract.Category.ALIAS_ID)), c.getString(c
+					.getColumnIndex(EventAccContract.Category.ALIAS_NAME))));
+		} else {
 			op.setCategory(null);
 		}
-		
-		op.setType(c.getString(c.getColumnIndex(EventAccContract.Operation.TYPE)).equals("EXPENSE")?OperationType.EXPENSE:OperationType.INCOME);
-		
+
+		op.setType(c.getString(c.getColumnIndex(EventAccContract.Operation.TYPE)).equals("EXPENSE") ? OperationType.EXPENSE
+				: OperationType.INCOME);
+
 		op.setValue(c.getDouble(c.getColumnIndex(EventAccContract.Operation.VALUE)));
-		if(!c.isNull(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID))){
-		op.setCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID)), c
-				.getString(c.getColumnIndex(EventAccContract.Currency.ALIAS_NAME)), c
-				.getString(c.getColumnIndex(EventAccContract.Currency.ALIAS_CODE))));}
-		else{
+		if (!c.isNull(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID))) {
+			op.setCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID)), c.getString(c
+					.getColumnIndex(EventAccContract.Currency.ALIAS_NAME)), c.getString(c
+					.getColumnIndex(EventAccContract.Currency.ALIAS_CODE))));
+		} else {
 			op.setCurrency(null);
 		}
-		
-		if(!c.isNull(c.getColumnIndex(EventAccContract.Operation.DATE))){
-		op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));}
-		else{
+
+		if (!c.isNull(c.getColumnIndex(EventAccContract.Operation.DATE))) {
+			op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
+		} else {
 			op.setDate(null);
 		}
-		
+
 		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID))));
-		
+
 		if (!c.isNull(c.getColumnIndex(EventAccContract.Place.ALIAS_ID))) {
 			op.setPlace(new Place(c.getLong(c.getColumnIndex(EventAccContract.Place.ALIAS_ID)), c.getString(c
 					.getColumnIndex(EventAccContract.Place.ALIAS_NAME))));
-			
-		}else{
+
+		} else {
 			op.setPlace(null);
 		}
 		return op;
