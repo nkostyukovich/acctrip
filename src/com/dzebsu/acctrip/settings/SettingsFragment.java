@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -14,6 +13,7 @@ import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.settings.dialogs.BackupOnDeviceDialogPreference;
 import com.dzebsu.acctrip.settings.dialogs.BackupViaEmailDialogPreference;
+import com.dzebsu.acctrip.settings.dialogs.LanguageListPreference;
 import com.dzebsu.acctrip.settings.dialogs.RestoreFromDeviceDialogPreference;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -73,8 +73,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	}
 
 	private void updatePrefSummary(SharedPreferences sharedPreferences, Preference p) {
-		if (p instanceof ListPreference) {
-			ListPreference listPref = (ListPreference) p;
+		if (p instanceof LanguageListPreference) {
+			// TODO set def value current locale if en or ru
+			LanguageListPreference listPref = (LanguageListPreference) p;
 			p.setSummary(listPref.getEntry());
 		} else if (p instanceof BackupOnDeviceDialogPreference) {
 			BackupOnDeviceDialogPreference condirmDialogPreference = (BackupOnDeviceDialogPreference) p;

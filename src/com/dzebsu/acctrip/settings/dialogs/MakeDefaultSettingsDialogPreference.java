@@ -1,5 +1,6 @@
 package com.dzebsu.acctrip.settings.dialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -13,9 +14,12 @@ public class MakeDefaultSettingsDialogPreference extends BaseDialogPreference {
 
 	@Override
 	protected Integer performConfirmedAction() {
-		if (this.getSharedPreferences().edit().clear().commit())
+		if (this.getSharedPreferences().edit().clear().commit()) {
+			Activity ac = ((Activity) cxt);
+			ac.finish();
+			ac.startActivity(ac.getIntent());
 			return R.string.def_applied;
-		else return null;
+		} else return null;
 		// TODO notify that all changed
 	}
 

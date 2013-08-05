@@ -11,6 +11,7 @@ public final class R {
     public static final class array {
         public static final int operation_type_spinner=0x7f070000;
         public static final int pref_languages=0x7f070001;
+        public static final int pref_languages_val=0x7f070002;
     }
     public static final class attr {
     }
@@ -144,6 +145,7 @@ public final class R {
         public static final int delete_dialog_title=0x7f060020;
         public static final int dic_currency_code_lbl=0x7f06002c;
         /**  dictionary 
+ dictionary 
          */
         public static final int dic_del=0x7f060023;
         public static final int dic_edit=0x7f06002d;
@@ -198,6 +200,7 @@ public final class R {
         public static final int pref_backup_database_title_email=0x7f060055;
         public static final int pref_curr_event_mode_summary=0x7f06003c;
         /**  PREFERENCES 
+ PREFERENCES 
          */
         public static final int pref_curr_event_mode_title=0x7f06003b;
         public static final int pref_default_dialog_message=0x7f06005a;
