@@ -21,7 +21,7 @@ public class BackupOnDeviceDialogPreference extends BaseBackupConfirmDialogPrefe
 
 	@Override
 	public Integer performConfirmedAction() {
-		String s = makeBackupDBToDeviceExternalMemory();
+		String s = makeBackupDBToDeviceExternalMemory(false);
 		if (s == null) return null;
 		Editor ed = this.getEditor();
 		ed.putString(this.getKey(), DateFormat.format("dd/MM/yy", Calendar.getInstance()).toString() + "@" + s);

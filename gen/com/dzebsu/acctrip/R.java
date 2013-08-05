@@ -248,6 +248,11 @@ public final class R {
         public static final int pref_recreate_database_dialog_title=0x7f06006d;
         public static final int pref_recreate_database_summary=0x7f06006c;
         public static final int pref_recreate_database_title=0x7f06006b;
+        public static final int pref_restore_from_device_dialog_message=0x7f06008b;
+        public static final int pref_restore_from_device_summary=0x7f06008c;
+        public static final int pref_restore_from_device_title=0x7f06008d;
+        public static final int restore=0x7f06008e;
+        public static final int restore_success=0x7f06008f;
         public static final int save=0x7f06000c;
         public static final int save_edit_btn=0x7f060053;
         public static final int save_op=0x7f060060;

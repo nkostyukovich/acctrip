@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import com.dzebsu.acctrip.R;
 
-public class MakeDefaultSettingsDialogPreference extends BaseBackupConfirmDialogPreference {
+public class MakeDefaultSettingsDialogPreference extends BaseDialogPreference {
 
 	public MakeDefaultSettingsDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);

@@ -24,7 +24,7 @@ public class BackupViaEmailDialogPreference extends BaseBackupConfirmDialogPrefe
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.setType("plain/text");
 		sendIntent.putExtra(Intent.EXTRA_SUBJECT, cxt.getString(R.string.backup_subject));
-		String s = makeBackupDBToDeviceExternalMemory();
+		String s = makeBackupDBToDeviceExternalMemory(false);
 		Editor ed = findPreferenceInHierarchy(KEY_DEVICE_BACKUP).getEditor();
 		ed.putString(KEY_DEVICE_BACKUP, DateFormat.format("dd/MM/yy", Calendar.getInstance()).toString() + "@" + s);
 		ed.commit();

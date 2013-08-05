@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
+    <CheckBoxPreference
         android:key="pref_allow_current_event_mode"
         android:title="@string/pref_curr_event_mode_title"
         android:summary="@string/pref_curr_event_mode_summary"
@@ -39,7 +39,16 @@
         android:positiveButtonText="@string/send"
         android:negativeButtonText="@string/cancel"
         />
-        
+     <com.dzebsu.acctrip.settings.dialogs.RestoreFromDeviceDialogPreference
+        android:title="@string/pref_restore_from_device_title"
+        android:key="pref_backup_restore_from_device_last"
+        android:defaultValue="@string/unknown"
+        android:dialogIcon="@android:drawable/ic_dialog_info"       
+        android:dialogTitle="@string/pref_restore_from_device_title"        
+        android:dialogMessage="@string/pref_restore_from_device_dialog_message"
+        android:positiveButtonText="@string/restore"
+        android:negativeButtonText="@string/cancel"
+        />
         </PreferenceScreen>
     <com.dzebsu.acctrip.settings.dialogs.EraseAllDataConfirmDialogPreference
         android:title="@string/pref_recreate_database_title"

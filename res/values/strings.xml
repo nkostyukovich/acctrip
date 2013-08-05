@@ -127,8 +127,8 @@
 	<string name="operation_failed">Operation failed.</string>
 	
 	<!-- PREFERENCES -->
-	<string name="pref_curr_event_mode_title">Current event mode</string>
-	<string name="pref_curr_event_mode_summary">Allowing first screen be your current event</string>
+	<string name="pref_curr_event_mode_title">Current Event mode</string>
+	<string name="pref_curr_event_mode_summary">Allow first screen be your current event</string>
 
 	<string name="pref_language_title">Language</string>
 	
@@ -139,8 +139,8 @@
         <item>Русский</item>
     </string-array>
     <string name="pref_language_def">English</string>
-    <string name="pref_backup_database_title">Backup and restore your data</string>
-    <string name="pref_backup_database_summary">Save and restore your data on device memory or share it via email</string>
+    <string name="pref_backup_database_title">Backup and Restore</string>
+    <string name="pref_backup_database_summary">Save and restore your data from device memory or share it via email</string>
     
      <string name="pref_recreate_database_title">Erase all your data</string>
     <string name="pref_recreate_database_summary">Delete all events, operations, places, etc.</string>
@@ -172,7 +172,7 @@
 	<string name="assum_sent">Assuming, you will send it</string>
 	<string name="send">Send</string>
 	 <string name="pref_backup_database_title_email">Backup to your email</string>
-	<string name="pref_backup_database_email_dialog_message">Send your data via email. While process you also acquire copy on device.</string> 
+	<string name="pref_backup_database_email_dialog_message">Send your data via email. While process you will also acquire copy on device.</string> 
 
 	
 	
@@ -181,7 +181,12 @@
 	<string name="pref_default_dialog_title">Reset settings</string>
 	<string name="pref_default_dialog_message">Reset all settings to default?</string>
 	<string name="set_default">Reset</string>
+	<string name="def_applied">Settings reseted.</string>
 	
-	<string name="def_applied">Default settings applied.</string>
+	<string name="pref_restore_from_device_dialog_message">Did you copied backuped file to %s using some device file manager?</string>
+	<string name="pref_restore_from_device_summary">Before restore, copy backuped file to %1$s with the same filename.\nLast restore: %2$s</string>
+	<string name="pref_restore_from_device_title">Restore data</string>
+	<string name="restore">Restore</string>
+	<string name="restore_success">Restore successed.</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.dzebsu.acctrip.settings;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -10,8 +11,10 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.settings.dialogs.BackupOnDeviceDialogPreference;
 import com.dzebsu.acctrip.settings.dialogs.BackupViaEmailDialogPreference;
+import com.dzebsu.acctrip.settings.dialogs.RestoreFromDeviceDialogPreference;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
@@ -85,6 +88,14 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 			String s = sharedPreferences.getString(condirmDialogPreference.getKey(), getString(R.string.unknown));
 
 			p.setSummary(String.format(getString(R.string.last_backup_half), s));
+
+		} else if (p instanceof RestoreFromDeviceDialogPreference) {
+			RestoreFromDeviceDialogPreference condirmDialogPreference = (RestoreFromDeviceDialogPreference) p;
+			String s = sharedPreferences.getString(condirmDialogPreference.getKey(), getString(R.string.unknown));
+
+			p.setSummary(String.format(getString(R.string.pref_restore_from_device_summary), Environment
+					.getExternalStorageDirectory()
+					+ "\\" + EventAccDbHelper.DATABASE_NAME, s));
 
 		}
 	}
