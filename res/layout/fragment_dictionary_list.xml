@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/dic_new"
         android:iconifiedByDefault="false"
-        android:queryHint="@string/dic_search" >
+        android:queryHint="@string/filter_hint_start_typing" >
 
     </SearchView>
 
@@ -25,7 +25,7 @@
     </ListView>
      <ImageButton
             android:id="@+id/dic_new"
-            android:contentDescription="@string/add_place"
+            android:contentDescription="@string/add_element"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_input_add"

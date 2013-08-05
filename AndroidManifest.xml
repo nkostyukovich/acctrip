@@ -35,8 +35,7 @@
         <activity android:name="com.dzebsu.acctrip.EditOperationActivity" >
         </activity>
         <activity
-            android:name="com.dzebsu.acctrip.DictionaryActivity"
-            android:label="@string/title_activity_dictionary" >
+            android:name="com.dzebsu.acctrip.DictionaryActivity" >
         </activity>
         <activity android:name="com.dzebsu.acctrip.OperationDetailsActivity" >
         </activity>

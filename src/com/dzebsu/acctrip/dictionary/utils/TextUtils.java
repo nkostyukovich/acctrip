@@ -1,8 +1,7 @@
 package com.dzebsu.acctrip.dictionary.utils;
 
 public class TextUtils {
-
-	// TODO does locale matter?
+	//TODO does locale matter?
 
 	/**
 	 * returns the string, the first char lowercase

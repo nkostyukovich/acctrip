@@ -28,7 +28,7 @@
 
              <ImageButton
             android:id="@+id/dic_new"
-            android:contentDescription="@string/add_place"
+            android:contentDescription="@string/add_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_input_add"

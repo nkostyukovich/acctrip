@@ -54,7 +54,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/lin_lay"
         android:iconifiedByDefault="false"
-        android:queryHint="@string/op_filer_field" >
+        android:queryHint="@string/filter_hint_start_typing" >
     </SearchView>
 
     <LinearLayout
