@@ -78,6 +78,7 @@
         <item>en</item>
         <item>ru</item>
     </string-array>
+    <string name="pref_language_switch_btn">Switch language</string>
     <string name="pref_backup_database_title">Backup and Restore</string>
     <string name="pref_backup_database_summary">Save and restore your data from device memory or share it via email</string>    
     <string name="pref_recreate_database_title">Clear all your data</string>
@@ -117,4 +118,5 @@
 	<string name="cat_none">Category</string>
 	<string name="pl_none">Place</string>
 	<string name="date_none">No date</string>
+	
 </resources>

@@ -2,16 +2,13 @@ package com.dzebsu.acctrip;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,9 +20,9 @@ public class EditEventActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
-		Intent intent=getIntent();
+		Intent intent = getIntent();
 		((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra("eventName"));
-		if(intent.hasExtra("edit")){
+		if (intent.hasExtra("edit")) {
 			((EditText) this.findViewById(R.id.editEventDesc)).setText(intent.getStringExtra("eventDesc"));
 		}
 		setupActionBar();
@@ -42,8 +39,8 @@ public class EditEventActivity extends Activity {
 		}
 	}
 
-	//due different ways how to get here
-	//getSupportParent
+	// due different ways how to get here
+	// getSupportParent
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -54,19 +51,21 @@ public class EditEventActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-		//	this.
-			/*Intent intent = new Intent(this, EventListActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);*/
-			finish();
-			return true;
-		case R.id.save_op:
-			onSaveEvent(item.getActionView());
-			return true;
-		case R.id.cancel_op:
-			onCancelBtn(item.getActionView());
-			return true;
+			case android.R.id.home:
+				// this.
+				/*
+				 * Intent intent = new Intent(this, EventListActivity.class);
+				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				 * startActivity(intent);
+				 */
+				finish();
+				return true;
+			case R.id.save_op:
+				onSaveEvent(item.getActionView());
+				return true;
+			case R.id.cancel_op:
+				onCancelBtn(item.getActionView());
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -79,16 +78,16 @@ public class EditEventActivity extends Activity {
 		}
 		String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
 		EventDataSource dataSource = new EventDataSource(this);
-		Intent inthere=getIntent();
-		if(!inthere.hasExtra("edit")){
-		long eventId = dataSource.insert(name, desc);
-		// go right to new event
-		Intent intent = new Intent(this, OperationListActivity.class);
-		intent.putExtra("eventId", eventId);
-		startActivity(intent);
-		finish();}
-		else{
-			dataSource.update(inthere.getLongExtra("id",-1), name, desc);
+		Intent inthere = getIntent();
+		if (!inthere.hasExtra("edit")) {
+			long eventId = dataSource.insert(name, desc);
+			// go right to new event
+			Intent intent = new Intent(this, OperationListActivity.class);
+			intent.putExtra("eventId", eventId);
+			startActivity(intent);
+			finish();
+		} else {
+			dataSource.update(inthere.getLongExtra("id", -1), name, desc);
 			finish();
 		}
 	}
@@ -97,7 +96,6 @@ public class EditEventActivity extends Activity {
 	public void onCancelBtn(View view) {
 		finish();
 	}
-
 
 	@Override
 	protected void onResume() {

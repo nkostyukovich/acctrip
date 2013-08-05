@@ -5,14 +5,9 @@
         android:title="@string/pref_curr_event_mode_title"
         android:summary="@string/pref_curr_event_mode_summary"
         android:defaultValue="false" />
-    <com.dzebsu.acctrip.settings.dialogs.LanguageListPreference
-        android:key="pref_language"
-        android:title="@string/pref_language_title"
-        android:dialogTitle="@string/pref_language_dialog_title"
-        android:entries="@array/pref_languages"
-        android:entryValues="@array/pref_languages_val"
-        android:defaultValue="@string/english"
-        />
+    <Preference android:title="@string/pref_language_switch_btn" >
+    <intent android:action="android.provider.Settings.ACTION_LOCALE"/>
+	</Preference>
     <PreferenceScreen
             android:key="pref_backup"
             android:title="@string/pref_backup_database_title"
