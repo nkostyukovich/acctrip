@@ -22,7 +22,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/nameTextView"
-        android:text="11111111111ggggggg" />
+        style="@style/EventListItemDesc"
+        />
 
     <TextView
         android:id="@+id/eventIdTextView"
