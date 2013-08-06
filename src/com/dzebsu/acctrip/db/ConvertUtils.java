@@ -1,11 +1,8 @@
 package com.dzebsu.acctrip.db;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import android.database.Cursor;
 
+import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
@@ -53,22 +50,10 @@ public class ConvertUtils {
 		op.setCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.Currency.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Currency.ALIAS_NAME)), c.getString(c
 				.getColumnIndex(EventAccContract.Currency.ALIAS_CODE))));
-		op.setDate(convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
+		op.setDate(DateFormatter.convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
 		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID))));
 		op.setPlace(new Place(c.getLong(c.getColumnIndex(EventAccContract.Place.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Place.ALIAS_NAME))));
 		return op;
-	}
-
-	public static Date convertLongToDate(long value) {
-		Calendar cal = GregorianCalendar.getInstance();
-		cal.setTimeInMillis(value);
-		return cal.getTime();
-	}
-
-	public static long convertDateToLong(Date date) {
-		Calendar cal = GregorianCalendar.getInstance();
-		cal.setTime(date);
-		return cal.getTime().getTime();
 	}
 }

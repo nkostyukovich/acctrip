@@ -121,5 +121,7 @@
 	<string name="cat_none">Category</string>
 	<string name="pl_none">Place</string>
 	<string name="date_none">No date</string>
-	
+<!-- 	<string name="time_format">h:mm a</string>
+	<string name="date_format">EEE, MMM d  \'\'yy</string>
+	<string name="date_format_without_y">EEE, MMM d</string> -->
 </resources>

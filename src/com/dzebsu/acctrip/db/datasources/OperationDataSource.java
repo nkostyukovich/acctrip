@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.EventAccContract;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
@@ -66,7 +67,7 @@ public class OperationDataSource {
 			ContentValues values = new ContentValues();
 			values.put(EventAccContract.Operation.CATEGORY_ID, catId);
 			values.put(EventAccContract.Operation.CURRENCY_ID, curId);
-			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
+			values.put(EventAccContract.Operation.DATE, DateFormatter.convertDateToLong(date));
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
 			values.put(EventAccContract.Operation.PLACE_ID, placeId);
@@ -86,7 +87,7 @@ public class OperationDataSource {
 			ContentValues values = new ContentValues();
 			values.put(EventAccContract.Operation.CATEGORY_ID, catId);
 			values.put(EventAccContract.Operation.CURRENCY_ID, curId);
-			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
+			values.put(EventAccContract.Operation.DATE, DateFormatter.convertDateToLong(date));
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
 			values.put(EventAccContract.Operation.PLACE_ID, placeId);
