@@ -11,13 +11,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -32,6 +36,58 @@ import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 
 public class OperationListActivity extends Activity {
+
+	ActionMode mActionMode;
+
+	private int selectedItem;
+
+	private Object selectedViewTag;
+
+	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
+
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			mActionMode = null;
+			final ListView list = (ListView) findViewById(R.id.op_list);
+			list.findViewWithTag(selectedViewTag).setBackgroundColor(
+					getApplication().getResources().getColor(android.R.color.transparent));
+			// list.clearChoices();
+			// list.getChildAt(selectedItem).setBackgroundColor(
+			// getApplication().getResources().getColor(android.R.color.transparent));
+
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// Inflate a menu resource providing context menu items
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.context_action_bar_dictionary, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.dic_edit:
+					onElementEdit(adapterZ.getItemId(selectedItem - 1));
+					mode.finish(); // Action picked, so close the CAB
+					return true;
+				case R.id.dic_del:
+					onDeleteElement(adapterZ.getItemId(selectedItem - 1));
+					mode.finish(); // Action picked, so close the CAB
+					return true;
+				default:
+					return false;
+			}
+		}
+	};
 
 	private Event event;
 
@@ -51,6 +107,32 @@ public class OperationListActivity extends Activity {
 		mListState = state.getParcelable(LIST_STATE);
 	}
 
+	protected void onDeleteElement(final long itemId) {
+		new AlertDialog.Builder(this).setTitle(R.string.delete_dialog_title).setMessage(
+				String.format(getString(R.string.confirm_del), getString(R.string.this_op))).setIcon(
+				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int whichButton) {
+						new OperationDataSource(OperationListActivity.this).deleteById(itemId);
+						Intent intent = new Intent(OperationListActivity.this, OperationListActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						intent.putExtra("toast", R.string.op_deleted);
+						intent.putExtra("eventId", event.getId());
+						startActivity(intent);
+					}
+				}).setNegativeButton(android.R.string.no, null).show();
+
+	}
+
+	protected void onElementEdit(long itemId) {
+		Intent intent = new Intent(OperationListActivity.this, EditOperationActivity.class);
+		intent.putExtra("eventId", event.getId());
+		intent.putExtra("mode", "edit");
+		intent.putExtra("opID", itemId);
+		startActivity(intent);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,15 +142,44 @@ public class OperationListActivity extends Activity {
 		ListView listView = (ListView) findViewById(R.id.op_list);
 		listView.addHeaderView(createListHeader());
 		fillOperationList();
-		listView.setOnItemClickListener(new OnItemClickListener() {
 
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(OperationListActivity.this, OperationDetailsActivity.class);
-				intent.putExtra("evName", event.getName());
-				intent.putExtra("opID", id);
-				startActivity(intent);
+		listView.setLongClickable(true);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos, long id) {
+				if (mActionMode != null) {
+					return false;
+				}
+				selectedViewTag = view.getTag();
+				mActionMode = startActionMode(mActionModeCallback);
+				selectedItem = pos;
+				view.setBackgroundColor(getApplication().getResources().getColor(SELECTION_COLOR));
+				return true;
 			}
 		});
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+
+				if (mActionMode != null) mActionMode.finish();
+
+			}
+		});
+
+		// listView.setOnItemClickListener(new OnItemClickListener() {
+		//
+		// public void onItemClick(AdapterView<?> parent, View view, int
+		// position, long id) {
+		// Intent intent = new Intent(OperationListActivity.this,
+		// OperationDetailsActivity.class);
+		// intent.putExtra("evName", event.getName());
+		// intent.putExtra("opID", id);
+		// startActivity(intent);
+		// }
+		// });
 
 		((Button) findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
 
@@ -80,6 +191,14 @@ public class OperationListActivity extends Activity {
 		});
 		// add filter_Event_Edittext for events names
 		SearchView eventsFilter = (SearchView) findViewById(R.id.uni_op_searchView);
+		eventsFilter.setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (mActionMode != null) mActionMode.finish();
+
+			}
+		});
 		eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 			@Override
@@ -89,6 +208,7 @@ public class OperationListActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
+
 				OperationListActivity.this.adapterZ.getFilter().filter(newText);
 				return true;
 			}
@@ -227,6 +347,13 @@ public class OperationListActivity extends Activity {
 	protected void onRestart() {
 		super.onRestart();
 		dataChanged = true;
+	}
+
+	@Override
+	public void onPause() {
+
+		super.onPause();
+		if (mActionMode != null) mActionMode.finish();
 	}
 
 	public void fillEventInfo(long eventId) {

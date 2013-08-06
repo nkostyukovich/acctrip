@@ -91,7 +91,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
 			p.setSummary(String.format(getString(R.string.pref_restore_from_device_summary), Environment
 					.getExternalStorageDirectory()
-					+ "\\" + EventAccDbHelper.DATABASE_NAME, s));
+					+ "/" + EventAccDbHelper.DATABASE_NAME, s));
 
 		}
 	}

@@ -5,12 +5,6 @@
         android:title="@string/pref_curr_event_mode_title"
         android:summary="@string/pref_curr_event_mode_summary"
         android:defaultValue="false" />
-    <Preference android:title="@string/pref_language_switch_btn" >
-    <intent 
-     android:action="android.intent.action.PICK"
-
-     android:targetClass="Settings.ACTION_LOCALE_SETTINGS" />
-	</Preference>
     <PreferenceScreen
             android:key="pref_backup"
             android:title="@string/pref_backup_database_title"

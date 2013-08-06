@@ -101,15 +101,14 @@ public final class R {
         public static final int activity_edit_event=0x7f030001;
         public static final int activity_edit_operation=0x7f030002;
         public static final int activity_event_list=0x7f030003;
-        public static final int activity_operation_details=0x7f030004;
-        public static final int activity_operation_list=0x7f030005;
-        public static final int dictonary_new_dialog=0x7f030006;
-        public static final int erase_data_dialog_preference=0x7f030007;
-        public static final int fragment_dictionary_list=0x7f030008;
-        public static final int operations_header=0x7f030009;
-        public static final int row_dictionary_list=0x7f03000a;
-        public static final int row_event_list=0x7f03000b;
-        public static final int row_operation_list=0x7f03000c;
+        public static final int activity_operation_list=0x7f030004;
+        public static final int dictonary_new_dialog=0x7f030005;
+        public static final int erase_data_dialog_preference=0x7f030006;
+        public static final int fragment_dictionary_list=0x7f030007;
+        public static final int operations_header=0x7f030008;
+        public static final int row_dictionary_list=0x7f030009;
+        public static final int row_event_list=0x7f03000a;
+        public static final int row_operation_list=0x7f03000b;
     }
     public static final class menu {
         public static final int context_action_bar_dictionary=0x7f090000;

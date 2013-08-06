@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -46,6 +47,8 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 	ActionMode mActionMode;
 
+	private Object selectedViewTag;
+
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
@@ -57,7 +60,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		public void onDestroyActionMode(ActionMode mode) {
 			mActionMode = null;
 			final ListView list = (ListView) getView().findViewById(R.id.dictionarylist);
-			list.getChildAt(selectedItem).setBackgroundColor(
+			list.findViewWithTag(selectedViewTag).setBackgroundColor(
 					getActivity().getApplication().getResources().getColor(android.R.color.transparent));
 
 		}
@@ -120,7 +123,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 				if (mActionMode != null) {
 					return false;
 				}
-
+				selectedViewTag = view.getTag();
 				mActionMode = getActivity().startActionMode(mActionModeCallback);
 				selectedItem = pos;
 				view.setBackgroundColor(getActivity().getApplication().getResources().getColor(SELECTION_COLOR));
@@ -158,6 +161,14 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		});
 
 		SearchView objectsFilter = (SearchView) getView().findViewById(R.id.dic_search);
+		objectsFilter.setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (mActionMode != null) mActionMode.finish();
+
+			}
+		});
 		objectsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 			@Override
