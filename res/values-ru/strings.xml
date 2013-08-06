@@ -38,6 +38,7 @@
 	<string name="event_title">Event</string>
 	<!-- dictionary -->
 	<string name="dic_del">Delete</string>	
+	<string name="pref_language_switch_btn">Switch language</string>
 	<string name="dic_name_lbl">%s name</string>
 	<string name="dic_new_title">New %s</string>
 	<string name="dic_edit_title">Edit %s</string>

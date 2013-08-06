@@ -1,11 +1,9 @@
 package com.dzebsu.acctrip;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -47,13 +45,6 @@ public class EventListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String languageToLoad = "ru"; // your language
-		Locale locale = new Locale(languageToLoad);
-		Locale.setDefault(locale);
-		Configuration config = new Configuration();
-		config.locale = locale;
-		getBaseContext().getResources()
-				.updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
 		// to initialize default settings for the first and only time
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

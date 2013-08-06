@@ -6,7 +6,10 @@
         android:summary="@string/pref_curr_event_mode_summary"
         android:defaultValue="false" />
     <Preference android:title="@string/pref_language_switch_btn" >
-    <intent android:action="android.provider.Settings.ACTION_LOCALE"/>
+    <intent 
+     android:action="android.intent.action.PICK"
+
+     android:targetClass="Settings.ACTION_LOCALE_SETTINGS" />
 	</Preference>
     <PreferenceScreen
             android:key="pref_backup"
