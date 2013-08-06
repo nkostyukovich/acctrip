@@ -64,29 +64,12 @@ public class OperationDataSource {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			if (catId != -1) {
-				values.put(EventAccContract.Operation.CATEGORY_ID, catId);
-			} else {
-				values.putNull(EventAccContract.Operation.CATEGORY_ID);
-			}
-			if (curId != -1) {
-				values.put(EventAccContract.Operation.CURRENCY_ID, curId);
-			} else {
-				values.putNull(EventAccContract.Operation.CURRENCY_ID);
-			}
-			if (date != null) {
-				values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
-			} else {
-				values.putNull(EventAccContract.Operation.DATE);
-			}
+			values.put(EventAccContract.Operation.CATEGORY_ID, catId);
+			values.put(EventAccContract.Operation.CURRENCY_ID, curId);
+			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
-			if (placeId != -1) {
-				values.put(EventAccContract.Operation.PLACE_ID, placeId);
-			} else {
-				values.putNull(EventAccContract.Operation.PLACE_ID);
-			}
-
+			values.put(EventAccContract.Operation.PLACE_ID, placeId);
 			values.put(EventAccContract.Operation.TYPE, type.getLabel(ctx));
 			values.put(EventAccContract.Operation.VALUE, value);
 			long ir = database.insert(EventAccContract.Operation.TABLE_NAME, null, values);
@@ -101,28 +84,12 @@ public class OperationDataSource {
 		open();
 		try {
 			ContentValues values = new ContentValues();
-			if (catId != -1) {
-				values.put(EventAccContract.Operation.CATEGORY_ID, catId);
-			} else {
-				values.putNull(EventAccContract.Operation.CATEGORY_ID);
-			}
-			if (curId != -1) {
-				values.put(EventAccContract.Operation.CURRENCY_ID, curId);
-			} else {
-				values.putNull(EventAccContract.Operation.CURRENCY_ID);
-			}
-			if (date != null) {
-				values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
-			} else {
-				values.putNull(EventAccContract.Operation.DATE);
-			}
+			values.put(EventAccContract.Operation.CATEGORY_ID, catId);
+			values.put(EventAccContract.Operation.CURRENCY_ID, curId);
+			values.put(EventAccContract.Operation.DATE, ConvertUtils.convertDateToLong(date));
 			values.put(EventAccContract.Operation.DESC, desc);
 			values.put(EventAccContract.Operation.EVENT_ID, eventId);
-			if (placeId != -1) {
-				values.put(EventAccContract.Operation.PLACE_ID, placeId);
-			} else {
-				values.putNull(EventAccContract.Operation.PLACE_ID);
-			}
+			values.put(EventAccContract.Operation.PLACE_ID, placeId);
 
 			values.put(EventAccContract.Operation.TYPE, type.getLabel(ctx));
 			values.put(EventAccContract.Operation.VALUE, value);

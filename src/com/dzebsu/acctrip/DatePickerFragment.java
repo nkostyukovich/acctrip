@@ -17,29 +17,31 @@ public class DatePickerFragment extends DialogFragment implements OnDateSetListe
 		int year;
 		int month;
 		int day;// TODO do not work properly
-		if (!this.getArguments().containsKey("def")) {
+		if (!this.getArguments().containsKey("date")) {
 			final Calendar c = Calendar.getInstance();
 			year = c.get(Calendar.YEAR);
 			month = c.get(Calendar.MONTH);
 			day = c.get(Calendar.DAY_OF_MONTH);
 		} else {
-			year = getArguments().getInt("year");
-			month = getArguments().getInt("month");
-			day = getArguments().getInt("day");
+			final Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(getArguments().getLong("date"));
+			year = c.get(Calendar.YEAR);
+			month = c.get(Calendar.MONTH);
+			day = c.get(Calendar.DAY_OF_MONTH);
 		}
 		// Create a new instance of DatePickerDialog and return it
 		return new DatePickerDialog(getActivity(), this, year, month, day);
 	}
 
-	private DataPickerListener listener;
+	private DatePickerListener listener;
 
-	public void setDataPickerListener(DataPickerListener listener) {
+	public void setDataPickerListener(DatePickerListener listener) {
 		this.listener = listener;
 	}
 
 	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		listener.onDataPicked(year, month, day);
+		listener.onDatePicked(year, month, day);
 		this.dismiss();
 	}
 

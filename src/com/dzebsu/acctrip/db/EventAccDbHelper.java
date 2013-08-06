@@ -32,8 +32,8 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 			+ EventAccContract.Operation.CATEGORY_ID + " INTEGER NOT NULL, " + EventAccContract.Operation.DESC
 			+ " TEXT, " + EventAccContract.Operation.TYPE + " INTEGER NOT NULL, " + EventAccContract.Operation.VALUE
 			+ " REAL NOT NULL, " + EventAccContract.Operation.CURRENCY_ID + " INTEGER NOT NULL, "
-			+ EventAccContract.Operation.DATE + " LONG, " + EventAccContract.Operation.EVENT_ID + " INTEGER NOT NULL, "
-			+ EventAccContract.Operation.PLACE_ID + " INTEGER NOT NULL, " + "FOREIGN KEY ("
+			+ EventAccContract.Operation.DATE + " LONG NOT NULL, " + EventAccContract.Operation.EVENT_ID
+			+ " INTEGER NOT NULL, " + EventAccContract.Operation.PLACE_ID + " INTEGER NOT NULL, " + "FOREIGN KEY ("
 			+ EventAccContract.Operation.CATEGORY_ID + ") REFERENCES " + EventAccContract.Category.TABLE_NAME + " ("
 			+ EventAccContract.Category._ID + "), " + "FOREIGN KEY (" + EventAccContract.Operation.CURRENCY_ID
 			+ ") REFERENCES " + EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID + ") "

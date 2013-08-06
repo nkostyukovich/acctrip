@@ -2,7 +2,6 @@ package com.dzebsu.acctrip.adapters;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,11 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.models.Operation;
-import com.dzebsu.acctrip.models.dictionaries.Category;
-import com.dzebsu.acctrip.models.dictionaries.Currency;
-import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
@@ -93,16 +88,11 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		if (s.length() > 80) s = s.substring(0, 80) + "...";
 		holder.desc.setText(s);
 
-		Place pl = objects.get(position).getPlace();
-		Category ca = objects.get(position).getCategory();
-		Currency cu = objects.get(position).getCurrency();
-		Date da = objects.get(position).getDate();
-
-		String cur = cu == null ? "?" : cu.getCode();
-		String place = pl == null ? "?" : pl.getName();
-		String cat = ca == null ? "?" : ca.getName();
+		String cur = objects.get(position).getCurrency().getCode();
+		String place = objects.get(position).getPlace().getName();
+		String cat = objects.get(position).getCategory().getName();
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		String date = da == null ? context.getString(R.string.date_none) : sdf.format(objects.get(position).getDate());
+		String date = sdf.format(objects.get(position).getDate());
 
 		holder.date.setText(date);
 
@@ -135,9 +125,8 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			if (constraint != null) {
 				for (Operation g : objects) {
 					SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-					String s = g.getDesc() + g.getId() + g.getValue()
-							+ (g.getCategory() != null ? g.getCategory().getName() : "") + sdf.format(g.getDate())
-							+ (g.getPlace() != null ? g.getPlace().getName() : "");
+					String s = g.getDesc() + g.getId() + g.getValue() + (g.getCategory().getName())
+							+ sdf.format(g.getDate()) + (g.getPlace().getName());
 					// TODO sort by value if only numbers
 					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}

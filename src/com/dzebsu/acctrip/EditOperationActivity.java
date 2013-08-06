@@ -20,16 +20,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dzebsu.acctrip.db.ConvertUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.models.dictionaries.Place;
 
-public class EditOperationActivity extends FragmentActivity implements DataPickerListener, IDictionaryFragmentListener {
+public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener {
 
 	// 1 place 2 cat 3 cur// what does user want to create now
 	private int newItemClass = 0;
@@ -83,7 +85,8 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 					OperationType.EXPENSE) == 0 ? 0 : 1);
 			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
 			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
-			dateS = defOP.getDate() == null ? getString(R.string.date_none) : sdf.format(defOP.getDate());
+			dateS = sdf.format(defOP.getDate());
+			date = defOP.getDate();
 		}
 
 		if (defOP != null) {
@@ -91,13 +94,13 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 			Category ca = defOP.getCategory();
 			Currency cu = defOP.getCurrency();
 
-			currency = cu == null ? getString(R.string.curr_none) : cu.getCode();
-			place = pl == null ? getString(R.string.pl_none) : pl.getName();
-			category = ca == null ? getString(R.string.cat_none) : ca.getName();
+			currency = cu.getCode();
+			place = pl.getName();
+			category = ca.getName();
 
-			placeId = pl == null ? -1 : pl.getId();
-			categoryId = ca == null ? -1 : ca.getId();
-			currencyId = cu == null ? -1 : cu.getId();
+			placeId = pl.getId();
+			categoryId = ca.getId();
+			currencyId = cu.getId();
 		}
 		Button curBtn = ((Button) findViewById(R.id.op_edit_currency_btn));
 		Button placeBtn = ((Button) findViewById(R.id.op_edit_place_btn));
@@ -138,13 +141,9 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 				// TODO get day of month from date
 				DatePickerFragment newFragment = new DatePickerFragment();
 				Bundle args = new Bundle();
-				if (mode.equals("edit") && date != null) {
-					args.putInt("def", 0);
-					args.putInt("year", 1900 + date.getYear());
-					args.putInt("month", date.getMonth());
-					args.putInt("day", date.getDay());
+				if (mode.equals("edit") || date != null) {
+					args.putLong("date", ConvertUtils.convertDateToLong(date));
 				}
-				args.putBoolean("dummy", false);
 				newFragment.setArguments(args);
 				newFragment.setDataPickerListener(EditOperationActivity.this);
 				newFragment.show(getSupportFragmentManager(), "datePicker");
@@ -206,8 +205,16 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 
 	public void onSaveOperation(View view) {
 		String value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
-		if (value.isEmpty()) {
-			Toast.makeText(getApplicationContext(), R.string.enter_value, Toast.LENGTH_SHORT).show();
+		if (value.isEmpty() || categoryId == -1 || currencyId == -1 || placeId == -1) {
+			String message;
+
+			message = value.isEmpty() ? getString(R.string.enter_value) : "";
+
+			message = TextUtils.addNewLine(message, currencyId == -1 ? getString(R.string.pick_currency) : null);
+			message = TextUtils.addNewLine(message, placeId == -1 ? getString(R.string.pick_place) : null);
+			message = TextUtils.addNewLine(message, categoryId == -1 ? getString(R.string.pick_category) : null);
+
+			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		String desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
@@ -338,10 +345,10 @@ public class EditOperationActivity extends FragmentActivity implements DataPicke
 	}
 
 	@Override
-	public void onDataPicked(int year, int month, int day) {
-		date.setDate(day);
-		date.setMonth(month);
-		date.setYear(year);
+	public void onDatePicked(int year, int month, int day) {
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, day);
+		date = c.getTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
 		((Button) findViewById(R.id.op_edit_date_btn)).setText(sdf.format(date));
 	}
