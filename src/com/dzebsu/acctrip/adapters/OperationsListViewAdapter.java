@@ -1,9 +1,7 @@
 package com.dzebsu.acctrip.adapters;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.models.Operation;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
@@ -40,8 +39,6 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		public TextView desc = null;
 
 		public TextView expenses = null;
-
-		public TextView opId = null;
 
 		public TextView place = null;
 
@@ -77,7 +74,6 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			rowViewHolder.date = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_date_tv);
 			rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_desc_tv);
 			rowViewHolder.expenses = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_expenses);
-			rowViewHolder.opId = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_id_tv);
 			rowViewHolder.place = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_place);
 			rowViewHolder.category = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_category);
 			rowView.setTag(rowViewHolder);
@@ -91,14 +87,12 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		String cur = objects.get(position).getCurrency().getCode();
 		String place = objects.get(position).getPlace().getName();
 		String cat = objects.get(position).getCategory().getName();
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		String date = sdf.format(objects.get(position).getDate());
+
+		String date = DateFormatter.formatDateAndTime(context, objects.get(position).getDate());
 
 		holder.date.setText(date);
 
 		holder.expenses.setText(objects.get(position).getValue() + " " + cur);
-		holder.opId.setText(context.getString(com.dzebsu.acctrip.R.string.op_id_tv)
-				+ ((Long) objects.get(position).getId()).toString());
 		s = place;
 		if (s.length() > 12) s = s.substring(0, 12) + "...";
 		holder.place.setText(s);
@@ -124,9 +118,9 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			objects = objectsInit;
 			if (constraint != null) {
 				for (Operation g : objects) {
-					SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
+
 					String s = g.getDesc() + g.getId() + g.getValue() + (g.getCategory().getName())
-							+ sdf.format(g.getDate()) + (g.getPlace().getName());
+							+ DateFormatter.formatDateAndTime(context, g.getDate()) + (g.getPlace().getName());
 					// TODO sort by value if only numbers
 					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}

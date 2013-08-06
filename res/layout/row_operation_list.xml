@@ -10,17 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/op_list_expenses"
         android:text="15.30 pm, 27/07"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/op_list_id_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/op_list_expenses"
-        android:text="@string/op_id_tv"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/op_list_desc_tv"
@@ -47,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/op_list_id_tv"
+        android:layout_below="@+id/op_list_expenses"
         android:text="Tokyo Tower" />
 
     <TextView

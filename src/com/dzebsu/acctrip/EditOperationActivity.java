@@ -1,9 +1,7 @@
 package com.dzebsu.acctrip;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -20,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.db.ConvertUtils;
+import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
@@ -73,9 +71,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this).getEventById(eventId)
 				.getName());
 		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
 		date = Calendar.getInstance().getTime();
-		String dateS = sdf.format(date);
 		Operation defOP;
 		if (mode.equals("new")) {
 			defOP = new OperationDataSource(this).getLastOperationByEventId(eventId);
@@ -85,9 +81,10 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 					OperationType.EXPENSE) == 0 ? 0 : 1);
 			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
 			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
-			dateS = sdf.format(defOP.getDate());
+
 			date = defOP.getDate();
 		}
+		String dateS = DateFormatter.formatDate(this, date);
 
 		if (defOP != null) {
 			Place pl = defOP.getPlace();
@@ -106,10 +103,12 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		Button placeBtn = ((Button) findViewById(R.id.op_edit_place_btn));
 		Button catBtn = ((Button) findViewById(R.id.op_edit_category_btn));
 		Button dateBtn = ((Button) findViewById(R.id.op_edit_date_btn));
+		Button timeBtn = ((Button) findViewById(R.id.op_edit_time_btn));
 		curBtn.setText(currency);
 		catBtn.setText(category);
 		placeBtn.setText(place);
 		dateBtn.setText(dateS);
+		timeBtn.setText(DateFormatter.formatTime(this, date));
 		curBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -138,15 +137,29 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 			@Override
 			public void onClick(View v) {
-				// TODO get day of month from date
 				DatePickerFragment newFragment = new DatePickerFragment();
 				Bundle args = new Bundle();
 				if (mode.equals("edit") || date != null) {
-					args.putLong("date", ConvertUtils.convertDateToLong(date));
+					args.putLong("date", DateFormatter.convertDateToLong(date));
 				}
 				newFragment.setArguments(args);
 				newFragment.setDataPickerListener(EditOperationActivity.this);
 				newFragment.show(getSupportFragmentManager(), "datePicker");
+
+			}
+		});
+		timeBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				TimePickerFragment newFragment = new TimePickerFragment();
+				Bundle args = new Bundle();
+				if (mode.equals("edit") || date != null) {
+					args.putLong("time", DateFormatter.convertDateToLong(date));
+				}
+				newFragment.setArguments(args);
+				newFragment.setDatePickerListener(EditOperationActivity.this);
+				newFragment.show(getSupportFragmentManager(), "timePicker");
 
 			}
 		});
@@ -349,8 +362,20 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		Calendar c = Calendar.getInstance();
 		c.set(year, month, day);
 		date = c.getTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-		((Button) findViewById(R.id.op_edit_date_btn)).setText(sdf.format(date));
+		// SimpleDateFormat sdf = new
+		// SimpleDateFormat(getString(R.string.date_format),
+		// Locale.getDefault());
+		((Button) findViewById(R.id.op_edit_date_btn)).setText(DateFormatter.formatDate(this, date));
 	}
 
+	@Override
+	public void onTimePicked(int hourOfDay, int minute) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		// XXX if(Locale.getDefault()!=Locale.US)
+		c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		c.set(Calendar.MINUTE, minute);
+		date = c.getTime();
+		((Button) findViewById(R.id.op_edit_time_btn)).setText(DateFormatter.formatTime(this, date));
+	}
 }
