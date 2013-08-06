@@ -100,7 +100,6 @@ public class PlaceDataSource extends BaseDictionaryDataSource<Place> {
 
 	@Override
 	protected String getEntityAliasId() {
-
 		return EventAccContract.Place.ALIAS_ID;
 	}
 }

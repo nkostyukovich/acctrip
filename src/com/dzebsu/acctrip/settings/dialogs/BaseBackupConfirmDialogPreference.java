@@ -65,7 +65,6 @@ public abstract class BaseBackupConfirmDialogPreference extends BaseDialogPrefer
 					fis.close();
 					fos.close();
 					new SingleMediaScanner(cxt, backupDB.getPath());
-
 				}
 			}
 		} catch (Exception e) {

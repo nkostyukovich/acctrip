@@ -100,7 +100,6 @@ public class CategoryDataSource extends BaseDictionaryDataSource<Category> {
 
 	@Override
 	protected String getEntityAliasId() {
-
 		return EventAccContract.Category.ALIAS_ID;
 	}
 

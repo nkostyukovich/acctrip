@@ -32,7 +32,9 @@ public final class R {
         public static final int dic_new=0x7f020003;
         public static final int dictionaries=0x7f020004;
         public static final int ic_launcher=0x7f020005;
-        public static final int save_op=0x7f020006;
+        public static final int list_item_normal=0x7f020006;
+        public static final int list_view_selector=0x7f020007;
+        public static final int save_op=0x7f020008;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f0a0001;
@@ -260,6 +262,9 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        public static final int EventListItemDesc=0x7f080004;
+        public static final int EventListItemName=0x7f080003;
+        public static final int TripMoneyTheme=0x7f080002;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
