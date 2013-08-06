@@ -290,7 +290,6 @@ public class OperationListActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		fillOperationList();
 		if (mListState != null) ((ListView) findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
 		mListState = null;
@@ -314,6 +313,7 @@ public class OperationListActivity extends Activity {
 	}
 
 	private void fillOperationList() {
+		event = new EventDataSource(this).getEventById(event.getId());
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
 			OperationDataSource dataSource = new OperationDataSource(this);

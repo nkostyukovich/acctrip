@@ -30,13 +30,12 @@ public final class R {
         public static final int cancel_op=0x7f020001;
         public static final int dic_del=0x7f020002;
         public static final int dic_edit=0x7f020003;
-        public static final int dic_new=0x7f020004;
-        public static final int dictionaries=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int list_item_normal=0x7f020007;
-        public static final int list_view=0x7f020008;
-        public static final int list_view_selector=0x7f020009;
-        public static final int save_op=0x7f02000a;
+        public static final int dictionaries=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int list_item_normal=0x7f020006;
+        public static final int list_view=0x7f020007;
+        public static final int list_view_selector=0x7f020008;
+        public static final int save_op=0x7f020009;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f0a0001;

@@ -83,6 +83,8 @@ public class EditEventActivity extends Activity {
 			long eventId = dataSource.insert(name, desc);
 			// go right to new event
 			Intent intent = new Intent(this, OperationListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// edited intent.putExtra("toast", R.string.op_deleted);
 			intent.putExtra("eventId", eventId);
 			startActivity(intent);
 			finish();
