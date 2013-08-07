@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -157,6 +159,20 @@ public class OperationListActivity extends Activity {
 				selectedItem = pos;
 				view.setBackgroundColor(getApplication().getResources().getColor(SELECTION_COLOR));
 				return true;
+			}
+		});
+		listView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				if (mActionMode != null) mActionMode.finish();
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 		listView.setOnItemClickListener(new OnItemClickListener() {

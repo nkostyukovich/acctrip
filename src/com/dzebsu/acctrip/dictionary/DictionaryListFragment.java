@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -129,6 +131,20 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 				selectedItem = pos;
 				view.setBackgroundColor(getActivity().getApplication().getResources().getColor(SELECTION_COLOR));
 				return true;
+			}
+		});
+		list.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {
+				if (mActionMode != null) mActionMode.finish();
+
+			}
+
+			@Override
+			public void onScroll(AbsListView arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
 			}
 		});
 		list.setOnItemClickListener(new OnItemClickListener() {
