@@ -10,8 +10,10 @@ package com.dzebsu.acctrip;
 public final class R {
     public static final class array {
         public static final int operation_type_spinner=0x7f070000;
-        public static final int pref_languages=0x7f070001;
-        public static final int pref_languages_val=0x7f070002;
+        public static final int pref_lang_entries=0x7f070001;
+        public static final int pref_lang_entry_values=0x7f070002;
+        public static final int pref_languages=0x7f070003;
+        public static final int pref_languages_val=0x7f070004;
     }
     public static final class attr {
     }
@@ -128,23 +130,27 @@ public final class R {
         public static final int add_element=0x7f06000d;
         public static final int add_event=0x7f06000e;
         public static final int app_name=0x7f060000;
-        public static final int assum_sent=0x7f060057;
-        public static final int backup=0x7f06005b;
-        public static final int backup_copy_success=0x7f060053;
-        public static final int backup_subject=0x7f060055;
-        public static final int backup_text=0x7f060056;
+        public static final int assum_sent=0x7f060058;
+        public static final int backup=0x7f06005c;
+        public static final int backup_copy_success=0x7f060054;
+        public static final int backup_subject=0x7f060056;
+        public static final int backup_text=0x7f060057;
         public static final int cancel=0x7f06000a;
         public static final int cancel_op=0x7f06003b;
-        public static final int cat_none=0x7f060067;
+        public static final int cat_none=0x7f060068;
         public static final int category=0x7f060029;
         public static final int category_tab=0x7f06001e;
+        /**  	<string name="pref_restart_summary2">\nTo changes to be applied, need restart app.</string> 
+         */
+        public static final int close_app=0x7f06006d;
         public static final int confirm_del=0x7f06002e;
-        public static final int copy=0x7f060050;
-        public static final int curr_none=0x7f060066;
+        public static final int copy=0x7f060051;
+        public static final int curr_none=0x7f060067;
         public static final int currency=0x7f06002a;
         public static final int currency_tab=0x7f06001f;
-        public static final int date_none=0x7f060069;
-        public static final int def_applied=0x7f060060;
+        public static final int date_none=0x7f06006a;
+        public static final int def_applied=0x7f060061;
+        public static final int default_lang=0x7f06004c;
         public static final int delete_dialog_title=0x7f060020;
         public static final int dic_currency_code_lbl=0x7f06002c;
         /**  dictionary 
@@ -155,7 +161,7 @@ public final class R {
         public static final int dic_edit_title=0x7f060026;
         public static final int dic_name_lbl=0x7f060024;
         public static final int dic_new_title=0x7f060025;
-        public static final int english=0x7f06004b;
+        public static final int english=0x7f06006f;
         public static final int enter_code=0x7f060039;
         public static final int enter_text=0x7f060019;
         public static final int enter_value=0x7f060033;
@@ -169,8 +175,8 @@ public final class R {
         public static final int filter_event_name_hint=0x7f060007;
         public static final int filter_hint_start_typing=0x7f060014;
         public static final int id_text_view=0x7f06000b;
-        public static final int last_backup=0x7f060051;
-        public static final int last_backup_half=0x7f060052;
+        public static final int last_backup=0x7f060052;
+        public static final int last_backup_half=0x7f060053;
         public static final int lbl_event_desc=0x7f060008;
         public static final int lbl_event_name=0x7f060006;
         public static final int not_message=0x7f06001c;
@@ -192,48 +198,52 @@ public final class R {
         public static final int pick_category=0x7f060035;
         public static final int pick_currency=0x7f060036;
         public static final int pick_place=0x7f060034;
-        public static final int pl_none=0x7f060068;
+        public static final int pl_none=0x7f060069;
         public static final int place=0x7f060028;
         public static final int place_tab=0x7f06001d;
-        public static final int pref_all_data_erased=0x7f060049;
-        public static final int pref_backup_database_def=0x7f06004d;
-        public static final int pref_backup_database_device_dialog_message=0x7f06004f;
-        public static final int pref_backup_database_dialog_title=0x7f06004e;
-        public static final int pref_backup_database_email_dialog_message=0x7f06005a;
-        public static final int pref_backup_database_summary=0x7f060044;
-        public static final int pref_backup_database_title=0x7f060043;
-        public static final int pref_backup_database_title_device=0x7f06004c;
-        public static final int pref_backup_database_title_email=0x7f060059;
+        public static final int pref_all_data_erased=0x7f06004a;
+        public static final int pref_backup_database_def=0x7f06004e;
+        public static final int pref_backup_database_device_dialog_message=0x7f060050;
+        public static final int pref_backup_database_dialog_title=0x7f06004f;
+        public static final int pref_backup_database_email_dialog_message=0x7f06005b;
+        public static final int pref_backup_database_summary=0x7f060045;
+        public static final int pref_backup_database_title=0x7f060044;
+        public static final int pref_backup_database_title_device=0x7f06004d;
+        public static final int pref_backup_database_title_email=0x7f06005a;
         public static final int pref_curr_event_mode_summary=0x7f06003f;
         /**  PREFERENCES 
  PREFERENCES 
          */
         public static final int pref_curr_event_mode_title=0x7f06003e;
-        public static final int pref_default_dialog_message=0x7f06005e;
-        public static final int pref_default_dialog_title=0x7f06005d;
-        public static final int pref_default_title=0x7f06005c;
+        public static final int pref_default_dialog_message=0x7f06005f;
+        public static final int pref_default_dialog_title=0x7f06005e;
+        public static final int pref_default_title=0x7f06005d;
+        public static final int pref_lang_dialog_title=0x7f060043;
+        public static final int pref_lang_title=0x7f060042;
         public static final int pref_language_dialog_title=0x7f060041;
-        public static final int pref_language_switch_btn=0x7f060042;
+        public static final int pref_language_switch_btn=0x7f06006e;
         public static final int pref_language_title=0x7f060040;
-        public static final int pref_recreate_database_dialog_message=0x7f060048;
-        public static final int pref_recreate_database_dialog_title=0x7f060047;
-        public static final int pref_recreate_database_summary=0x7f060046;
-        public static final int pref_recreate_database_title=0x7f060045;
-        public static final int pref_restore_from_device_dialog_message=0x7f060061;
-        public static final int pref_restore_from_device_summary=0x7f060062;
-        public static final int pref_restore_from_device_title=0x7f060063;
-        public static final int restore=0x7f060064;
-        public static final int restore_success=0x7f060065;
+        public static final int pref_recreate_database_dialog_message=0x7f060049;
+        public static final int pref_recreate_database_dialog_title=0x7f060048;
+        public static final int pref_recreate_database_summary=0x7f060047;
+        public static final int pref_recreate_database_title=0x7f060046;
+        public static final int pref_restart_dialog_message=0x7f06006c;
+        public static final int pref_restart_dialog_title=0x7f06006b;
+        public static final int pref_restore_from_device_dialog_message=0x7f060062;
+        public static final int pref_restore_from_device_summary=0x7f060063;
+        public static final int pref_restore_from_device_title=0x7f060064;
+        public static final int restore=0x7f060065;
+        public static final int restore_success=0x7f060066;
         public static final int save=0x7f060009;
         public static final int save_op=0x7f06003a;
-        public static final int send=0x7f060058;
-        public static final int set_default=0x7f06005f;
-        public static final int settings=0x7f06004a;
+        public static final int send=0x7f060059;
+        public static final int set_default=0x7f060060;
+        public static final int settings=0x7f06004b;
         public static final int sorry_confirm_del=0x7f06002f;
         public static final int this_op=0x7f06002b;
         public static final int title_activity_edit_event=0x7f060004;
         public static final int title_activity_edit_operation=0x7f060005;
-        public static final int unknown=0x7f060054;
+        public static final int unknown=0x7f060055;
         public static final int used_by_ops=0x7f060027;
         public static final int warning=0x7f060030;
     }

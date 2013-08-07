@@ -73,15 +73,18 @@
 	<string name="pref_curr_event_mode_summary">Allow first screen be your current event</string>
 	<string name="pref_language_title">Language</string>	
 	<string name="pref_language_dialog_title">Pick your language</string>	
-	<string-array name="pref_languages">
+	<string-array name="pref_lang_entries">
+	    <item>Default</item>
         <item>English</item>
         <item>Русский</item>
     </string-array>
-    <string-array name="pref_languages_val">
+    <string-array name="pref_lang_entry_values">
+        <item>def</item>
         <item>en</item>
         <item>ru</item>
     </string-array>
-    <string name="pref_language_switch_btn">Switch language</string>
+    <string name="pref_lang_title">Language</string>
+    <string name="pref_lang_dialog_title">Choose language</string>
     <string name="pref_backup_database_title">Backup and Restore</string>
     <string name="pref_backup_database_summary">Save and restore your data from device memory or share it via email</string>    
     <string name="pref_recreate_database_title">Clear all your data</string>
@@ -90,7 +93,7 @@
     <string name="pref_recreate_database_dialog_message">Are you sure?\nThese changes cannot be undone.</string>
 	<string name="pref_all_data_erased">All data cleared.</string>
 	<string name="settings">Settings</string>
-	<string name="english">en</string>		
+	<string name="default_lang">def</string>		
 	<string name="pref_backup_database_title_device">Backup to device memory</string>
 	<string name="pref_backup_database_def">unknown@unknown</string>
 	<string name="pref_backup_database_dialog_title">Backup</string>
@@ -121,7 +124,8 @@
 	<string name="cat_none">Category</string>
 	<string name="pl_none">Place</string>
 	<string name="date_none">No date</string>
-<!-- 	<string name="time_format">h:mm a</string>
-	<string name="date_format">EEE, MMM d  \'\'yy</string>
-	<string name="date_format_without_y">EEE, MMM d</string> -->
+	<string name="pref_restart_dialog_title">Restart</string>
+	<string name="pref_restart_dialog_message">To changes to be applied, relaunch @string/app_name this way.</string>
+<!-- 	<string name="pref_restart_summary2">\nTo changes to be applied, need restart app.</string> -->
+	<string name="close_app">Relaunch</string>
 </resources>

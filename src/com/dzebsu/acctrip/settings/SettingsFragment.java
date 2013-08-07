@@ -13,6 +13,7 @@ import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.settings.dialogs.BackupOnDeviceDialogPreference;
 import com.dzebsu.acctrip.settings.dialogs.BackupViaEmailDialogPreference;
+import com.dzebsu.acctrip.settings.dialogs.LanguagePickerListPreference;
 import com.dzebsu.acctrip.settings.dialogs.RestoreFromDeviceDialogPreference;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -72,7 +73,11 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	}
 
 	private void updatePrefSummary(SharedPreferences sharedPreferences, Preference p) {
-		if (p instanceof BackupOnDeviceDialogPreference) {
+		if (p instanceof LanguagePickerListPreference) {
+			LanguagePickerListPreference picker = (LanguagePickerListPreference) p;
+			String s = picker.getEntry().toString();
+			p.setSummary(s);
+		} else if (p instanceof BackupOnDeviceDialogPreference) {
 			BackupOnDeviceDialogPreference condirmDialogPreference = (BackupOnDeviceDialogPreference) p;
 			String[] s = sharedPreferences.getString(condirmDialogPreference.getKey(),
 					getString(R.string.pref_backup_database_def)).split("@");
