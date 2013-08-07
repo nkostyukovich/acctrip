@@ -94,10 +94,6 @@ public class EventListActivity extends Activity {
 			case R.id.open_dictionaries:
 				onOpenDictionaries(item.getActionView());
 				return true;
-			case R.id.recreate_all_tables:
-				// TODO deprecated. delete!
-				// reCreateAllTables(item.getActionView());
-				return true;
 			case R.id.settings:
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
