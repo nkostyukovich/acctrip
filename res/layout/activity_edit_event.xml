@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_marginBottom="15dp"
         android:text="@string/lbl_event_name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -21,7 +21,6 @@
         android:id="@+id/editEventName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
         android:ems="10"
         android:hint="@string/event_name_hint"
         android:imeOptions="actionNext|actionDone"
@@ -30,13 +29,14 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" >
 
-        <requestFocus/>
+        <requestFocus />
     </EditText>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         android:text="@string/lbl_event_desc"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -44,42 +44,42 @@
     <EditText
         android:id="@+id/editEventDesc"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_height="150dp"
         android:ems="10"
         android:gravity="top"
         android:hint="@string/event_description_hint"
+        android:imeOptions="normal|actionDone"
         android:inputType="textMultiLine"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-       android:imeOptions="normal|actionDone" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/edit_event_primary_currency"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:text="@string/edit_event_prim_curr" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/edit_event_save_btn"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            
-            android:layout_marginBottom="20dp"
+            android:layout_alignParentTop="true"
             android:layout_marginRight="20dp"
-            android:onClick="onSaveEvent"
+            android:layout_marginTop="10dp"
             android:text="@string/save" />
 
         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="20dp"
-            
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
-            android:onClick="onCancelBtn"
             android:text="@string/cancel" />
     </RelativeLayout>
 

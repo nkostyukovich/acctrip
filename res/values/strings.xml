@@ -128,4 +128,9 @@
 	<string name="pref_restart_dialog_message">To changes to be applied, relaunch @string/app_name this way.</string>
 <!-- 	<string name="pref_restart_summary2">\nTo changes to be applied, need restart app.</string> -->
 	<string name="close_app">Relaunch</string>
+	<string name="entry_created">%s created.</string>
+	<string name="entry_deleted">%s deleted.</string>
+	<string name="entry_edited">%s edited.</string>
+	<string name="edit_event_prim_curr">Primary Currency:\n</string>
+	
 </resources>

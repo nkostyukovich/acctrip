@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -18,24 +19,34 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
-import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
-import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
+import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
+import com.dzebsu.acctrip.dictionary.DictionaryType;
+import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class DictionaryElementPickerFragment extends DialogFragment {
+public class DictionaryElementPickerFragment<T extends BaseDictionary> extends DialogFragment {
 
-	static public DictionaryElementPickerFragment prepareDialog(int obj) {
-		Bundle args = new Bundle();
-		args.putInt("objType", obj);
-		return DictionaryElementPickerFragment.newInstance(args);
+	private IDictionaryDataSource<T> dataSource;
+
+	private DictionaryType type;
+
+	public void setDataSource(IDictionaryDataSource<T> dataSource) {
+		this.dataSource = dataSource;
 	}
 
-	static DictionaryElementPickerFragment newInstance(Bundle data) {
-		DictionaryElementPickerFragment f = new DictionaryElementPickerFragment();
-		f.setArguments(data);
-		return f;
+	public static <T extends BaseDictionary> DictionaryElementPickerFragment<T> newInstance(Class<T> clazz, Context cxt) {
+		DictionaryElementPickerFragment<T> fragment = new DictionaryElementPickerFragment<T>();
+		fragment.setClass(clazz);
+		fragment.setDataSource(DictUtils.getEntityDataSourceInstance(clazz, cxt));
+		return fragment;
 	}
+
+	public void setClass(Class<T> clazz) {
+		this.clazz = clazz;
+	}
+
+	private Class<T> clazz;
 
 	private IDictionaryFragmentListener pickListener;
 
@@ -49,10 +60,12 @@ public class DictionaryElementPickerFragment extends DialogFragment {
 		pickListener = listener;
 	}
 
-	// TODO let user choose none value
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		obj = getArguments().getInt("objType");
+
+		// XXX BUG here on screen rotation NPE
+		dataSource.setContext(this.getActivity());
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		view = inflater.inflate(R.layout.fragment_dictionary_list, null, false);
@@ -63,8 +76,21 @@ public class DictionaryElementPickerFragment extends DialogFragment {
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 				Bundle args = new Bundle();
 				args.putLong("pickedId", id);
-				args.putString("picked", ((BaseDictionary) adapterZ.getItem(pos)).getName());
-				pickListener.onValueChanged(args);
+				BaseDictionary entry = adapterZ.getItem(pos);
+				String title = entry.getName();
+				if (entry instanceof Currency) {
+					title = ((Currency) entry).getCode();
+				}
+				args.putString("picked", title);
+				try {
+					pickListener.onActionPerformed(args);
+				} catch (java.lang.InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				DictionaryElementPickerFragment.this.dismiss();
 
 			}
@@ -76,7 +102,16 @@ public class DictionaryElementPickerFragment extends DialogFragment {
 			public void onClick(View v) {
 				Bundle args = new Bundle();
 				args.putBoolean("requestNew", true);
-				pickListener.onValueChanged(args);
+				args.putSerializable("clazz", clazz);
+				try {
+					pickListener.onActionPerformed(args);
+				} catch (java.lang.InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				DictionaryElementPickerFragment.this.dismiss();
 			}
 		});
@@ -114,19 +149,8 @@ public class DictionaryElementPickerFragment extends DialogFragment {
 	}
 
 	private void fillList() {
-		List<? extends BaseDictionary> objs = null;
-		switch (obj) {
-		case 1:
-			objs = new PlaceDataSource(this.getActivity()).getEntityList();
-			break;
-		case 2:
-			objs = new CategoryDataSource(this.getActivity()).getEntityList();
-			break;
-		case 3:
-			objs = new CurrencyDataSource(this.getActivity()).getEntityList();
-			break;
-		}
-		adapterZ = new DictionaryListViewAdapter(getActivity(), objs);
+		List<T> objs = dataSource.getEntityList();
+		adapterZ = new DictionaryListViewAdapter<T>(getActivity(), objs);
 		// trigger filter to it being applied on resume
 
 		ListAdapter adapter = adapterZ;

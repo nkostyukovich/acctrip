@@ -9,6 +9,10 @@ public abstract class BaseDictionary extends BaseModel {
 	public BaseDictionary() {
 	}
 
+	public BaseDictionary(long id) {
+		super(id);
+	}
+
 	public BaseDictionary(long id, String name) {
 		super(id);
 		this.name = name;

@@ -16,14 +16,17 @@ import com.dzebsu.acctrip.models.Event;
 public class EventDataSource {
 
 	private SQLiteDatabase database;
+
 	private EventAccDbHelper dbHelper;
+
 	private Context ctx;
 
-	private String[] selectedColumns = { EventAccContract.Event._ID, EventAccContract.Event.NAME, EventAccContract.Event.DESC };
+	private String[] selectedColumns = { EventAccContract.Event._ID, EventAccContract.Event.NAME,
+			EventAccContract.Event.DESC, EventAccContract.Event.PRIMARY_CURRENCY_ID };
 
 	public EventDataSource(Context ctx) {
 		dbHelper = new EventAccDbHelper(ctx);
-		this.ctx=ctx;
+		this.ctx = ctx;
 	}
 
 	public void open() {
@@ -33,26 +36,27 @@ public class EventDataSource {
 	public void close() {
 		database.close();
 	}
-	
-	public long insert(String name, String desc) {
-		open();
-		try {
-			ContentValues values = new ContentValues();
-			values.put(EventAccContract.Event.NAME, name);
-			values.put(EventAccContract.Event.DESC, desc);		 
-			return database.insert(EventAccContract.Event.TABLE_NAME, null, values);
-		} finally {
-			close();
-		}
-	}
-	
-	
-	public Event update(Long id, String name, String desc) {
+
+	public long insert(String name, String desc, long primaryCurrencyId) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
 			values.put(EventAccContract.Event.NAME, name);
 			values.put(EventAccContract.Event.DESC, desc);
+			values.put(EventAccContract.Event.PRIMARY_CURRENCY_ID, primaryCurrencyId);
+			return database.insert(EventAccContract.Event.TABLE_NAME, null, values);
+		} finally {
+			close();
+		}
+	}
+
+	public Event update(Long id, String name, String desc, long primaryCurrencyId) {
+		open();
+		try {
+			ContentValues values = new ContentValues();
+			values.put(EventAccContract.Event.NAME, name);
+			values.put(EventAccContract.Event.DESC, desc);
+			values.put(EventAccContract.Event.PRIMARY_CURRENCY_ID, primaryCurrencyId);
 			String whereClause = EventAccContract.Event._ID + " = ?";
 			database.update(EventAccContract.Event.TABLE_NAME, values, whereClause, new String[] { Long.toString(id) });
 			return getEventById(id);
@@ -63,9 +67,10 @@ public class EventDataSource {
 
 	public Event getEventById(long id) {
 		open();
-		try{
+		try {
 			String whereBatch = EventAccContract.Event._ID + " = ?";
-			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch, new String[] { Long.toString(id) }, null, null, null);
+			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch,
+					new String[] { Long.toString(id) }, null, null, null);
 			Event event = null;
 			if (c.getCount() > 0) {
 				c.moveToFirst();
@@ -73,7 +78,7 @@ public class EventDataSource {
 			}
 			c.close();
 			return event;
-		}finally{
+		} finally {
 			close();
 		}
 	}
@@ -82,7 +87,8 @@ public class EventDataSource {
 		open();
 		try {
 			List<Event> result = new ArrayList<Event>();
-			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null, EventAccContract.Event._ID + " DESC");
+			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null,
+					EventAccContract.Event._ID + " DESC");
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				result.add(ConvertUtils.cursorToEvent(c));
@@ -94,13 +100,13 @@ public class EventDataSource {
 			close();
 		}
 	}
-	
+
 	public long delete(Long id) {
 		open();
-		long c=-1;
+		long c = -1;
 		try {
 			String whereClause = EventAccContract.Event._ID + " = ?";
-			c= database.delete(EventAccContract.Event.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
+			c = database.delete(EventAccContract.Event.TABLE_NAME, whereClause, new String[] { Long.toString(id) });
 		} finally {
 			close();
 		}

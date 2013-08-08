@@ -16,7 +16,8 @@ public class ConvertUtils {
 		long id = c.getLong(c.getColumnIndex(EventAccContract.Event._ID));
 		String name = c.getString(c.getColumnIndex(EventAccContract.Event.NAME));
 		String desc = c.getString(c.getColumnIndex(EventAccContract.Event.DESC));
-		return new Event(id, name, desc);
+		long primCurrId = c.getLong(c.getColumnIndex(EventAccContract.Event.PRIMARY_CURRENCY_ID));
+		return new Event(id, name, desc, primCurrId);
 	}
 
 	public static Category cursorToCategory(Cursor c) {

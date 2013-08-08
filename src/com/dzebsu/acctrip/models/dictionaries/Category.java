@@ -6,6 +6,10 @@ public class Category extends BaseDictionary {
 		super();
 	}
 
+	public Category(long id) {
+		super(id);
+	}
+
 	public Category(long id, String name) {
 		super(id, name);
 	}

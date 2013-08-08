@@ -105,34 +105,6 @@
                 android:text="Tokyo" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/edit_ll" >
-
-            <Button
-                android:id="@+id/edit_op_save_btn"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"
-                android:onClick="onSaveOperation"
-                android:text="@string/save" />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:onClick="onCancelBtn"
-                android:text="@string/cancel" />
-        </RelativeLayout>
-
         <LinearLayout
             android:id="@+id/edit_ll"
             android:layout_width="fill_parent"
@@ -158,5 +130,32 @@
             
             android:text="24/7/2013" />
         </LinearLayout>
+        
+        <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/edit_ll">
+
+        <Button
+            android:id="@+id/edit_op_save_btn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/save" />
+
+        <Button
+            android:id="@+id/edit_op_cancel_btn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/cancel" />
+    </RelativeLayout>
 
     </RelativeLayout>

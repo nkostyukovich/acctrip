@@ -6,6 +6,10 @@ public class Place extends BaseDictionary {
 		super();
 	}
 
+	public Place(long id) {
+		super(id);
+	}
+
 	public Place(long id, String name) {
 		super(id, name);
 	}

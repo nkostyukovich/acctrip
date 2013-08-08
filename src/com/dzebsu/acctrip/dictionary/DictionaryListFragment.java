@@ -31,6 +31,7 @@ import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
+import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 
 public class DictionaryListFragment<T extends BaseDictionary> extends Fragment implements IDialogListener<T> {
@@ -109,7 +110,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		Bundle data = getArguments();
 		clazz = (Class<T>) data.get("class");
 		dictType = DictUtils.getDictionaryType(clazz);
-		// XXX BUG here on screen rotation NPE
+		// XXX BUG here on screen rotating NPE
 		dataSource.setContext(this.getActivity());
 	}
 
@@ -242,6 +243,11 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 						public void onClick(DialogInterface dialog, int which) {
 							if (which == Dialog.BUTTON_POSITIVE) {
 								dataSource.deleteEntity(id);
+								Toast.makeText(
+										getActivity(),
+										String.format(getString(R.string.entry_deleted), TextUtils
+												.asUpperCaseFirstChar(getString(DictUtils.getDictionaryType(clazz)
+														.getElementName()))), Toast.LENGTH_SHORT).show();
 								dataChanged = true;
 								fillList();
 							}
@@ -278,10 +284,16 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 	public void onSuccess(T entity) {
 		if (entity.getId() == null) {
 			dataSource.insertEntity(entity);
-			Toast.makeText(getActivity(), "Created.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					getActivity(),
+					String.format(getString(R.string.entry_created), TextUtils.asUpperCaseFirstChar(getString(DictUtils
+							.getDictionaryType(clazz).getElementName()))), Toast.LENGTH_SHORT).show();
 		} else {
 			dataSource.updateEntity(entity);
-			Toast.makeText(getActivity(), "Edited.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					getActivity(),
+					String.format(getString(R.string.entry_edited), TextUtils.asUpperCaseFirstChar(getString(DictUtils
+							.getDictionaryType(clazz).getElementName()))), Toast.LENGTH_SHORT).show();
 		}
 		dataChanged = true;
 		fillList();

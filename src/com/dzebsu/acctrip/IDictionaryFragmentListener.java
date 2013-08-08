@@ -3,7 +3,7 @@ package com.dzebsu.acctrip;
 import android.os.Bundle;
 
 public interface IDictionaryFragmentListener {
-	
-	void onValueChanged(Bundle args);
-	
+
+	void onActionPerformed(Bundle args) throws InstantiationException, IllegalAccessException;
+
 }

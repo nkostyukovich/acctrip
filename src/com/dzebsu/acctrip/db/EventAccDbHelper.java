@@ -6,13 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class EventAccDbHelper extends SQLiteOpenHelper {
 
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 
 	public static final String DATABASE_NAME = "EventAcc.db";
 
 	private static final String SQL_CREATE_EVENT_TABLE = "CREATE TABLE " + EventAccContract.Event.TABLE_NAME + " ("
 			+ EventAccContract.Event._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EventAccContract.Event.NAME
-			+ " TEXT NOT NULL, " + EventAccContract.Event.DESC + " TEXT " + " )";
+			+ " TEXT NOT NULL, " + EventAccContract.Event.DESC + " TEXT, " + EventAccContract.Event.PRIMARY_CURRENCY_ID
+			+ " INTEGER NOT NULL, FOREIGN KEY (" + EventAccContract.Event.PRIMARY_CURRENCY_ID + ") REFERENCES "
+			+ EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID + ") " + " )";
 
 	private static final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + EventAccContract.Category.TABLE_NAME
 			+ " (" + EventAccContract.Category._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -57,7 +59,7 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+		if (oldVersion < newVersion) reCreateAllTables(db);
 	}
 
 	public void reCreateAllTables(SQLiteDatabase db) {
