@@ -34,8 +34,11 @@ public class OperationDataSource {
 
 			"cur." + EventAccContract.Currency.NAME + " " + EventAccContract.Currency.ALIAS_NAME + ", " + "op."
 			+ EventAccContract.Operation.DATE + " " + EventAccContract.Operation.DATE + ", " + "ev."
-			+ EventAccContract.Event._ID + " " + EventAccContract.Event.ALIAS_ID + ", " + "pl."
-			+ EventAccContract.Place._ID + " " + EventAccContract.Place.ALIAS_ID + ", " + "pl."
+			+ EventAccContract.Event._ID + " " + EventAccContract.Event.ALIAS_ID + ", " + "ev."
+			+ EventAccContract.Event.NAME + " " + EventAccContract.Event.ALIAS_NAME + ", " + "ev."
+			+ EventAccContract.Event.DESC + " " + EventAccContract.Event.ALIAS_DESC + ", " + "ev."
+			+ EventAccContract.Event.PRIMARY_CURRENCY_ID + " " + EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID
+			+ ", " + "pl." + EventAccContract.Place._ID + " " + EventAccContract.Place.ALIAS_ID + ", " + "pl."
 			+ EventAccContract.Place.NAME + " " + EventAccContract.Place.ALIAS_NAME
 			+ " from operation op left join event ev on (op.eventId = ev._id) "
 			+ " left join category cat on (op.categoryId = cat._id) "

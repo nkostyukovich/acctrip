@@ -21,6 +21,10 @@ public class EventAccContract {
 
 		public static final String ALIAS_ID = "event_id";
 
+		public static final String ALIAS_DESC = "event_desc";
+
+		public static final String ALIAS_NAME = "event_name";
+
 	}
 
 	public static abstract class Category implements BaseColumns {

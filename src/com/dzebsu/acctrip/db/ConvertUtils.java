@@ -52,7 +52,12 @@ public class ConvertUtils {
 				.getColumnIndex(EventAccContract.Currency.ALIAS_NAME)), c.getString(c
 				.getColumnIndex(EventAccContract.Currency.ALIAS_CODE))));
 		op.setDate(DateFormatter.convertLongToDate(c.getLong(c.getColumnIndex(EventAccContract.Operation.DATE))));
-		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID))));
+
+		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID)), c.getString(c
+				.getColumnIndex(EventAccContract.Event.ALIAS_NAME)), c.getString(c
+				.getColumnIndex(EventAccContract.Event.ALIAS_DESC)), c.getLong(c
+				.getColumnIndex(EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID))));
+
 		op.setPlace(new Place(c.getLong(c.getColumnIndex(EventAccContract.Place.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Place.ALIAS_NAME))));
 		return op;

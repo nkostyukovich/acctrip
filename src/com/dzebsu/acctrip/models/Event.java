@@ -6,13 +6,15 @@ public class Event extends BaseModel {
 
 	private String desc;
 
-	private double primaryCurrencyId;
+	private long primaryCurrencyId;
 
-	public double getPrimaryCurrencyId() {
+	// TODO need Currency object
+
+	public long getPrimaryCurrencyId() {
 		return primaryCurrencyId;
 	}
 
-	public void setPrimaryCurrencyId(double primaryCurrencyId) {
+	public void setPrimaryCurrencyId(long primaryCurrencyId) {
 		this.primaryCurrencyId = primaryCurrencyId;
 	}
 
@@ -24,7 +26,7 @@ public class Event extends BaseModel {
 		super(id);
 	}
 
-	public Event(long id, String name, String desc, double primaryCurrencyId) {
+	public Event(long id, String name, String desc, long primaryCurrencyId) {
 		super(id);
 		this.name = name;
 		this.desc = desc;

@@ -115,7 +115,7 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 	public void onPositiveBtn() {
 		String name = ((EditText) view.findViewById(R.id.dic_new_name_et)).getText().toString();
 		if (name.isEmpty()) {
-			Toast.makeText(this.getActivity().getApplicationContext(), R.string.enter_text, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this.getActivity().getApplicationContext(), R.string.enter_name, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		entity.setName(name);

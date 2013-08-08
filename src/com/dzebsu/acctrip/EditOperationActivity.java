@@ -26,6 +26,7 @@ import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.dictionary.utils.TextUtils;
+import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
@@ -55,7 +56,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	// 1 place 2 cat 3 cur// what does user want to create now
 	private Button dictionaryBtnInQuestion;
 
-	private long eventId = 0;
+	private Event event;
 
 	private IdBox entityInQuestion;
 
@@ -76,7 +77,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_operation);
 		Intent intent = getIntent();
-		eventId = intent.getLongExtra("eventId", 0);
+		event = new EventDataSource(this).getEventById(intent.getLongExtra("eventId", 0));
 		mode = intent.getStringExtra("mode");
 		opID = intent.getLongExtra("opID", 0);
 		setupActionBar();
@@ -102,13 +103,13 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			}
 		});
 
-		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this).getEventById(eventId)
-				.getName());
+		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this)
+				.getEventById(event.getId()).getName());
 		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
 		date = Calendar.getInstance().getTime();
 		Operation defOP;
 		if (mode.equals("new")) {
-			defOP = new OperationDataSource(this).getLastOperationByEventId(eventId);
+			defOP = new OperationDataSource(this).getLastOperationByEventId(event.getId());
 		} else {
 			defOP = new OperationDataSource(this).getOperationById(opID);
 			((Spinner) this.findViewById(R.id.op_edit_type_spinner)).setSelection(defOP.getType().compareTo(
@@ -120,9 +121,9 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		}
 		String dateS = DateFormatter.formatDate(this, date);
 
-		String place = "Place";
-		String category = "Category";
-		String currency = "Curr$";
+		String place = getString(R.string.edit_event_place_def);
+		String category = getString(R.string.edit_event_cat_def);
+		String currency = getString(R.string.edit_event_curr_def);
 
 		if (defOP != null) {
 			Place pl = defOP.getPlace();
@@ -270,12 +271,12 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		OperationDataSource dataSource = new OperationDataSource(this);
 		value = opType.compareTo(OperationType.EXPENSE) == 0 ? "-" + value : value;
 		if (!mode.equals("edit")) {
-			dataSource.insert(date, desc, Double.parseDouble(value), opType, eventId, categoryId.getId(), currencyId
-					.getId(), placeId.getId());
+			dataSource.insert(date, desc, Double.parseDouble(value), opType, event.getId(), categoryId.getId(),
+					currencyId.getId(), placeId.getId());
 			finish();
 			Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
 		} else {
-			dataSource.update(opID, date, desc, Double.parseDouble(value), opType, eventId, categoryId.getId(),
+			dataSource.update(opID, date, desc, Double.parseDouble(value), opType, event.getId(), categoryId.getId(),
 					currencyId.getId(), placeId.getId());
 			finish();
 			Toast.makeText(getApplicationContext(), R.string.op_changed, Toast.LENGTH_SHORT).show();
@@ -308,28 +309,6 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			IllegalAccessException {
 		createDictionaryEntryHelper(clazz);
 	}
-
-	// @Override
-	// public void onSuccess(Bundle args) {
-	// String mode = args.getString("mode");
-	// if (mode.equals("new")) {
-	// String name = args.getString("name");
-	// switch (newItemClass) {
-	// case 1:
-	// changeBtnValue(name, new PlaceDataSource(this).insert(name));
-	// break;
-	// case 2:
-	// changeBtnValue(name, new CategoryDataSource(this).insert(name));
-	// break;
-	// case 3:
-	// changeBtnValue(args.getString("code"), new CurrencyDataSource(this)
-	// .insert(name, args.getString("code")));
-	// break;
-	// }
-	//
-	// }
-	//
-	// }
 
 	private void changeBtnValue(String title, long id) {
 		entityInQuestion.setId(id);

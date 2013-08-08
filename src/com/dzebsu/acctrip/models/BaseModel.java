@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class BaseModel implements Serializable {
 
-	private Long id;
+	private long id;
 
 	public BaseModel() {
 	}

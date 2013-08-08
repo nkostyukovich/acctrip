@@ -26,7 +26,7 @@
 	<string name="op_id_tv">Id: </string>
 	<string name="op_new_btn">New operation</string>
 	<string name="op_del_menu">Delete event</string>
-	<string name="enter_text">Please enter name.</string>
+	<string name="enter_name">Please enter name.</string>
 	<string name="event_deleted">Event deleted.</string>
 	<string name="op_deleted">Operation deleted.</string>
 	<string name="not_message">Not a message.</string>	
@@ -63,7 +63,8 @@
    	<string name="pick_currency">Please, pick currency.</string>
    	<string name="op_created">Operation created.</string>
 	<string name="ev_used_by_ops">%1$s has %2$d operations in it. They all will be deleted along with event.\nAre you sure want to delete all this?</string>
-	<string name="enter_code">Please, ener code too.</string>
+	<string name="enter_code">Please, enter code as well.</string>
+	<string name="enter_currency">Please, enter currency.</string>
 	<string name="save_op">Save</string>
 	<string name="cancel_op">Cancel</string>
 	<string name="op_changed">Operation changed.</string>
@@ -131,6 +132,11 @@
 	<string name="entry_created">%s created.</string>
 	<string name="entry_deleted">%s deleted.</string>
 	<string name="entry_edited">%s edited.</string>
-	<string name="edit_event_prim_curr">Primary Currency:\n</string>
+	<string name="edit_event_prim_curr">Primary Currency:\u0020</string>
+	
+	<string name="edit_event_prim_curr_def">Currency$</string>
+	<string name="edit_event_curr_def">Curr$</string>
+	<string name="edit_event_cat_def">Category</string>
+	<string name="edit_event_place_def">Place</string>
 	
 </resources>
