@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class EventAccDbHelper extends SQLiteOpenHelper {
 
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 3;
 
 	public static final String DATABASE_NAME = "EventAcc.db";
 
@@ -44,6 +44,19 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 			+ EventAccContract.Operation.PLACE_ID + ") REFERENCES " + EventAccContract.Place.TABLE_NAME + " ("
 			+ EventAccContract.Place._ID + ") " + " )";
 
+	private static final String SQL_CREATE_CUREENCY_PAIR_TABLE = "CREATE TABLE "
+			+ EventAccContract.CurrencyPair.TABLE_NAME + " (" + EventAccContract.CurrencyPair.EVENT_ID
+			+ " INTEGER NOT NULL, " + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " INTEGER NOT NULL, "
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " INTEGER NOT NULL, "
+			+ EventAccContract.CurrencyPair.RATE + " REAL NOT NULL, PRIMARY KEY ("
+			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + ", "
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + "), FOREIGN KEY ("
+			+ EventAccContract.CurrencyPair.EVENT_ID + ") REFERENCES " + EventAccContract.Event.TABLE_NAME + " ("
+			+ EventAccContract.Event._ID + "),  FOREIGN KEY (" + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID
+			+ ") REFERENCES " + EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID
+			+ "), FOREIGN KEY (" + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + ") REFERENCES "
+			+ EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID + ") " + " )";
+
 	public EventAccDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -55,6 +68,7 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_CURRENCY_TABLE);
 		db.execSQL(SQL_CREATE_PLACE_TABLE);
 		db.execSQL(SQL_CREATE_OPERATION_TABLE);
+		db.execSQL(SQL_CREATE_CUREENCY_PAIR_TABLE);
 	}
 
 	@Override
@@ -68,6 +82,7 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + EventAccContract.Currency.TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + EventAccContract.Place.TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + EventAccContract.Operation.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + EventAccContract.CurrencyPair.TABLE_NAME);
 		onCreate(db);
 	}
 }
