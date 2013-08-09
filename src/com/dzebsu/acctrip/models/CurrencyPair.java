@@ -1,34 +1,53 @@
 package com.dzebsu.acctrip.models;
 
-public class CurrencyPair extends BaseModel {
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-	private long firstCurrency;
+public class CurrencyPair {
 
-	private long secondCurrency;
+	private Long eventId;
+
+	private Currency firstCurrency;
+
+	private Currency secondCurrency;
 
 	// 1/2
 	private double rate;
 
-	public CurrencyPair(long id, long firstCurrency, long secondCurrency, double rate) {
-		super(id);
+	public CurrencyPair(Long eventId, Currency firstCurrency, Currency secondCurrency, double rate) {
+		this.eventId = eventId;
 		this.firstCurrency = firstCurrency;
 		this.secondCurrency = secondCurrency;
 		this.rate = rate;
 	}
 
-	public long getFirstCurrency() {
+	public CurrencyPair(Long eventId, Currency firstCurrency, Currency secondCurrency) {
+		this.eventId = eventId;
+		this.firstCurrency = firstCurrency;
+		this.secondCurrency = secondCurrency;
+		this.rate = 1;
+	}
+
+	public Long getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Long eventId) {
+		this.eventId = eventId;
+	}
+
+	public Currency getFirstCurrency() {
 		return firstCurrency;
 	}
 
-	public void setFirstCurrency(long firstCurrency) {
+	public void setFirstCurrency(Currency firstCurrency) {
 		this.firstCurrency = firstCurrency;
 	}
 
-	public long getSecondCurrency() {
+	public Currency getSecondCurrency() {
 		return secondCurrency;
 	}
 
-	public void setSecondCurrency(long secondCurrency) {
+	public void setSecondCurrency(Currency secondCurrency) {
 		this.secondCurrency = secondCurrency;
 	}
 
@@ -39,4 +58,5 @@ public class CurrencyPair extends BaseModel {
 	public void setRate(double rate) {
 		this.rate = rate;
 	}
+
 }
