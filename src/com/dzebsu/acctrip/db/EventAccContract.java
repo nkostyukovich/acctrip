@@ -19,6 +19,10 @@ public class EventAccContract {
 
 		public static final String ALIAS_PRIMARY_CURRENCY_ID = "event_prim_curr_id";
 
+		public static final String ALIAS_PRIMARY_CURRENCY_NAME = "event_prim_curr_name";
+
+		public static final String ALIAS_PRIMARY_CURRENCY_CODE = "event_prim_curr_code";
+
 		public static final String ALIAS_ID = "event_id";
 
 		public static final String ALIAS_DESC = "event_desc";
@@ -84,6 +88,27 @@ public class EventAccContract {
 
 		public static final String PLACE_ID = "placeId";
 
+	}
+
+	public static abstract class CurrencyPair implements BaseColumns {
+
+		public static final String TABLE_NAME = "currency_pair";
+
+		public static final String EVENT_ID = "eventId";
+
+		public static final String FIRST_CURRENCY_ID = "first_curr_id";
+
+		public static final String SECOND_CURRENCY_ID = "second_curr_id";
+
+		public static final String ALIAS_FIRST_CODE = "first_cur_code";
+
+		public static final String ALIAS_FIRST_NAME = "first_cur_name";
+
+		public static final String ALIAS_SECOND_CODE = "second_cur_code";
+
+		public static final String ALIAS_SECOND_NAME = "second_cur_name";
+
+		public static final String RATE = "rate";
 	}
 
 }

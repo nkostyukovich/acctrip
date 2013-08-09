@@ -3,6 +3,7 @@ package com.dzebsu.acctrip.db;
 import android.database.Cursor;
 
 import com.dzebsu.acctrip.date.utils.DateFormatter;
+import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
@@ -61,5 +62,19 @@ public class ConvertUtils {
 		op.setPlace(new Place(c.getLong(c.getColumnIndex(EventAccContract.Place.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Place.ALIAS_NAME))));
 		return op;
+	}
+
+	public static CurrencyPair cursorToCurrencyPair(Cursor c) {
+		CurrencyPair cp = new CurrencyPair();
+		cp.setEventId(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.EVENT_ID)));
+		cp.setFirstCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.FIRST_CURRENCY_ID)),
+				c.getString(c.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_FIRST_NAME)), c.getString(c
+						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_FIRST_CODE))));
+		cp.setSecondCurrency(new Currency(
+				c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID)), c.getString(c
+						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_SECOND_NAME)), c.getString(c
+						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_SECOND_CODE))));
+		cp.setRate(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.RATE)));
+		return cp;
 	}
 }

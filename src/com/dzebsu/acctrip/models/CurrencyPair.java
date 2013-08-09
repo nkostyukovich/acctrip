@@ -13,6 +13,13 @@ public class CurrencyPair {
 	// 1/2
 	private double rate;
 
+	public CurrencyPair() {
+		this.eventId = -1L;
+		this.firstCurrency = null;
+		this.secondCurrency = null;
+		this.rate = 1.;
+	}
+
 	public CurrencyPair(Long eventId, Currency firstCurrency, Currency secondCurrency, double rate) {
 		this.eventId = eventId;
 		this.firstCurrency = firstCurrency;
