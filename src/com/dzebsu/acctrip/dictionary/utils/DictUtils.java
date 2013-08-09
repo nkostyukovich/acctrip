@@ -30,10 +30,6 @@ public class DictUtils {
 		return dictTypeMapping.get(clazz);
 	}
 
-	private static IDictionaryDataSource<Place> getPl(Context cxt) {
-		return new PlaceDataSource(cxt);
-	}
-
 	public static <T extends BaseDictionary> IDictionaryDataSource<T> getEntityDataSourceInstance(Class<T> clazz,
 			Context cxt) {
 		if (Place.class.isAssignableFrom(clazz)) return (IDictionaryDataSource<T>) new PlaceDataSource(cxt);
