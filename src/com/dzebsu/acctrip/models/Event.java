@@ -1,21 +1,23 @@
 package com.dzebsu.acctrip.models;
 
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+
 public class Event extends BaseModel {
 
 	private String name;
 
 	private String desc;
 
-	private long primaryCurrencyId;
+	private Currency primaryCurrency;
 
 	// TODO need Currency object
 
-	public long getPrimaryCurrencyId() {
-		return primaryCurrencyId;
+	public Currency getPrimaryCurrency() {
+		return primaryCurrency;
 	}
 
-	public void setPrimaryCurrencyId(long primaryCurrencyId) {
-		this.primaryCurrencyId = primaryCurrencyId;
+	public void setPrimaryCurrency(Currency primaryCurrency) {
+		this.primaryCurrency = primaryCurrency;
 	}
 
 	public Event() {
@@ -26,11 +28,11 @@ public class Event extends BaseModel {
 		super(id);
 	}
 
-	public Event(long id, String name, String desc, long primaryCurrencyId) {
+	public Event(long id, String name, String desc, Currency primaryCurrency) {
 		super(id);
 		this.name = name;
 		this.desc = desc;
-		this.primaryCurrencyId = primaryCurrencyId;
+		this.primaryCurrency = primaryCurrency;
 	}
 
 	public String getName() {

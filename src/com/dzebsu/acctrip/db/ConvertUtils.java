@@ -14,11 +14,16 @@ import com.dzebsu.acctrip.models.dictionaries.Place;
 public class ConvertUtils {
 
 	public static Event cursorToEvent(Cursor c) {
-		long id = c.getLong(c.getColumnIndex(EventAccContract.Event._ID));
-		String name = c.getString(c.getColumnIndex(EventAccContract.Event.NAME));
-		String desc = c.getString(c.getColumnIndex(EventAccContract.Event.DESC));
-		long primCurrId = c.getLong(c.getColumnIndex(EventAccContract.Event.PRIMARY_CURRENCY_ID));
-		return new Event(id, name, desc, primCurrId);
+		// XXX without info about primaryCurrency
+		Event ev = new Event();
+		ev.setId(c.getLong(c.getColumnIndex(EventAccContract.Event._ID)));
+		ev.setName(c.getString(c.getColumnIndex(EventAccContract.Event.NAME)));
+		ev.setDesc(c.getString(c.getColumnIndex(EventAccContract.Event.DESC)));
+		ev.setPrimaryCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.Event.PRIMARY_CURRENCY_ID)), c
+				.getString(c.getColumnIndex(EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_NAME)), c.getString(c
+				.getColumnIndex(EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_CODE))));
+
+		return ev;
 	}
 
 	public static Category cursorToCategory(Cursor c) {
@@ -56,8 +61,8 @@ public class ConvertUtils {
 
 		op.setEvent(new Event(c.getLong(c.getColumnIndex(EventAccContract.Event.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Event.ALIAS_NAME)), c.getString(c
-				.getColumnIndex(EventAccContract.Event.ALIAS_DESC)), c.getLong(c
-				.getColumnIndex(EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID))));
+				.getColumnIndex(EventAccContract.Event.ALIAS_DESC)), new Currency(c.getLong(c
+				.getColumnIndex(EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID)))));
 
 		op.setPlace(new Place(c.getLong(c.getColumnIndex(EventAccContract.Place.ALIAS_ID)), c.getString(c
 				.getColumnIndex(EventAccContract.Place.ALIAS_NAME))));

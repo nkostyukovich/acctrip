@@ -21,6 +21,16 @@ public class EventDataSource {
 
 	private Context ctx;
 
+	private final static String SELECT_OP_QUERY = "select ev." + EventAccContract.Event._ID + " "
+			+ EventAccContract.Event._ID + ", " + "ev." + EventAccContract.Event.NAME + " "
+			+ EventAccContract.Event.NAME + ", " + "ev." + EventAccContract.Event.DESC + " "
+			+ EventAccContract.Event.DESC + ", " + "ev." + EventAccContract.Event.PRIMARY_CURRENCY_ID + " "
+			+ EventAccContract.Event.PRIMARY_CURRENCY_ID + ", " + "curr." + EventAccContract.Currency.NAME + " "
+			+ EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_NAME + ", " + "curr." + EventAccContract.Currency.CODE
+			+ " " + EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_CODE + " from " + EventAccContract.Event.TABLE_NAME
+			+ " ev left join " + EventAccContract.Currency.TABLE_NAME + " curr on ( ev."
+			+ EventAccContract.Event.PRIMARY_CURRENCY_ID + "=curr." + EventAccContract.Currency._ID + ") ";
+
 	private String[] selectedColumns = { EventAccContract.Event._ID, EventAccContract.Event.NAME,
 			EventAccContract.Event.DESC, EventAccContract.Event.PRIMARY_CURRENCY_ID };
 
@@ -68,9 +78,8 @@ public class EventDataSource {
 	public Event getEventById(long id) {
 		open();
 		try {
-			String whereBatch = EventAccContract.Event._ID + " = ?";
-			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, whereBatch,
-					new String[] { Long.toString(id) }, null, null, null);
+			String whereBatch = " where ev." + EventAccContract.Event._ID + " = ?";
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + whereBatch, new String[] { Long.toString(id) });
 			Event event = null;
 			if (c.getCount() > 0) {
 				c.moveToFirst();
@@ -87,8 +96,7 @@ public class EventDataSource {
 		open();
 		try {
 			List<Event> result = new ArrayList<Event>();
-			Cursor c = database.query(EventAccContract.Event.TABLE_NAME, selectedColumns, null, null, null, null,
-					EventAccContract.Event._ID + " DESC");
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " order by " + EventAccContract.Event._ID + " DESC", null);
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				result.add(ConvertUtils.cursorToEvent(c));

@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.models.Event;
@@ -368,7 +367,7 @@ public class OperationListActivity extends Activity {
 				+ opdata.getCountByEventId(event.getId()));
 		// TODO converts
 		((TextView) findViewById(R.id.op_all_expenses)).setText(opdata.getSumByEventId(event.getId()) + " "
-				+ new CurrencyDataSource(this).getEntityById(event.getPrimaryCurrencyId()).getCode());
+				+ event.getPrimaryCurrency().getCode());
 	}
 
 }

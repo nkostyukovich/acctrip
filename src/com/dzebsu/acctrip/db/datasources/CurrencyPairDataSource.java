@@ -26,9 +26,16 @@ public class CurrencyPairDataSource {
 			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + ", " + "c_pairs." + EventAccContract.CurrencyPair.RATE
 			+ " " + EventAccContract.CurrencyPair.RATE + ", " + "first_cur." + EventAccContract.Currency.NAME + " "
 			+ EventAccContract.CurrencyPair.ALIAS_FIRST_NAME + ", " + "first_cur." + EventAccContract.Currency.CODE
-			+ " " + EventAccContract.CurrencyPair.ALIAS_FIRST_CODE + ", " + "second_cur."
-			+ EventAccContract.Currency.NAME + " " + EventAccContract.CurrencyPair.ALIAS_SECOND_NAME + ", "
-			+ "second_cur." + EventAccContract.Currency.CODE + " " + EventAccContract.CurrencyPair.ALIAS_SECOND_CODE
+			+ " " + EventAccContract.CurrencyPair.ALIAS_FIRST_CODE + ", "
+			+ "second_cur."
+			+ EventAccContract.Currency.NAME
+			+ " "
+			+ EventAccContract.CurrencyPair.ALIAS_SECOND_NAME
+			+ ", "
+			+ "second_cur."
+			+ EventAccContract.Currency.CODE
+			+ " "
+			+ EventAccContract.CurrencyPair.ALIAS_SECOND_CODE
 			+ ", " /*
 					 * + "ev." + EventAccContract.Event._ID + " " +
 					 * EventAccContract.Event.ALIAS_ID + ", " + "ev." +
@@ -39,9 +46,11 @@ public class CurrencyPairDataSource {
 					 * EventAccContract.Event.PRIMARY_CURRENCY_ID + " " +
 					 * EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID
 					 */
-			+ " from currency_pair c_pairs left join " + EventAccContract.Event.TABLE_NAME + " ev on (c_pairs."
-			+ EventAccContract.CurrencyPair.EVENT_ID + " = ev._id) " + " left join "
-			+ EventAccContract.Currency.TABLE_NAME + " first_cur on (c_pairs."
+			+ " from currency_pair c_pairs "
+			// +"left join "
+			// + EventAccContract.Event.TABLE_NAME + " ev on (c_pairs." +
+			// EventAccContract.CurrencyPair.EVENT_ID + " = ev._id) "
+			+ " left join " + EventAccContract.Currency.TABLE_NAME + " first_cur on (c_pairs."
 			+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " = first_cur._id) " + "left join "
 			+ EventAccContract.Currency.TABLE_NAME + " second_cur on (c_pairs."
 			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = second_cur._id) ";

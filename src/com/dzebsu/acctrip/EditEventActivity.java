@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
@@ -64,9 +63,8 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 		if (intent.hasExtra("editId")) {
 			Event ev = new EventDataSource(this).getEventById(intent.getLongExtra("editId", -1));
-			primaryCurrencyId = ev.getPrimaryCurrencyId();
-			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
-					+ new CurrencyDataSource(this).getEntityById(primaryCurrencyId).getCode());
+			primaryCurrencyId = ev.getPrimaryCurrency().getId();
+			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + ev.getPrimaryCurrency().getCode());
 			((EditText) this.findViewById(R.id.editEventDesc)).setText(ev.getDesc());
 			((EditText) this.findViewById(R.id.editEventName)).setText(ev.getName());
 		} else {
