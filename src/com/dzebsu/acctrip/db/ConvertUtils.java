@@ -72,9 +72,6 @@ public class ConvertUtils {
 	public static CurrencyPair cursorToCurrencyPair(Cursor c) {
 		CurrencyPair cp = new CurrencyPair();
 		cp.setEventId(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.EVENT_ID)));
-		cp.setFirstCurrency(new Currency(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.FIRST_CURRENCY_ID)),
-				c.getString(c.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_FIRST_NAME)), c.getString(c
-						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_FIRST_CODE))));
 		cp.setSecondCurrency(new Currency(
 				c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID)), c.getString(c
 						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_SECOND_NAME)), c.getString(c

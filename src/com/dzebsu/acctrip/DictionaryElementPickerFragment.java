@@ -54,7 +54,7 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 
 	private int obj;
 
-	private DictionaryListViewAdapter adapterZ;
+	private DictionaryListViewAdapter<T> adapterZ;
 
 	public void setOnPickFragmentListener(IDictionaryFragmentListener listener) {
 		pickListener = listener;
