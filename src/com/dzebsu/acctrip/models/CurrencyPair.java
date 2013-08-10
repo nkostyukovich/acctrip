@@ -8,7 +8,6 @@ public class CurrencyPair {
 
 	private Currency secondCurrency;
 
-	// 1/2
 	private double rate;
 
 	public CurrencyPair() {
@@ -23,7 +22,7 @@ public class CurrencyPair {
 		this.rate = rate;
 	}
 
-	public CurrencyPair(Long eventId, Currency firstCurrency, Currency secondCurrency) {
+	public CurrencyPair(Long eventId, Currency secondCurrency) {
 		this.eventId = eventId;
 		this.secondCurrency = secondCurrency;
 		this.rate = 1;

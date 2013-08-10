@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+
+    <TextView
+        android:id="@+id/cur_row_cur1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="USD"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/cur_row_cur2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/cur_row_arrow"
+        android:text="JPY"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/cur_row_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/cur_row_cur1"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/cur_row_arrow"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/cur_row_et_cur1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cur_row_et_cur2"
+        android:layout_alignBottom="@+id/cur_row_et_cur2"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:ems="5"
+        android:singleLine="true"
+        android:inputType="numberDecimal"
+        android:text="1.00" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/cur_row_et_cur2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cur_row_cur2"
+        android:layout_toRightOf="@+id/cur_row_reverse_button"
+        android:ems="5"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
+        android:layout_marginLeft="10dp"
+        android:text="135.15" />
+
+    <ImageButton
+        android:id="@+id/cur_row_reverse_button"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/cur_row_arrow"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cur_row_et_cur2"
+        android:layout_alignLeft="@+id/cur_row_arrow"
+        android:layout_alignRight="@+id/cur_row_arrow"
+        android:src="@drawable/cur_reverse" 
+        android:contentDescription="@string/flip_currs"
+        
+        />
+
+</RelativeLayout>

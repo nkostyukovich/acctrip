@@ -139,4 +139,12 @@
 	<string name="edit_event_cat_def">Category</string>
 	<string name="edit_event_place_def">Place</string>
 	
+	
+	<string name="cur_row_arrow">-></string>
+	<string name="flip_currs">Flip currencies</string>
+	<string name="apply">Apply</string>
+	<string name="event_currencies_activity_title">Edit rates</string>
+	<string name="currency_rates_edited">Currency rates edited.</string>
+	<string name="edit_event_currs">Event currencies</string>
+	
 </resources>

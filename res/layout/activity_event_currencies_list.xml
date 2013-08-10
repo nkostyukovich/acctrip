@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rellay_dic_list"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context=".dictionary.DictionaryListFragment" >
+
+    <ListView
+        android:descendantFocusability="beforeDescendants"
+        android:id="@+id/currencylist"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="0dp"
+        android:layout_above="@+id/ll_cur_list" >
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/ll_cur_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" >
+
+        <Button
+            android:id="@+id/ev_cur_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" 
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <Button
+            android:id="@+id/ev_cur_apply"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/apply" 
+            style="?android:attr/buttonBarButtonStyle"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -44,14 +44,11 @@ public class CurrencyPairDataSource {
 			+ "left join " + EventAccContract.Currency.TABLE_NAME + " second_cur on (c_pairs."
 			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = second_cur._id) ";
 
-	private Context ctx;
-
 	public static String getSelectConjunctionTableQuery() {
 		return SELECT_OP_QUERY;
 	}
 
 	public CurrencyPairDataSource(Context ctx) {
-		this.ctx = ctx;
 		dbHelper = new EventAccDbHelper(ctx);
 	}
 
@@ -93,6 +90,13 @@ public class CurrencyPairDataSource {
 			return getCurrencyPairByValues(eventId, secondCurrencyId);
 		} finally {
 			close();
+		}
+	}
+
+	public void updateRatesBunch(List<CurrencyPair> cps, double rates[]) {
+		for (int i = 0; i < cps.size(); i++) {
+			CurrencyPair cp = cps.get(i);
+			update(cp.getEventId(), cp.getSecondCurrency().getId(), rates[i]);
 		}
 	}
 
