@@ -59,7 +59,7 @@ public class EventCurrenciesSimpleDialogListViewAdapter extends ArrayAdapter<Cur
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.firstCurrencyCode.setText(primaryCurrency.getCode());
 		holder.secondCurrencyCode.setText(objects.get(position).getSecondCurrency().getCode());
-		holder.rate.setText(CurrencyUtils.formatAfterPoint(objects.get(position).getRate()));
+		holder.rate.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getRate()));
 		return rowView;
 	}
 

@@ -91,7 +91,7 @@ public class EditCurrencyPairDialog extends DialogFragment {
 		firstCurrencyValue = ((EditText) view.findViewById(R.id.cur_row_et_cur1));
 		firstCurrencyValue.setText("1.00");
 		secondCurrencyValue = ((EditText) view.findViewById(R.id.cur_row_et_cur2));
-		secondCurrencyValue.setText(CurrencyUtils.formatAfterPoint(currencyPair.getRate()));
+		secondCurrencyValue.setText(CurrencyUtils.formatDecimalImportant(currencyPair.getRate()));
 		builder.setView(view);
 		return builder.create();
 	}

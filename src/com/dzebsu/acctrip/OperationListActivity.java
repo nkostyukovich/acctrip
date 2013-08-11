@@ -379,8 +379,8 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)
 				+ String.valueOf(event.getId()));
 		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + operations.size());
-		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatAfterPoint(getTotalSum()) + " "
-				+ event.getPrimaryCurrency().getCode());
+		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatDecimalNotImportant(getTotalSum())
+				+ " " + event.getPrimaryCurrency().getCode());
 	}
 
 	private double getTotalSum() {

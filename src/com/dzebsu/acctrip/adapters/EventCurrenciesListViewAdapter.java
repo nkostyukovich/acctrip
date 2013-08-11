@@ -156,13 +156,13 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		if (leftOri[position]) {
 			firstCurrencyCode = primaryCurrency.getCode();
 			secondCurrencyCode = objects.get(position).getSecondCurrency().getCode();
-			firstCurrencyValue = CurrencyUtils.formatAfterPoint(firstValues[position]);
-			secondCurrencyValue = CurrencyUtils.formatAfterPoint(secondValues[position]);
+			firstCurrencyValue = CurrencyUtils.formatDecimalImportant(firstValues[position]);
+			secondCurrencyValue = CurrencyUtils.formatDecimalImportant(secondValues[position]);
 		} else {
 			firstCurrencyCode = objects.get(position).getSecondCurrency().getCode();
 			secondCurrencyCode = primaryCurrency.getCode();
-			firstCurrencyValue = CurrencyUtils.formatAfterPoint(secondValues[position]);
-			secondCurrencyValue = CurrencyUtils.formatAfterPoint(firstValues[position]);
+			firstCurrencyValue = CurrencyUtils.formatDecimalImportant(secondValues[position]);
+			secondCurrencyValue = CurrencyUtils.formatDecimalImportant(firstValues[position]);
 		}
 
 		holder.firstCurrencyCode.setText(firstCurrencyCode);
