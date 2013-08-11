@@ -36,8 +36,6 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		return primaryCurrency;
 	}
 
-	// TODO FOCUS on first EDITTEXT
-
 	public void setFirstValue(int position, double value) {
 		if (leftOri[position]) {
 			firstValues[position] = value;
@@ -178,7 +176,6 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-				// TODO replace parse double everywhere
 				setFirstValue(pos, CurrencyUtils.getDouble(s.toString()));
 
 			}

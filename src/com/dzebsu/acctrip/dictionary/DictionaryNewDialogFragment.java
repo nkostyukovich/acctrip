@@ -33,6 +33,7 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 		DictionaryNewDialogFragment<T> fragment = new DictionaryNewDialogFragment<T>();
 		fragment.setEntity(entity);
 		fragment.setType(type);
+		fragment.setRetainInstance(true);
 		return fragment;
 	}
 
@@ -75,7 +76,6 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 				((EditText) view.findViewById(R.id.dic_new_name_et2)).setText(((Currency) entity).getCode());
 			}
 		}
-		// TODO implement other dialog for Delete
 
 		builder.setView(view);
 		builder.setTitle(

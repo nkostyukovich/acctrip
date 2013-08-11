@@ -39,6 +39,7 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		DictionaryElementPickerFragment<T> fragment = new DictionaryElementPickerFragment<T>();
 		fragment.setClass(clazz);
 		fragment.setDataSource(DictUtils.getEntityDataSourceInstance(clazz, cxt));
+		fragment.setRetainInstance(true);
 		return fragment;
 	}
 
@@ -63,7 +64,7 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		// XXX BUG here on screen rotation NPE
+		// setRetainInstance(true) save us from NPE here
 		dataSource.setContext(this.getActivity());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -85,10 +86,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DictionaryElementPickerFragment.this.dismiss();
@@ -106,10 +105,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DictionaryElementPickerFragment.this.dismiss();
@@ -143,7 +140,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		super.onResume();
 		fillList();
 		Window window = getDialog().getWindow();
-		// XXX attention absolute value
+		// XXX attention absolute value, problem when list smaller than this
+		// area, it's not touchable
 		window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 400);
 
 	}

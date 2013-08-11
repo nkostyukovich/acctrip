@@ -20,11 +20,14 @@ public class EventCurrenciesSimpleDialog extends DialogFragment {
 
 	private Event event;
 
+	private SimpleDialogListener listener;
+
 	private static final String INTENT_EXTRA_EVENT_ID = "eventId";
 
 	public static EventCurrenciesSimpleDialog newInstance(Event event) {
 		EventCurrenciesSimpleDialog dialog = new EventCurrenciesSimpleDialog();
 		dialog.setEvent(event);
+		dialog.setRetainInstance(true);
 		return dialog;
 	}
 
@@ -64,8 +67,9 @@ public class EventCurrenciesSimpleDialog extends DialogFragment {
 	}
 
 	protected void showFastEditDialog(CurrencyPair currencyPair) {
-		EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(), currencyPair).show(getFragmentManager(),
-				"EditDialog");
+		EditCurrencyPairDialog dialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(), currencyPair);
+		dialog.setListener(listener);
+		dialog.show(getFragmentManager(), "EditDialog");
 
 	}
 
@@ -75,6 +79,10 @@ public class EventCurrenciesSimpleDialog extends DialogFragment {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public void setListenerToUse(SimpleDialogListener listener) {
+		this.listener = listener;
 	}
 
 }

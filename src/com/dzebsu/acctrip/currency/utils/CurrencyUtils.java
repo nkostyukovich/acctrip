@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 
 public class CurrencyUtils {
 
+	// TODO remove all E and provide different length after point
 	public static String formatAfterPoint(double value) {
 		DecimalFormat money = new DecimalFormat("#.####");
 		money.setRoundingMode(RoundingMode.UP);

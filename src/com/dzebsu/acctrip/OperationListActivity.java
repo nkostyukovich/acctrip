@@ -41,7 +41,7 @@ import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 
-public class OperationListActivity extends Activity {
+public class OperationListActivity extends Activity implements SimpleDialogListener {
 
 	ActionMode mActionMode;
 
@@ -179,7 +179,6 @@ public class OperationListActivity extends Activity {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -267,6 +266,7 @@ public class OperationListActivity extends Activity {
 
 	private void showEventCurrenciesSimpleDialog() {
 		EventCurrenciesSimpleDialog newDialog = EventCurrenciesSimpleDialog.newInstance(event);
+		newDialog.setListenerToUse(this);
 		newDialog.show(getFragmentManager(), "SimpleCurrencyPairs");
 	}
 
@@ -379,7 +379,6 @@ public class OperationListActivity extends Activity {
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)
 				+ String.valueOf(event.getId()));
 		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + operations.size());
-		// TODO converts !!!
 		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatAfterPoint(getTotalSum()) + " "
 				+ event.getPrimaryCurrency().getCode());
 	}
@@ -390,6 +389,24 @@ public class OperationListActivity extends Activity {
 			sum += op.getValue() / currencyPairs.get(op.getCurrency().getId()).getRate();
 		}
 		return sum;
+	}
+
+	@Override
+	public void positiveButtonDialog(Bundle args) {
+		currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+		fillEventInfo();
+	}
+
+	@Override
+	public void negativeButtonDialog(Bundle args) {
+		// nothing
+
+	}
+
+	@Override
+	public void anotherDialogAction(Bundle args) {
+		// nothing
+
 	}
 
 }

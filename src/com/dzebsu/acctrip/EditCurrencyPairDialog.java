@@ -50,6 +50,7 @@ public class EditCurrencyPairDialog extends DialogFragment {
 		EditCurrencyPairDialog dialog = new EditCurrencyPairDialog();
 		dialog.setPrimaryCurrency(primaryCurrency);
 		dialog.setCurrencyPair(currencyPair);
+		dialog.setRetainInstance(true);
 		return dialog;
 	}
 
@@ -60,7 +61,7 @@ public class EditCurrencyPairDialog extends DialogFragment {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if (listener != null) listener.iteractionCompleted(null);
+				if (listener != null) listener.negativeButtonDialog(null);
 				dismiss();
 
 			}
@@ -68,8 +69,8 @@ public class EditCurrencyPairDialog extends DialogFragment {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if (listener != null) listener.iteractionCompleted(null);
 				saveChanges();
+				if (listener != null) listener.positiveButtonDialog(null);
 				dismiss();
 				Toast.makeText(getActivity(), R.string.currency_rate_edited, Toast.LENGTH_SHORT).show();
 			}

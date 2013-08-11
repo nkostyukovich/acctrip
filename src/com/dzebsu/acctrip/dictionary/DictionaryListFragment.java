@@ -110,7 +110,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 		Bundle data = getArguments();
 		clazz = (Class<T>) data.get("class");
 		dictType = DictUtils.getDictionaryType(clazz);
-		// XXX BUG here on screen rotating NPE
+		// retainInstance saves us her from NPE
 		dataSource.setContext(this.getActivity());
 	}
 
@@ -144,7 +144,6 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 			@Override
 			public void onScroll(AbsListView arg0, int arg1, int arg2, int arg3) {
-				// TODO Auto-generated method stub
 
 			}
 		});

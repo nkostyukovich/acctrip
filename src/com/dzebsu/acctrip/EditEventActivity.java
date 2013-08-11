@@ -165,8 +165,6 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			startActivity(intent);
 			finish();
 		} else {
-			// TODO check for currency!!!!!
-			// XXX
 			// TODO retrieve old values
 			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(this);

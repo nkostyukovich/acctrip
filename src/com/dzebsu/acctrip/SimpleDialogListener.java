@@ -4,5 +4,9 @@ import android.os.Bundle;
 
 public interface SimpleDialogListener {
 
-	public void iteractionCompleted(Bundle args);
+	public void positiveButtonDialog(Bundle args);
+
+	public void negativeButtonDialog(Bundle args);
+
+	public void anotherDialogAction(Bundle args);
 }

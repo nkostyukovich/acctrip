@@ -30,7 +30,6 @@ public class LanguagePickerListPreference extends ListPreference {
 								LanguagePickerListPreference.this.finalize();
 								System.exit(0);
 							} catch (Throwable e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 

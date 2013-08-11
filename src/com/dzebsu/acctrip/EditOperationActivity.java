@@ -418,7 +418,19 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	}
 
 	@Override
-	public void iteractionCompleted(Bundle args) {
+	public void positiveButtonDialog(Bundle args) {
+		writeChangesToDB();
+
+	}
+
+	@Override
+	public void negativeButtonDialog(Bundle args) {
+		writeChangesToDB();
+
+	}
+
+	@Override
+	public void anotherDialogAction(Bundle args) {
 		writeChangesToDB();
 
 	}

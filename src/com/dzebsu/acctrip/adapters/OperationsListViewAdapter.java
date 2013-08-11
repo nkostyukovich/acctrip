@@ -121,7 +121,6 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 					String s = g.getDesc() + g.getId() + g.getValue() + (g.getCategory().getName())
 							+ DateFormatter.formatDateAndTime(context, g.getDate()) + (g.getPlace().getName());
-					// TODO sort by value if only numbers
 					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) filtered.add(g);
 				}
 			}

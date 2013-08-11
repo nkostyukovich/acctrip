@@ -16,7 +16,7 @@ public class DatePickerFragment extends DialogFragment implements OnDateSetListe
 		// Use the current date as the default date in the picker
 		int year;
 		int month;
-		int day;// TODO do not work properly
+		int day;
 		if (!this.getArguments().containsKey("date")) {
 			final Calendar c = Calendar.getInstance();
 			year = c.get(Calendar.YEAR);
