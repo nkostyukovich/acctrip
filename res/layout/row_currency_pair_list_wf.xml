@@ -49,10 +49,8 @@
         android:ems="5"
         android:singleLine="true"
         android:inputType="numberDecimal"
-        android:text="1.00" >
+        android:text="1.00" />
 
-        <requestFocus />
-    </EditText>
 
     <EditText
         android:id="@+id/cur_row_et_cur2"
@@ -64,7 +62,9 @@
         android:inputType="numberDecimal"
         android:singleLine="true"
         android:layout_marginLeft="5dp"
-        android:text="135.15" />
+        android:text="135.15" >
+        <requestFocus />
+        </EditText>
 
     <ImageButton
         android:id="@+id/cur_row_reverse_button"

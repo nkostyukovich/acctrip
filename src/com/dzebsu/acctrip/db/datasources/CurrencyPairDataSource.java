@@ -2,7 +2,9 @@ package com.dzebsu.acctrip.db.datasources;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -181,6 +183,25 @@ public class CurrencyPairDataSource {
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				result.add(ConvertUtils.cursorToCurrencyPair(c));
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
+		}
+	}
+
+	public Map<Long, CurrencyPair> getCurrencyPairMapByEventId(long eventId) {
+		open();
+		try {
+			Map<Long, CurrencyPair> result = new HashMap<Long, CurrencyPair>();
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where " + EventAccContract.CurrencyPair.EVENT_ID + " = "
+					+ eventId, null);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				CurrencyPair cp = ConvertUtils.cursorToCurrencyPair(c);
+				result.put(cp.getSecondCurrency().getId(), cp);
 				c.moveToNext();
 			}
 			c.close();

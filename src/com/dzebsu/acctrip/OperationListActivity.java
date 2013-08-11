@@ -1,6 +1,7 @@
 package com.dzebsu.acctrip;
 
 import java.util.List;
+import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -32,8 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
+import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 
@@ -44,6 +48,10 @@ public class OperationListActivity extends Activity {
 	private int selectedItem;
 
 	private Object selectedViewTag;
+
+	private List<Operation> operations;
+
+	private Map<Long, CurrencyPair> currencyPairs;
 
 	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
 
@@ -325,8 +333,8 @@ public class OperationListActivity extends Activity {
 		event = new EventDataSource(this).getEventById(event.getId());
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
-			OperationDataSource dataSource = new OperationDataSource(this);
-			List<Operation> operations = dataSource.getOperationListByEventId(event.getId());
+			currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+			operations = new OperationDataSource(this).getOperationListByEventId(event.getId());
 			adapterZ = new OperationsListViewAdapter(this, operations);
 
 		}
@@ -370,12 +378,18 @@ public class OperationListActivity extends Activity {
 		((TextView) findViewById(R.id.op_desc_tv)).setText(event.getDesc());
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)
 				+ String.valueOf(event.getId()));
-		OperationDataSource opdata = new OperationDataSource(this);
-		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops)
-				+ opdata.getCountByEventId(event.getId()));
+		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + operations.size());
 		// TODO converts !!!
-		((TextView) findViewById(R.id.op_all_expenses)).setText(opdata.getSumByEventId(event.getId()) + " "
+		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatAfterPoint(getTotalSum()) + " "
 				+ event.getPrimaryCurrency().getCode());
+	}
+
+	private double getTotalSum() {
+		double sum = 0.;
+		for (Operation op : operations) {
+			sum += op.getValue() / currencyPairs.get(op.getCurrency().getId()).getRate();
+		}
+		return sum;
 	}
 
 }
