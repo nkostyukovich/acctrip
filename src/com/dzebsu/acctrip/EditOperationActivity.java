@@ -136,6 +136,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			Place pl = defOP.getPlace();
 			Category ca = defOP.getCategory();
 			Currency cu = defOP.getCurrency();
+			currencyIdBefore = cu.getId();
 
 			currency = cu.getCode();
 			place = pl.getName();
@@ -265,6 +266,8 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	private String value;
 
+	protected long currencyIdBefore = -1;
+
 	public void onSaveOperation() {
 		value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
 		if (value.isEmpty() || categoryId.getId() == -1 || currencyId.getId() == -1 || placeId.getId() == -1) {
@@ -291,9 +294,18 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	}
 
+	// add this in event edit
 	private void suggestEditCurrencyRate() {
-
+		final CurrencyPairDataSource currencyPairDB = new CurrencyPairDataSource(EditOperationActivity.this);
 		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()) != null) {
+
+			if (mode.equals("edit")
+					&& currencyIdBefore != currencyId.getId()
+					&& currencyIdBefore != event.getPrimaryCurrency().getId()
+					&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(event.getId(),
+							currencyIdBefore) == 1) {
+				currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
+			}
 			writeChangesToDB();
 			return;
 		}
@@ -307,8 +319,15 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						new CurrencyPairDataSource(EditOperationActivity.this)
-								.insert(event.getId(), currencyId.getId());
+						if (mode.equals("edit")
+								&& currencyIdBefore != currencyId.getId()
+								&& currencyIdBefore != event.getPrimaryCurrency().getId()
+								&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(
+										event.getId(), currencyIdBefore) == 1) {
+							currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
+						}
+
+						currencyPairDB.insert(event.getId(), currencyId.getId());
 						writeChangesToDB();
 					}
 				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
@@ -316,12 +335,18 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
+						if (mode.equals("edit")
+								&& currencyIdBefore != currencyId.getId()
+								&& currencyIdBefore != event.getPrimaryCurrency().getId()
+								&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(
+										event.getId(), currencyIdBefore) == 1) {
+							currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
+						}
 						EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event
 								.getPrimaryCurrency(), new CurrencyPair(event.getId(), new CurrencyDataSource(
 								EditOperationActivity.this).getEntityById(currencyId.getId())));
 
-						new CurrencyPairDataSource(EditOperationActivity.this)
-								.insert(event.getId(), currencyId.getId());
+						currencyPairDB.insert(event.getId(), currencyId.getId());
 						newDialog.setListener(EditOperationActivity.this);
 						newDialog.show(getFragmentManager(), "EditDialog");
 					}

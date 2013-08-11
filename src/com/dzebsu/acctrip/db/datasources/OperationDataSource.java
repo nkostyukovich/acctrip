@@ -214,6 +214,22 @@ public class OperationDataSource {
 		}
 	}
 
+	public long getCountByCurrencyOfEventId(long eventId, long currencyId) {
+		open();
+		try {
+			Cursor c = database.rawQuery("select count(eventId) cur_count from "
+					+ EventAccContract.Operation.TABLE_NAME + " where eventId=? AND "
+					+ EventAccContract.Operation.CURRENCY_ID + "=?", new String[] { Long.toString(eventId),
+					Long.toString(currencyId) });
+			c.moveToFirst();
+			long cnt = Long.parseLong(c.getString(c.getColumnIndex("cur_count")));
+			c.close();
+			return cnt;
+		} finally {
+			close();
+		}
+	}
+
 	public List<Operation> getOperationListByCategoryId(long categoryId) {
 		open();
 		try {
