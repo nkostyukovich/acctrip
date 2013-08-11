@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:layout_margin="15dp"
+     >
 
     <TextView
         android:id="@+id/cur_row_cur1"
@@ -11,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:text="USD"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
 <TextView
     android:id="@+id/cur_row_cur2"
@@ -21,7 +23,7 @@
     android:layout_toRightOf="@+id/cur_row_arrow"
     android:text="JPY"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textSize="20sp" />
+    android:textSize="30sp" />
 
 <TextView
     android:id="@+id/cur_row_arrow"
@@ -33,17 +35,17 @@
     android:layout_toRightOf="@+id/cur_row_cur1"
     android:text="@string/cur_row_arrow"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textSize="20sp" />
+    android:textSize="30sp" />
 
 <TextView
-    android:id="@+id/textView1"
+    android:id="@+id/cur_row_rate"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:layout_toRightOf="@+id/cur_row_cur2"
     android:layout_marginLeft="10dp"
+    android:layout_toRightOf="@+id/cur_row_cur2"
     android:text="135.35"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textSize="20sp" />
+    android:textSize="30sp" />
 
 </RelativeLayout>

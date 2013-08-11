@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +42,7 @@ public class EventCurrenciesListActivity extends Activity {
 		event = new EventDataSource(this).getEventById(getIntent().getLongExtra(INTENT_EXTRA_EVENT_ID, -1));
 		setupActionBar();
 		fillEventList();
-		if (savedInstanceState.containsKey(RESTORE_KEY_LEFT_ORI)) {
+		if (savedInstanceState != null && savedInstanceState.containsKey(RESTORE_KEY_LEFT_ORI)) {
 			adapterZ.setLeftOri(savedInstanceState.getBooleanArray(RESTORE_KEY_LEFT_ORI));
 			adapterZ.setFirstValues(savedInstanceState.getDoubleArray(RESTORE_KEY_FIST_VALUES));
 			adapterZ.setSecondValues(savedInstanceState.getDoubleArray(RESTORE_KEY_SECOND_VALUES));
@@ -51,7 +52,7 @@ public class EventCurrenciesListActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				finish();
+				onCancelBtn();
 
 			}
 		});
@@ -59,21 +60,30 @@ public class EventCurrenciesListActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				saveRates();
-				Toast.makeText(getApplicationContext(), R.string.currency_rates_edited, Toast.LENGTH_SHORT).show();
-				finish();
+				onSaveBtn();
 			}
 		});
+	}
+
+	public void onCancelBtn() {
+		finish();
+
+	}
+
+	public void onSaveBtn() {
+		saveRates();
+		Toast.makeText(getApplicationContext(), R.string.currency_rates_edited, Toast.LENGTH_SHORT).show();
+		finish();
 	}
 
 	private void fillEventList() {
 		if (adapterZ == null) {
 			CurrencyPairDataSource dataSource = new CurrencyPairDataSource(this);
 			List<CurrencyPair> cps = dataSource.getCurrencyPairListByEventId(event.getId());
-			adapterZ = new EventCurrenciesListViewAdapter(this, cps);
+			adapterZ = new EventCurrenciesListViewAdapter(this, cps, event.getPrimaryCurrency());
 		}
 		ListAdapter adapter = adapterZ;
-		ListView listView = (ListView) findViewById(R.id.event_list);
+		ListView listView = (ListView) findViewById(R.id.currencylist);
 		// trigger filter to it being applied on resume
 		listView.setAdapter(adapter);
 
@@ -91,8 +101,21 @@ public class EventCurrenciesListActivity extends Activity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.edit_all_event_currencies, menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.save_all_currs:
+				onSaveBtn();
+				return true;
+			case R.id.cancel_all_currs:
+				onCancelBtn();
+				return true;
 			case android.R.id.home:
 				finish();
 				return true;

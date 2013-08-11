@@ -20,7 +20,7 @@
 		android:orderInCategory="4">
     </item>
     <item android:title="@string/edit_event_currs" 
-        android:id="@+id/edit_event_currs" 
+        android:id="@+id/menu_edit_event_currs" 
         android:showAsAction="always" 
         android:icon="@drawable/event_currencies"
 		android:orderInCategory="2">

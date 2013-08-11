@@ -1,6 +1,5 @@
 package com.dzebsu.acctrip;
 
-import android.R;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;

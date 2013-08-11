@@ -60,6 +60,10 @@ public class CurrencyPairDataSource {
 		database.close();
 	}
 
+	public long insert(long eventId, long secondCurrencyId) {
+		return insert(eventId, secondCurrencyId, 1.00);
+	}
+
 	public long insert(long eventId, long secondCurrencyId, double rate) {
 		open();
 		try {

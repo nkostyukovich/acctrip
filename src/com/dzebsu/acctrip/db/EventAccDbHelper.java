@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class EventAccDbHelper extends SQLiteOpenHelper {
 
-	public static final int DATABASE_VERSION = 4;
+	public static final int DATABASE_VERSION = 6;
 
 	public static final String DATABASE_NAME = "EventAcc.db";
 
@@ -46,7 +46,8 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_CUREENCY_PAIR_TABLE = "CREATE TABLE "
 			+ EventAccContract.CurrencyPair.TABLE_NAME + " (" + EventAccContract.CurrencyPair.EVENT_ID
-			+ " INTEGER NOT NULL, " + EventAccContract.CurrencyPair.RATE + " REAL NOT NULL, PRIMARY KEY ("
+			+ " INTEGER NOT NULL, " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " INTEGER NOT NULL, "
+			+ EventAccContract.CurrencyPair.RATE + " REAL NOT NULL, PRIMARY KEY ("
 			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID
 			+ "), FOREIGN KEY (" + EventAccContract.CurrencyPair.EVENT_ID + ") REFERENCES "
 			+ EventAccContract.Event.TABLE_NAME + " (" + EventAccContract.Event._ID + "),  FOREIGN KEY ("

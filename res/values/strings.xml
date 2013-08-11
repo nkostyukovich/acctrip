@@ -146,5 +146,16 @@
 	<string name="event_currencies_activity_title">Edit rates</string>
 	<string name="currency_rates_edited">Currency rates edited.</string>
 	<string name="edit_event_currs">Event currencies</string>
+	<string name="edit_all">Edit all</string>
+	<string name="event_currencies">Event currencies</string>
+	<string name="edit_currency_rate">Edit currency rate</string>
+	<string name="back">Back</string>
+	<string name="currency_rate_edited">Currency rate edited.</string>
+	
+	<string name="warning_first_time_curr">%1$s is being used first time in %2$s, do you want to provide its ratio to primary currency(%3$s)?</string>
+	
+	<string name="provide">Provide</string>
+	
+	<string name="later">Later</string>
 	
 </resources>

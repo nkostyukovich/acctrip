@@ -240,6 +240,9 @@ public class OperationListActivity extends Activity {
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				return true;
+			case R.id.menu_edit_event_currs:
+				showEventCurrenciesSimpleDialog();
+				return true;
 			case R.id.delete_event:
 				onDeleteEvent(item.getActionView());
 				return true;
@@ -252,6 +255,11 @@ public class OperationListActivity extends Activity {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void showEventCurrenciesSimpleDialog() {
+		EventCurrenciesSimpleDialog newDialog = EventCurrenciesSimpleDialog.newInstance(event);
+		newDialog.show(getFragmentManager(), "SimpleCurrencyPairs");
 	}
 
 	public void onOpenDictionaries() {
@@ -365,7 +373,7 @@ public class OperationListActivity extends Activity {
 		OperationDataSource opdata = new OperationDataSource(this);
 		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops)
 				+ opdata.getCountByEventId(event.getId()));
-		// TODO converts
+		// TODO converts !!!
 		((TextView) findViewById(R.id.op_all_expenses)).setText(opdata.getSumByEventId(event.getId()) + " "
 				+ event.getPrimaryCurrency().getCode());
 	}

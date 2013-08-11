@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
@@ -25,6 +26,12 @@ import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class EditEventActivity extends FragmentActivity implements IDictionaryFragmentListener {
+
+	private static final String INTENT_KEY_EVENT_NAME = "eventName";
+
+	private static final String NEW_INTENT_KEY_EVENT_ID = "eventId";
+
+	private static final String INTENT_KEY_EDIT_ID = "editId";
 
 	private long primaryCurrencyId = -1;
 
@@ -61,14 +68,14 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			}
 		});
 
-		if (intent.hasExtra("editId")) {
-			Event ev = new EventDataSource(this).getEventById(intent.getLongExtra("editId", -1));
+		if (intent.hasExtra(INTENT_KEY_EDIT_ID)) {
+			Event ev = new EventDataSource(this).getEventById(intent.getLongExtra(INTENT_KEY_EDIT_ID, -1));
 			primaryCurrencyId = ev.getPrimaryCurrency().getId();
 			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + ev.getPrimaryCurrency().getCode());
 			((EditText) this.findViewById(R.id.editEventDesc)).setText(ev.getDesc());
 			((EditText) this.findViewById(R.id.editEventName)).setText(ev.getName());
 		} else {
-			((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra("eventName"));
+			((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra(INTENT_KEY_EVENT_NAME));
 			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
 					+ getString(R.string.edit_event_prim_curr_def));
 		}
@@ -135,18 +142,24 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
 		EventDataSource dataSource = new EventDataSource(this);
 		Intent inthere = getIntent();
-		if (!inthere.hasExtra("editId")) {
+		if (!inthere.hasExtra(INTENT_KEY_EDIT_ID)) {
 			long eventId = dataSource.insert(name, desc, primaryCurrencyId);
+
+			// add primary currency to event currencies list
+			new CurrencyPairDataSource(this).insert(eventId, primaryCurrencyId);
 			// go right to new event
 			Intent intent = new Intent(this, OperationListActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			// edited intent.putExtra("toast", R.string.op_deleted);
 
-			intent.putExtra("eventId", eventId);
+			intent.putExtra(NEW_INTENT_KEY_EVENT_ID, eventId);
 			startActivity(intent);
 			finish();
 		} else {
-			dataSource.update(inthere.getLongExtra("editId", -1), name, desc, primaryCurrencyId);
+			// TODO check for currency!!!!!
+			// XXX
+			// TODO
+			dataSource.update(inthere.getLongExtra(INTENT_KEY_EDIT_ID, -1), name, desc, primaryCurrencyId);
 			finish();
 		}
 	}
@@ -168,8 +181,6 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	private void changeBtnValue(String title, long id) {
 		primaryCurrencyId = id;
 		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + title);
-		// TODO if edit, check for currPairs in this event that rate is, if new
-		// or check fails then suggest to set rates to all in this event
 	}
 
 	private <T extends BaseDictionary> void createDictionaryEntryHelper(Class<T> clazz) throws InstantiationException,

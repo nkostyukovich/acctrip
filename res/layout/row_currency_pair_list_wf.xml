@@ -37,7 +37,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40sp" />
 
-   <EditText
+    <EditText
         android:id="@+id/cur_row_et_cur1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,6 +51,7 @@
         android:inputType="numberDecimal"
         android:text="1.00" >
 
+        <requestFocus />
     </EditText>
 
     <EditText

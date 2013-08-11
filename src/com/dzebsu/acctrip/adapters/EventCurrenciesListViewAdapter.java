@@ -4,17 +4,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
@@ -34,7 +36,7 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		return primaryCurrency;
 	}
 
-	// TODO save all arrays XXX very IMPORTANT
+	// TODO FOCUS on first EDITTEXT
 
 	public void setFirstValue(int position, double value) {
 		if (leftOri[position]) {
@@ -90,15 +92,18 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 
 	private LayoutInflater inflater;
 
-	public EventCurrenciesListViewAdapter(Context context, List<CurrencyPair> objects) {
+	public EventCurrenciesListViewAdapter(Context context, List<CurrencyPair> objects, Currency primaryCurrency) {
 		super(context, com.dzebsu.acctrip.R.layout.row_currency_pair_list, objects);
 		this.objects = objects;
 		leftOri = new boolean[objects.size()];
 		Arrays.fill(leftOri, true);
+		firstValues = new double[objects.size()];
 		Arrays.fill(firstValues, 1.00);
+		secondValues = new double[objects.size()];
 		for (int i = 0; i < objects.size(); i++) {
 			secondValues[i] = objects.get(i).getRate();
 		}
+		this.primaryCurrency = primaryCurrency;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -153,13 +158,13 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		if (leftOri[position]) {
 			firstCurrencyCode = primaryCurrency.getCode();
 			secondCurrencyCode = objects.get(position).getSecondCurrency().getCode();
-			firstCurrencyValue = String.valueOf(firstValues[position]);
-			secondCurrencyValue = String.valueOf(secondValues[position]);
+			firstCurrencyValue = CurrencyUtils.formatAfterPoint(firstValues[position]);
+			secondCurrencyValue = CurrencyUtils.formatAfterPoint(secondValues[position]);
 		} else {
 			firstCurrencyCode = objects.get(position).getSecondCurrency().getCode();
 			secondCurrencyCode = primaryCurrency.getCode();
-			firstCurrencyValue = String.valueOf(secondValues[position]);
-			secondCurrencyValue = String.valueOf(firstValues[position]);
+			firstCurrencyValue = CurrencyUtils.formatAfterPoint(secondValues[position]);
+			secondCurrencyValue = CurrencyUtils.formatAfterPoint(firstValues[position]);
 		}
 
 		holder.firstCurrencyCode.setText(firstCurrencyCode);
@@ -168,25 +173,45 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		holder.secondCurrencyValue.setText(secondCurrencyValue);
 
 		final int pos = position;
-		holder.firstCurrencyValue.setOnFocusChangeListener(new OnFocusChangeListener() {
+		holder.firstCurrencyValue.addTextChangedListener(new TextWatcher() {
 
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (!hasFocus) {
-					final EditText cur = (EditText) v;
-					firstValues[pos] = Double.parseDouble(cur.getText().toString());
-				}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+				// TODO replace parse double everywhere
+				setFirstValue(pos, CurrencyUtils.getDouble(s.toString()));
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
 			}
 		});
-		holder.secondCurrencyValue.setOnFocusChangeListener(new OnFocusChangeListener() {
+		holder.secondCurrencyValue.addTextChangedListener(new TextWatcher() {
 
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (!hasFocus) {
-					final EditText cur = (EditText) v;
-					secondValues[pos] = Double.parseDouble(cur.getText().toString());
-				}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				setSecondValue(pos, CurrencyUtils.getDouble(s.toString()));
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
 			}
 		});
-		((Button) rowView.findViewById(R.id.cur_row_reverse_button)).setOnClickListener(new OnClickListener() {
+		((ImageButton) rowView.findViewById(R.id.cur_row_reverse_button)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

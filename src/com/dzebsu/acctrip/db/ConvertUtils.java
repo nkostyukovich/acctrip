@@ -76,7 +76,7 @@ public class ConvertUtils {
 				c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID)), c.getString(c
 						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_SECOND_NAME)), c.getString(c
 						.getColumnIndex(EventAccContract.CurrencyPair.ALIAS_SECOND_CODE))));
-		cp.setRate(c.getLong(c.getColumnIndex(EventAccContract.CurrencyPair.RATE)));
+		cp.setRate(c.getDouble(c.getColumnIndex(EventAccContract.CurrencyPair.RATE)));
 		return cp;
 	}
 }
