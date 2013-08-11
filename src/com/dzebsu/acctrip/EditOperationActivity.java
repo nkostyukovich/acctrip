@@ -302,8 +302,8 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		String message = String.format(getString(R.string.warning_first_time_curr),
 				((Button) findViewById(R.id.op_edit_currency_btn)).getText().toString(), event.getName(), event
 						.getPrimaryCurrency().getCode());
-		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle("Warning").setMessage(message).setNegativeButton(
-				R.string.later, new DialogInterface.OnClickListener() {
+		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
+				.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -313,18 +313,19 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 					}
 				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
 
-				EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(),
-						new CurrencyPair(event.getId(), new CurrencyDataSource(EditOperationActivity.this)
-								.getEntityById(currencyId.getId())));
+						EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event
+								.getPrimaryCurrency(), new CurrencyPair(event.getId(), new CurrencyDataSource(
+								EditOperationActivity.this).getEntityById(currencyId.getId())));
 
-				new CurrencyPairDataSource(EditOperationActivity.this).insert(event.getId(), currencyId.getId());
-				newDialog.setListener(EditOperationActivity.this);
-				newDialog.show(getFragmentManager(), "EditDialog");
-			}
-		});
+						new CurrencyPairDataSource(EditOperationActivity.this)
+								.insert(event.getId(), currencyId.getId());
+						newDialog.setListener(EditOperationActivity.this);
+						newDialog.show(getFragmentManager(), "EditDialog");
+					}
+				});
 		alert.create().show();
 	}
 

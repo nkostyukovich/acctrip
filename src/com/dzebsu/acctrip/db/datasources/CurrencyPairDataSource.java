@@ -1,6 +1,7 @@
 package com.dzebsu.acctrip.db.datasources;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -189,4 +190,16 @@ public class CurrencyPairDataSource {
 		}
 	}
 
+	public void updateRatesBunchToOneValueByEventId(Long eventId, double value) {
+		double rates[];
+		List<CurrencyPair> cps = getCurrencyPairListByEventId(eventId);
+		rates = new double[cps.size()];
+		Arrays.fill(rates, value);
+		updateRatesBunch(cps, rates);
+
+	}
+
+	public void updateRatesBunchToDefaultValueByEventId(Long eventId) {
+		updateRatesBunchToOneValueByEventId(eventId, 1.00);
+	}
 }

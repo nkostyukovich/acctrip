@@ -152,10 +152,12 @@
 	<string name="back">Back</string>
 	<string name="currency_rate_edited">Currency rate edited.</string>
 	
-	<string name="warning_first_time_curr">%1$s is being used first time in %2$s, do you want to provide its ratio to primary currency(%3$s)?</string>
-	
+	<string name="warning_first_time_curr">%1$s is being used first time in %2$s, do you want to provide its ratio to primary currency(%3$s) (default 1.00 to 1.00)?</string>
+	<string name="warning_new_prim_curr">%1$s is new primary currency in %2$s, do you want to provide its ratio to all other(default 1.00 to 1.00)?</string>
 	<string name="provide">Provide</string>
 	
 	<string name="later">Later</string>
+	
+	<string name="warning_word">Warning</string>
 	
 </resources>

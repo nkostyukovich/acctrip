@@ -1,6 +1,8 @@
 package com.dzebsu.acctrip;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,10 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private Button primaryCurrencyBtn;
 
+	private String currencyCode;
+
+	private Event editEvent;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,11 +75,13 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		});
 
 		if (intent.hasExtra(INTENT_KEY_EDIT_ID)) {
-			Event ev = new EventDataSource(this).getEventById(intent.getLongExtra(INTENT_KEY_EDIT_ID, -1));
-			primaryCurrencyId = ev.getPrimaryCurrency().getId();
-			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + ev.getPrimaryCurrency().getCode());
-			((EditText) this.findViewById(R.id.editEventDesc)).setText(ev.getDesc());
-			((EditText) this.findViewById(R.id.editEventName)).setText(ev.getName());
+			editEvent = new EventDataSource(this).getEventById(intent.getLongExtra(INTENT_KEY_EDIT_ID, -1));
+			primaryCurrencyId = editEvent.getPrimaryCurrency().getId();
+			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
+					+ editEvent.getPrimaryCurrency().getCode());
+			currencyCode = editEvent.getPrimaryCurrency().getCode();
+			((EditText) this.findViewById(R.id.editEventDesc)).setText(editEvent.getDesc());
+			((EditText) this.findViewById(R.id.editEventName)).setText(editEvent.getName());
 		} else {
 			((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra(INTENT_KEY_EVENT_NAME));
 			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
@@ -131,7 +139,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	}
 
 	public void onSaveEvent() {
-		String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
+		final String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
 		if (name.isEmpty() || primaryCurrencyId == -1) {
 			String message = name.isEmpty() ? getString(R.string.enter_name) : "";
 			message = TextUtils
@@ -139,13 +147,14 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
-		EventDataSource dataSource = new EventDataSource(this);
+		final String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
+
 		Intent inthere = getIntent();
 		if (!inthere.hasExtra(INTENT_KEY_EDIT_ID)) {
+			EventDataSource dataSource = new EventDataSource(this);
 			long eventId = dataSource.insert(name, desc, primaryCurrencyId);
 
-			// add primary currency to event currencies list
+			// add primary currency to event currencies list with default rate
 			new CurrencyPairDataSource(this).insert(eventId, primaryCurrencyId);
 			// go right to new event
 			Intent intent = new Intent(this, OperationListActivity.class);
@@ -158,11 +167,47 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		} else {
 			// TODO check for currency!!!!!
 			// XXX
-			// TODO
-			dataSource.update(inthere.getLongExtra(INTENT_KEY_EDIT_ID, -1), name, desc, primaryCurrencyId);
-			finish();
+			// TODO retrieve old values
+			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
+				String message = String.format(getString(R.string.warning_new_prim_curr), currencyCode, editEvent
+						.getName());
+				alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
+						.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
+								dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
+								new CurrencyPairDataSource(EditEventActivity.this)
+										.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
+								finish();
+
+							}
+						}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
+								dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
+								new CurrencyPairDataSource(EditEventActivity.this)
+										.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
+
+								Intent intent = new Intent(EditEventActivity.this, EventCurrenciesListActivity.class);
+								intent.putExtra(NEW_INTENT_EXTRA_EVENT_ID, editEvent.getId());
+								EditEventActivity.this.startActivity(intent);
+								finish();
+							}
+						}).create().show();
+			} else {
+				EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
+				dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
+				finish();
+			}
 		}
 	}
+
+	private static final String NEW_INTENT_EXTRA_EVENT_ID = "eventId";
 
 	// finishes activity when cancel clicked
 	public void onCancelBtn() {
@@ -180,6 +225,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void changeBtnValue(String title, long id) {
 		primaryCurrencyId = id;
+		currencyCode = title;
 		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + title);
 	}
 
