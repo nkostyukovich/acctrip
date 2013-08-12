@@ -42,6 +42,7 @@
 	<string name="dic_new_title">New %s</string>
 	<string name="dic_edit_title">Edit %s</string>
 	<string name="used_by_ops">You can\'t delete this %1$s.\nIt used by %2$d operations.</string>	
+	<string name="used_by_events_prim">You can\'t delete this currency.\nIt used by %d events as primary currency.</string>
 	<string name="place">place</string>
 	<string name="category">category</string>
 	<string name="currency">currency</string>

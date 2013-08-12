@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
-import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
@@ -31,7 +30,6 @@ import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.dictionary.utils.TextUtils;
-import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.OperationType;
@@ -112,20 +110,22 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this)
 				.getEventById(event.getId()).getName());
-		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
-		date = Calendar.getInstance().getTime();
 		Operation defOP;
 		if (mode.equals("new")) {
 			defOP = new OperationDataSource(this).getLastOperationByEventId(event.getId());
+			date = Calendar.getInstance().getTime();
 		} else {
 			defOP = new OperationDataSource(this).getOperationById(opID);
 			((Spinner) this.findViewById(R.id.op_edit_type_spinner)).setSelection(defOP.getType().compareTo(
 					OperationType.EXPENSE) == 0 ? 0 : 1);
 			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
 			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
-
 			date = defOP.getDate();
 		}
+		setDefaultButtonsValues(defOP);
+	}
+
+	private void setDefaultButtonsValues(Operation defOP) {
 		String dateS = DateFormatter.formatDate(this, date);
 
 		String place = getString(R.string.edit_event_place_def);
@@ -270,6 +270,17 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	public void onSaveOperation() {
 		value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
+		if (checkForNotEnteredData()) return;
+		desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
+		opType = ((Spinner) this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString()
+				.equals("Expense") ? OperationType.EXPENSE : OperationType.INCOME;
+
+		value = opType.compareTo(OperationType.EXPENSE) == 0 ? "-" + value : value;
+		suggestEditCurrencyRate();
+
+	}
+
+	private boolean checkForNotEnteredData() {
 		if (value.isEmpty() || categoryId.getId() == -1 || currencyId.getId() == -1 || placeId.getId() == -1) {
 			String message;
 			message = value.isEmpty() ? getString(R.string.enter_value) : "";
@@ -279,37 +290,23 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			message = TextUtils
 					.addNewLine(message, categoryId.getId() == -1 ? getString(R.string.pick_category) : null);
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-			return;
+			return true;
 		}
-		desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
-		opType = ((Spinner) this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString()
-				.equals("Expense") ? OperationType.EXPENSE : OperationType.INCOME;
-
-		value = opType.compareTo(OperationType.EXPENSE) == 0 ? "-" + value : value;
-		if (!mode.equals("edit")) {
-			suggestEditCurrencyRate();
-		} else {
-			suggestEditCurrencyRate();
-		}
-
+		return false;
 	}
 
 	// add this in event edit
 	private void suggestEditCurrencyRate() {
-		final CurrencyPairDataSource currencyPairDB = new CurrencyPairDataSource(EditOperationActivity.this);
-		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()) != null) {
 
-			if (mode.equals("edit")
-					&& currencyIdBefore != currencyId.getId()
-					&& currencyIdBefore != event.getPrimaryCurrency().getId()
-					&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(event.getId(),
-							currencyIdBefore) == 1) {
-				currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
-			}
-			writeChangesToDB();
+		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()) != null) {
+			writeOperationChangesToDB();
+			finish();
 			return;
 		}
+		invokeSuggestEditCurrenciesDialog();
+	}
 
+	private void invokeSuggestEditCurrenciesDialog() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		String message = String.format(getString(R.string.warning_first_time_curr),
 				((Button) findViewById(R.id.op_edit_currency_btn)).getText().toString(), event.getName(), event
@@ -319,42 +316,33 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						if (mode.equals("edit")
-								&& currencyIdBefore != currencyId.getId()
-								&& currencyIdBefore != event.getPrimaryCurrency().getId()
-								&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(
-										event.getId(), currencyIdBefore) == 1) {
-							currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
-						}
-
-						currencyPairDB.insert(event.getId(), currencyId.getId());
-						writeChangesToDB();
+						writeOperationChangesWithNewCurrencyPair();
+						finish();
 					}
 				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-
-						if (mode.equals("edit")
-								&& currencyIdBefore != currencyId.getId()
-								&& currencyIdBefore != event.getPrimaryCurrency().getId()
-								&& new OperationDataSource(EditOperationActivity.this).getCountByCurrencyOfEventId(
-										event.getId(), currencyIdBefore) == 1) {
-							currencyPairDB.deleteByValues(event.getId(), currencyIdBefore);
-						}
-						EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event
-								.getPrimaryCurrency(), new CurrencyPair(event.getId(), new CurrencyDataSource(
-								EditOperationActivity.this).getEntityById(currencyId.getId())));
-
-						currencyPairDB.insert(event.getId(), currencyId.getId());
-						newDialog.setListener(EditOperationActivity.this);
-						newDialog.show(getFragmentManager(), "EditDialog");
+						writeOperationChangesWithNewCurrencyPair();
+						invokeCurrencyRateEdit();
 					}
-				});
-		alert.create().show();
+				}).create().show();
+		// TODO on dismiss
 	}
 
-	private void writeChangesToDB() {
+	private void invokeCurrencyRateEdit() {
+		EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(),
+				new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()));
+		newDialog.setListener(EditOperationActivity.this);
+		newDialog.show(getFragmentManager(), "EditDialog");
+	}
+
+	private void writeOperationChangesWithNewCurrencyPair() {
+		new CurrencyPairDataSource(this).insert(event.getId(), currencyId.getId());
+		writeOperationChangesToDB();
+	}
+
+	private void writeOperationChangesToDB() {
 		if (mode.equals("edit")) {
 			updateOperation();
 		} else {
@@ -366,7 +354,6 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		OperationDataSource dataSource = new OperationDataSource(this);
 		dataSource.insert(date, desc, CurrencyUtils.getDouble(value), opType, event.getId(), categoryId.getId(),
 				currencyId.getId(), placeId.getId());
-		finish();
 		Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
 	}
 
@@ -374,7 +361,8 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		OperationDataSource dataSource = new OperationDataSource(this);
 		dataSource.update(opID, date, desc, CurrencyUtils.getDouble(value), opType, event.getId(), categoryId.getId(),
 				currencyId.getId(), placeId.getId());
-		finish();
+		new CurrencyPairDataSource(this).deleteCurrencyPairIfUnused(event.getId(), currencyIdBefore,
+				currencyId.getId(), event.getPrimaryCurrency().getId());
 		Toast.makeText(getApplicationContext(), R.string.op_changed, Toast.LENGTH_SHORT).show();
 	}
 
@@ -444,19 +432,20 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	@Override
 	public void positiveButtonDialog(Bundle args) {
-		writeChangesToDB();
+		finish();
 
 	}
 
 	@Override
 	public void negativeButtonDialog(Bundle args) {
-		writeChangesToDB();
+		finish();
 
 	}
 
 	@Override
 	public void anotherDialogAction(Bundle args) {
-		writeChangesToDB();
+		finish();
 
 	}
+
 }

@@ -22,6 +22,8 @@ public class CurrencyPairDataSource {
 
 	private EventAccDbHelper dbHelper;
 
+	private Context cxt;
+
 	private final static String SELECT_OP_QUERY = "select c_pairs." + EventAccContract.CurrencyPair.EVENT_ID + " "
 			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + "c_pairs."
 			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID
@@ -51,8 +53,9 @@ public class CurrencyPairDataSource {
 		return SELECT_OP_QUERY;
 	}
 
-	public CurrencyPairDataSource(Context ctx) {
-		dbHelper = new EventAccDbHelper(ctx);
+	public CurrencyPairDataSource(Context cxt) {
+		dbHelper = new EventAccDbHelper(cxt);
+		this.cxt = cxt;
 	}
 
 	public void open() {
@@ -63,11 +66,11 @@ public class CurrencyPairDataSource {
 		database.close();
 	}
 
-	public long insert(long eventId, long secondCurrencyId) {
-		return insert(eventId, secondCurrencyId, 1.00);
+	public void insert(long eventId, long secondCurrencyId) {
+		insert(eventId, secondCurrencyId, 1.00);
 	}
 
-	public long insert(long eventId, long secondCurrencyId, double rate) {
+	public void insert(long eventId, long secondCurrencyId, double rate) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
@@ -76,8 +79,8 @@ public class CurrencyPairDataSource {
 			values.put(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID, secondCurrencyId);
 			values.put(EventAccContract.CurrencyPair.RATE, rate);
 
-			long ir = database.insert(EventAccContract.CurrencyPair.TABLE_NAME, null, values);
-			return ir;
+			database.insert(EventAccContract.CurrencyPair.TABLE_NAME, null, values);
+
 		} finally {
 			close();
 		}
@@ -122,7 +125,7 @@ public class CurrencyPairDataSource {
 		return deleteEntry(cp.getEventId(), cp.getSecondCurrency().getId());
 	}
 
-	public long deleteByValues(long eventId, long secondCurrencyId) {
+	public long deleteCurrencyPair(long eventId, long secondCurrencyId) {
 		return deleteEntry(eventId, secondCurrencyId);
 	}
 
@@ -222,5 +225,14 @@ public class CurrencyPairDataSource {
 
 	public void updateRatesBunchToDefaultValueByEventId(Long eventId) {
 		updateRatesBunchToOneValueByEventId(eventId, 1.00);
+	}
+
+	public void deleteCurrencyPairIfUnused(long eventId, long currencyIdBefore, long currencyIdNow,
+			long primaryCurrencyIdNow) {
+		if (currencyIdBefore != currencyIdNow && currencyIdBefore != primaryCurrencyIdNow
+				&& new OperationDataSource(cxt).getCountByCurrencyOfEventId(eventId, currencyIdBefore) == 0) {
+			deleteCurrencyPair(eventId, currencyIdBefore);
+		}
+
 	}
 }

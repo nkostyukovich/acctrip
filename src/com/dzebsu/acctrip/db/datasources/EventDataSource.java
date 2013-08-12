@@ -122,4 +122,19 @@ public class EventDataSource {
 		return c;
 	}
 
+	public long countUsingAsPrimaryCurrency(long currencyId) {
+		open();
+		try {
+			Cursor c = database.rawQuery("select count(" + EventAccContract.Event.PRIMARY_CURRENCY_ID
+					+ ") cur_count from " + EventAccContract.Event.TABLE_NAME + " where "
+					+ EventAccContract.Event.PRIMARY_CURRENCY_ID + "=?", new String[] { Long.toString(currencyId) });
+			c.moveToFirst();
+			long cnt = Long.parseLong(c.getString(c.getColumnIndex("cur_count")));
+			c.close();
+			return cnt;
+		} finally {
+			close();
+		}
+	}
+
 }

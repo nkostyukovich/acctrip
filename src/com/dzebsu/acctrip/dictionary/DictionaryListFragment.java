@@ -29,10 +29,12 @@ import android.widget.Toast;
 
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
+import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class DictionaryListFragment<T extends BaseDictionary> extends Fragment implements IDialogListener<T> {
 
@@ -225,7 +227,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 	public void onDeleteElement(final long id) {
 
 		long ops = dataSource.getOperationListByEntityId(id).size();
-
+		long pr;
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
 				android.R.drawable.stat_notify_error);
 		if (ops > 0) {
@@ -233,6 +235,10 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 					String.format(getString(R.string.used_by_ops), getString(dictType.getElementName()), ops))
 					.setPositiveButton(R.string.okay, null);
 
+		} else if (Currency.class.isAssignableFrom(clazz)
+				&& (pr = new EventDataSource(this.getActivity()).countUsingAsPrimaryCurrency(id)) > 0) {
+			alert.setTitle(R.string.sorry_confirm_del).setMessage(
+					String.format(getString(R.string.used_by_events_prim), pr)).setPositiveButton(R.string.okay, null);
 		} else {
 			String message = String.format(getString(R.string.confirm_del), dataSource.getEntityById(id).getName());
 			alert.setTitle(R.string.delete_dialog_title).setMessage(message).setNegativeButton(R.string.cancel, null)

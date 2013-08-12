@@ -86,11 +86,11 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 				case R.id.dic_edit:
-					onElementEdit(adapterZ.getItemId(selectedItem - 1));
+					onOperationEdit(adapterZ.getItemId(selectedItem - 1));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				case R.id.dic_del:
-					onDeleteElement(adapterZ.getItemId(selectedItem - 1));
+					onDeleteOperation(adapterZ.getItemId(selectedItem - 1));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				default:
@@ -117,14 +117,18 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		mListState = state.getParcelable(LIST_STATE);
 	}
 
-	protected void onDeleteElement(final long itemId) {
+	protected void onDeleteOperation(final long itemId) {
 		new AlertDialog.Builder(this).setTitle(R.string.delete_dialog_title).setMessage(
 				String.format(getString(R.string.confirm_del), getString(R.string.this_op))).setIcon(
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
-						new OperationDataSource(OperationListActivity.this).deleteById(itemId);
+						OperationDataSource opdata = new OperationDataSource(OperationListActivity.this);
+						Operation op = opdata.getOperationById(itemId);
+						opdata.deleteById(itemId);
+						new CurrencyPairDataSource(OperationListActivity.this).deleteCurrencyPairIfUnused(
+								event.getId(), op.getCurrency().getId(), -1, event.getPrimaryCurrency().getId());
 						Intent intent = new Intent(OperationListActivity.this, OperationListActivity.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.putExtra("toast", R.string.op_deleted);
@@ -135,7 +139,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	}
 
-	protected void onElementEdit(long itemId) {
+	protected void onOperationEdit(long itemId) {
 		Intent intent = new Intent(OperationListActivity.this, EditOperationActivity.class);
 		intent.putExtra("eventId", event.getId());
 		intent.putExtra("mode", "edit");
@@ -295,6 +299,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
 						dataSource.delete(event.getId());
+						new CurrencyPairDataSource(OperationListActivity.this).deleteByEventId(event.getId());
 						Intent intent = new Intent(OperationListActivity.this, EventListActivity.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

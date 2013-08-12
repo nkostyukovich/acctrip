@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -47,22 +48,43 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_event);
-		Intent intent = getIntent();
+		setButtonsListeners();
+		if (getIntent().hasExtra(INTENT_KEY_EDIT_ID)) {
+			setActivityForEdit();
+		} else {
+			setActivityForNew();
+		}
+		setupActionBar();
+	}
+
+	private void setActivityForNew() {
+		((EditText) this.findViewById(R.id.editEventName)).setText(getIntent().getStringExtra(INTENT_KEY_EVENT_NAME));
+		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
+				+ getString(R.string.edit_event_prim_curr_def));
+	}
+
+	private void setActivityForEdit() {
+		editEvent = new EventDataSource(this).getEventById(getIntent().getLongExtra(INTENT_KEY_EDIT_ID, -1));
+		primaryCurrencyId = editEvent.getPrimaryCurrency().getId();
+		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + editEvent.getPrimaryCurrency().getCode());
+		currencyCode = editEvent.getPrimaryCurrency().getCode();
+		((EditText) this.findViewById(R.id.editEventDesc)).setText(editEvent.getDesc());
+		((EditText) this.findViewById(R.id.editEventName)).setText(editEvent.getName());
+	}
+
+	private void setButtonsListeners() {
 		((Button) findViewById(R.id.edit_event_save_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				onSaveEvent();
-
 			}
 		});
-
 		((Button) findViewById(R.id.edit_event_cancel_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				onCancelBtn();
-
 			}
 		});
 		primaryCurrencyBtn = ((Button) this.findViewById(R.id.edit_event_primary_currency));
@@ -73,21 +95,6 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 				invokeDictionaryPicker(Currency.class);
 			}
 		});
-
-		if (intent.hasExtra(INTENT_KEY_EDIT_ID)) {
-			editEvent = new EventDataSource(this).getEventById(intent.getLongExtra(INTENT_KEY_EDIT_ID, -1));
-			primaryCurrencyId = editEvent.getPrimaryCurrency().getId();
-			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
-					+ editEvent.getPrimaryCurrency().getCode());
-			currencyCode = editEvent.getPrimaryCurrency().getCode();
-			((EditText) this.findViewById(R.id.editEventDesc)).setText(editEvent.getDesc());
-			((EditText) this.findViewById(R.id.editEventName)).setText(editEvent.getName());
-		} else {
-			((EditText) this.findViewById(R.id.editEventName)).setText(intent.getStringExtra(INTENT_KEY_EVENT_NAME));
-			primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
-					+ getString(R.string.edit_event_prim_curr_def));
-		}
-		setupActionBar();
 	}
 
 	public <T extends BaseDictionary> void invokeDictionaryPicker(Class<T> itemType) {
@@ -120,12 +127,6 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				// this.
-				/*
-				 * Intent intent = new Intent(this, EventListActivity.class);
-				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				 * startActivity(intent);
-				 */
 				finish();
 				return true;
 			case R.id.save_op:
@@ -140,69 +141,100 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	public void onSaveEvent() {
 		final String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
+		if (checkForNotEnteredData(name)) return;
+		final String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
+		Intent inthere = getIntent();
+		if (!inthere.hasExtra(INTENT_KEY_EDIT_ID)) {
+			writeNewEventToDb(name, desc);
+		} else {
+			// TODO retrieve old values
+			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
+				invokeNewPrimaryCurrencyWarningDialog(name, desc);
+			} else {
+				updateEventInDB(name, desc);
+				finish();
+			}
+		}
+	}
+
+	private boolean checkForNotEnteredData(final String name) {
 		if (name.isEmpty() || primaryCurrencyId == -1) {
 			String message = name.isEmpty() ? getString(R.string.enter_name) : "";
 			message = TextUtils
 					.addNewLine(message, primaryCurrencyId == -1 ? getString(R.string.enter_currency) : null);
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-			return;
+			return true;
 		}
-		final String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
+		return false;
+	}
 
-		Intent inthere = getIntent();
-		if (!inthere.hasExtra(INTENT_KEY_EDIT_ID)) {
-			EventDataSource dataSource = new EventDataSource(this);
-			long eventId = dataSource.insert(name, desc, primaryCurrencyId);
+	private void updateEventInDB(final String name, final String desc) {
+		new EventDataSource(EditEventActivity.this).update(editEvent.getId(), name, desc, primaryCurrencyId);
+	}
 
-			// add primary currency to event currencies list with default rate
-			new CurrencyPairDataSource(this).insert(eventId, primaryCurrencyId);
-			// go right to new event
-			Intent intent = new Intent(this, OperationListActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			// edited intent.putExtra("toast", R.string.op_deleted);
+	private void invokeNewPrimaryCurrencyWarningDialog(final String name, final String desc) {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		String message = String.format(getString(R.string.warning_new_prim_curr), currencyCode, editEvent.getName());
+		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
+				.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
 
-			intent.putExtra(NEW_INTENT_KEY_EVENT_ID, eventId);
-			startActivity(intent);
-			finish();
-		} else {
-			// TODO retrieve old values
-			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(this);
-				String message = String.format(getString(R.string.warning_new_prim_curr), currencyCode, editEvent
-						.getName());
-				alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
-						.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						updateEventWithDefRates(name, desc);
+						finish();
+					}
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
-								dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
-								new CurrencyPairDataSource(EditEventActivity.this)
-										.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
-								finish();
+				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
 
-							}
-						}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						updateEventAndEditRates(name, desc);
+					}
+				}).create().show();
+	}
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
-								dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
-								new CurrencyPairDataSource(EditEventActivity.this)
-										.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
+	private void updateEventAndEditRates(final String name, final String desc) {
+		updateEventWithDefRates(name, desc);
+		startEditCurrencyPairsActivity();
+	}
 
-								Intent intent = new Intent(EditEventActivity.this, EventCurrenciesListActivity.class);
-								intent.putExtra(NEW_INTENT_EXTRA_EVENT_ID, editEvent.getId());
-								EditEventActivity.this.startActivity(intent);
-								finish();
-							}
-						}).create().show();
-			} else {
-				EventDataSource dataSource = new EventDataSource(EditEventActivity.this);
-				dataSource.update(editEvent.getId(), name, desc, primaryCurrencyId);
-				finish();
-			}
+	private void startEditCurrencyPairsActivity() {
+		Intent intent = new Intent(EditEventActivity.this, EventCurrenciesListActivity.class);
+		intent.putExtra(NEW_INTENT_EXTRA_EVENT_ID, editEvent.getId());
+		EditEventActivity.this.startActivity(intent);
+		finish();
+	}
+
+	private void updateEventWithDefRates(final String name, final String desc) {
+		updateEventInDB(name, desc);
+		updateCurrencyPairsWithDefRates();
+	}
+
+	private void updateCurrencyPairsWithDefRates() {
+		CurrencyPairDataSource currpairsData = new CurrencyPairDataSource(EditEventActivity.this);
+		currpairsData.deleteCurrencyPairIfUnused(editEvent.getId(), editEvent.getPrimaryCurrency().getId(),
+				primaryCurrencyId, primaryCurrencyId);
+		if (currpairsData.getCurrencyPairByValues(editEvent.getId(), primaryCurrencyId) == null) {
+			currpairsData.insert(editEvent.getId(), primaryCurrencyId);
 		}
+		currpairsData.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
+	}
+
+	private void writeNewEventToDb(final String name, final String desc) {
+		long eventId = new EventDataSource(this).insert(name, desc, primaryCurrencyId);
+		// add primary currency to event currencies list with default rate
+		new CurrencyPairDataSource(this).insert(eventId, primaryCurrencyId);
+		startOperationListActivity(eventId);
+		finish();
+	}
+
+	private void startOperationListActivity(long eventId) {
+		// go right to new event
+		Intent intent = new Intent(this, OperationListActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// edited intent.putExtra("toast", R.string.op_deleted);
+		intent.putExtra(NEW_INTENT_KEY_EVENT_ID, eventId);
+		startActivity(intent);
 	}
 
 	private static final String NEW_INTENT_EXTRA_EVENT_ID = "eventId";
@@ -216,9 +248,8 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	protected void onResume() {
 		super.onResume();
 		EditText editName = (EditText) findViewById(R.id.editEventName);
-		InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT);
-
 	}
 
 	private void changeBtnValue(String title, long id) {
@@ -256,4 +287,5 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
 		}
 	}
+
 }
