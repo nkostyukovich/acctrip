@@ -4,8 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -297,49 +298,35 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	// add this in event edit
 	private void suggestEditCurrencyRate() {
-
+		writeOperationChangesToDB();
 		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()) != null) {
-			writeOperationChangesToDB();
 			finish();
 			return;
 		}
-		invokeSuggestEditCurrenciesDialog();
-	}
-
-	private void invokeSuggestEditCurrenciesDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		String message = String.format(getString(R.string.warning_first_time_curr),
-				((Button) findViewById(R.id.op_edit_currency_btn)).getText().toString(), event.getName(), event
-						.getPrimaryCurrency().getCode());
-		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
-				.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						writeOperationChangesWithNewCurrencyPair();
-						finish();
-					}
-				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						writeOperationChangesWithNewCurrencyPair();
-						invokeCurrencyRateEdit();
-					}
-				}).create().show();
-		// TODO on dismiss
-	}
-
-	private void invokeCurrencyRateEdit() {
-		EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(),
-				new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()));
-		newDialog.setListener(EditOperationActivity.this);
-		newDialog.show(getFragmentManager(), "EditDialog");
-	}
-
-	private void writeOperationChangesWithNewCurrencyPair() {
 		new CurrencyPairDataSource(this).insert(event.getId(), currencyId.getId());
-		writeOperationChangesToDB();
+		startOperationListActivityWithNewCurrency();
+	}
+
+	private static void hideSoftKeyboard(Activity activity) {
+		InputMethodManager inputMethodManager = (InputMethodManager) activity
+				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+	}
+
+	private void startOperationListActivityWithNewCurrency() {
+		// TODO Auto-generated method stub
+		// doesn't work
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		// work
+		hideSoftKeyboard(this);
+		Bundle args = new Bundle();
+		args.putLong("currencyId", currencyId.getId());
+		Intent intent = new Intent(this, OperationListActivity.class);
+		intent.putExtra("newCurrencyAppeared", args);
+		intent.putExtra("eventId", event.getId());
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		finish();
 	}
 
 	private void writeOperationChangesToDB() {
@@ -399,7 +386,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	public <T extends BaseDictionary> void invokeDictionaryPicker(Class<T> itemType) {
 		DictionaryElementPickerFragment<T> newFragment = DictionaryElementPickerFragment.newInstance(itemType, this);
-		newFragment.show(getSupportFragmentManager(), "dialog");
+		newFragment.show(getSupportFragmentManager(), "pickerDialog");
 		newFragment.setOnPickFragmentListener(this);
 	}
 

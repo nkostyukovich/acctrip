@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -43,6 +44,10 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		return fragment;
 	}
 
+	public DictionaryElementPickerFragment() {
+		super();
+	}
+
 	public void setClass(Class<T> clazz) {
 		this.clazz = clazz;
 	}
@@ -59,6 +64,20 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 
 	public void setOnPickFragmentListener(IDictionaryFragmentListener listener) {
 		pickListener = listener;
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (getDialog() != null && getRetainInstance()) getDialog().setDismissMessage(null);
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof IDictionaryFragmentListener) {
+			this.pickListener = (IDictionaryFragmentListener) activity;
+		}
 	}
 
 	@Override
@@ -83,6 +102,7 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 					title = ((Currency) entry).getCode();
 				}
 				args.putString("picked", title);
+				Object o = pickListener;
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {

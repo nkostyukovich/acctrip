@@ -34,14 +34,18 @@ import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class OperationListActivity extends Activity implements SimpleDialogListener {
+
+	private static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
 
 	ActionMode mActionMode;
 
@@ -234,6 +238,9 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		if (intent.hasExtra("toast"))
 			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
 					Toast.LENGTH_SHORT).show();
+		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
+			newCurrencyAppeared();
+		}
 	}
 
 	@Override
@@ -414,4 +421,32 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	}
 
+	private void newCurrencyAppeared() {
+		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
+		invokeSuggestEditCurrenciesDialog(new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")));
+		getIntent().removeExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
+	}
+
+	private void invokeSuggestEditCurrenciesDialog(final Currency currency) {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		String message = String.format(getString(R.string.warning_first_time_curr), currency.getCode(),
+				event.getName(), event.getPrimaryCurrency().getCode());
+		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
+				.setNegativeButton(R.string.later, null).setPositiveButton(R.string.provide,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								invokeCurrencyRateEdit(currency.getId());
+							}
+						}).create().show();
+		// TODO on dismiss
+	}
+
+	private void invokeCurrencyRateEdit(long currencyId) {
+		EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(),
+				new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId));
+		newDialog.setListener(this);
+		newDialog.show(getFragmentManager(), "EditDialog");
+	}
 }
