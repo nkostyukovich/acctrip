@@ -111,6 +111,8 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 
+	private static final String INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED = "newPrimaryCurrencyAppeared";
+
 	private Parcelable mListState = null;
 
 	private boolean dataChanged = false;
@@ -241,6 +243,22 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
 			newCurrencyAppeared();
 		}
+		if (intent.hasExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
+			newPrimaryCurrencyAppeared();
+		}
+	}
+
+	private void newPrimaryCurrencyAppeared() {
+		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+		invokeSuggestEditCurrenciesDialogPrimary(new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")));
+		getIntent().removeExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+
+	}
+
+	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency) {
+		NewPrimaryCurrencyAppearedDialog dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency);
+		dialog.show(getFragmentManager(), "newPrimaryCurrencyAppeared");
+
 	}
 
 	@Override
@@ -427,7 +445,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		getIntent().removeExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
 	}
 
-	private void invokeSuggestEditCurrenciesDialog(final Currency currency) {
+	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
 		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
 		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
 

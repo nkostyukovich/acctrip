@@ -1,9 +1,7 @@
 package com.dzebsu.acctrip;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,7 +66,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID)) return;
 		primaryCurrencyId = savedInstanceState.getLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID);
 		currencyCode = savedInstanceState.getString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE);
-		primaryCurrencyBtn.setText(currencyCode);
+		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + currencyCode);
 	}
 
 	@Override
@@ -169,7 +168,8 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		} else {
 			// TODO retrieve old values
 			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
-				invokeNewPrimaryCurrencyWarningDialog(name, desc);
+				updateEventInDB(name, desc);
+				startOperationListActivityWithNewPrimaryCurrency();
 			} else {
 				updateEventInDB(name, desc);
 				finish();
@@ -177,7 +177,22 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		}
 	}
 
-	private boolean checkForNotEnteredData(final String name) {
+	private void startOperationListActivityWithNewPrimaryCurrency() {
+		// doesn't work
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		// work
+		LocalizedTripMoney.hideSoftKeyboard(this);
+		Bundle args = new Bundle();
+		args.putLong("currencyId", primaryCurrencyId);
+		Intent intent = new Intent(this, OperationListActivity.class);
+		intent.putExtra("newPrimaryCurrencyAppeared", args);
+		intent.putExtra("eventId", editEvent.getId());
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		finish();
+	}
+
+	private boolean checkForNotEnteredData(String name) {
 		if (name.isEmpty() || primaryCurrencyId == -1) {
 			String message = name.isEmpty() ? getString(R.string.enter_name) : "";
 			message = TextUtils
@@ -190,54 +205,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void updateEventInDB(final String name, final String desc) {
 		new EventDataSource(EditEventActivity.this).update(editEvent.getId(), name, desc, primaryCurrencyId);
-	}
 
-	private void invokeNewPrimaryCurrencyWarningDialog(final String name, final String desc) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		String message = String.format(getString(R.string.warning_new_prim_curr), currencyCode, editEvent.getName());
-		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
-				.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						updateEventWithDefRates(name, desc);
-						finish();
-					}
-
-				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						updateEventAndEditRates(name, desc);
-					}
-				}).create().show();
-	}
-
-	private void updateEventAndEditRates(final String name, final String desc) {
-		updateEventWithDefRates(name, desc);
-		startEditCurrencyPairsActivity();
-	}
-
-	private void startEditCurrencyPairsActivity() {
-		Intent intent = new Intent(EditEventActivity.this, EventCurrenciesListActivity.class);
-		intent.putExtra(NEW_INTENT_EXTRA_EVENT_ID, editEvent.getId());
-		EditEventActivity.this.startActivity(intent);
-		finish();
-	}
-
-	private void updateEventWithDefRates(final String name, final String desc) {
-		updateEventInDB(name, desc);
-		updateCurrencyPairsWithDefRates();
-	}
-
-	private void updateCurrencyPairsWithDefRates() {
-		CurrencyPairDataSource currpairsData = new CurrencyPairDataSource(EditEventActivity.this);
-		currpairsData.deleteCurrencyPairIfUnused(editEvent.getId(), editEvent.getPrimaryCurrency().getId(),
-				primaryCurrencyId, primaryCurrencyId);
-		if (currpairsData.getCurrencyPairByValues(editEvent.getId(), primaryCurrencyId) == null) {
-			currpairsData.insert(editEvent.getId(), primaryCurrencyId);
-		}
-		currpairsData.updateRatesBunchToDefaultValueByEventId(editEvent.getId());
 	}
 
 	private void writeNewEventToDb(final String name, final String desc) {
@@ -256,8 +224,6 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		intent.putExtra(NEW_INTENT_KEY_EVENT_ID, eventId);
 		startActivity(intent);
 	}
-
-	private static final String NEW_INTENT_EXTRA_EVENT_ID = "eventId";
 
 	// finishes activity when cancel clicked
 	public void onCancelBtn() {

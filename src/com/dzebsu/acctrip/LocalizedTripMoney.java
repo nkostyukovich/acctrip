@@ -2,10 +2,12 @@ package com.dzebsu.acctrip;
 
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.view.inputmethod.InputMethodManager;
 
 public class LocalizedTripMoney extends Application {
 
@@ -40,5 +42,11 @@ public class LocalizedTripMoney extends Application {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, null);
+	}
+
+	public static void hideSoftKeyboard(Activity activity) {
+		InputMethodManager inputMethodManager = (InputMethodManager) activity
+				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 	}
 }

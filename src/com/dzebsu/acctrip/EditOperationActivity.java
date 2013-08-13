@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -345,18 +343,12 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		startOperationListActivityWithNewCurrency();
 	}
 
-	private static void hideSoftKeyboard(Activity activity) {
-		InputMethodManager inputMethodManager = (InputMethodManager) activity
-				.getSystemService(Activity.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-	}
-
 	private void startOperationListActivityWithNewCurrency() {
 		// TODO Auto-generated method stub
 		// doesn't work
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		// work
-		hideSoftKeyboard(this);
+		LocalizedTripMoney.hideSoftKeyboard(this);
 		Bundle args = new Bundle();
 		args.putLong("currencyId", currencyId.getId());
 		Intent intent = new Intent(this, OperationListActivity.class);
