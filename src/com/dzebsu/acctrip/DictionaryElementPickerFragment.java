@@ -21,16 +21,14 @@ import android.widget.SearchView;
 
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
-import com.dzebsu.acctrip.dictionary.DictionaryType;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
+//must be not stable, in edit operation will crash and make bad code if is
 public class DictionaryElementPickerFragment<T extends BaseDictionary> extends DialogFragment {
 
 	private IDictionaryDataSource<T> dataSource;
-
-	private DictionaryType type;
 
 	public void setDataSource(IDictionaryDataSource<T> dataSource) {
 		this.dataSource = dataSource;
@@ -40,7 +38,6 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		DictionaryElementPickerFragment<T> fragment = new DictionaryElementPickerFragment<T>();
 		fragment.setClass(clazz);
 		fragment.setDataSource(DictUtils.getEntityDataSourceInstance(clazz, cxt));
-		fragment.setRetainInstance(true);
 		return fragment;
 	}
 
@@ -58,18 +55,10 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 
 	private View view;
 
-	private int obj;
-
 	private DictionaryListViewAdapter<T> adapterZ;
 
 	public void setOnPickFragmentListener(IDictionaryFragmentListener listener) {
 		pickListener = listener;
-	}
-
-	@Override
-	public void onDestroyView() {
-		if (getDialog() != null && getRetainInstance()) getDialog().setDismissMessage(null);
-		super.onDestroyView();
 	}
 
 	@Override
@@ -78,6 +67,12 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		if (activity instanceof IDictionaryFragmentListener) {
 			this.pickListener = (IDictionaryFragmentListener) activity;
 		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		pickListener = null;
 	}
 
 	@Override
@@ -102,7 +97,6 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 					title = ((Currency) entry).getCode();
 				}
 				args.putString("picked", title);
-				Object o = pickListener;
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {

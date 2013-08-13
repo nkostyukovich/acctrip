@@ -2,9 +2,9 @@ package com.dzebsu.acctrip;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 
-public class EventCurrenciesSimpleDialog extends DialogFragment {
+public class EventCurrenciesSimpleDialog extends BaseStableDialog {
 
 	private Event event;
 
@@ -29,6 +29,20 @@ public class EventCurrenciesSimpleDialog extends DialogFragment {
 		dialog.setEvent(event);
 		dialog.setRetainInstance(true);
 		return dialog;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof SimpleDialogListener) {
+			this.listener = (SimpleDialogListener) activity;
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
 	}
 
 	@Override

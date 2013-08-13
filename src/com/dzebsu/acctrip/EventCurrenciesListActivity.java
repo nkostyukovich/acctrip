@@ -41,7 +41,7 @@ public class EventCurrenciesListActivity extends Activity {
 		setContentView(R.layout.activity_event_currencies_list);
 		event = new EventDataSource(this).getEventById(getIntent().getLongExtra(INTENT_EXTRA_EVENT_ID, -1));
 		setupActionBar();
-		fillEventList();
+		fillCurrenciesList();
 		if (savedInstanceState != null && savedInstanceState.containsKey(RESTORE_KEY_LEFT_ORI)) {
 			adapterZ.setLeftOri(savedInstanceState.getBooleanArray(RESTORE_KEY_LEFT_ORI));
 			adapterZ.setFirstValues(savedInstanceState.getDoubleArray(RESTORE_KEY_FIST_VALUES));
@@ -76,7 +76,7 @@ public class EventCurrenciesListActivity extends Activity {
 		finish();
 	}
 
-	private void fillEventList() {
+	private void fillCurrenciesList() {
 		if (adapterZ == null) {
 			CurrencyPairDataSource dataSource = new CurrencyPairDataSource(this);
 			List<CurrencyPair> cps = dataSource.getCurrencyPairListByEventId(event.getId());

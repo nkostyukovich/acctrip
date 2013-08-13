@@ -30,6 +30,10 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class EditEventActivity extends FragmentActivity implements IDictionaryFragmentListener {
 
+	private static final String SAVE_STATE_KEY_PRIMARY_CURRENCY_ID = "primaryCurrencyId";
+
+	private static final String SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE = "primaryCurrencyCode";
+
 	private static final String INTENT_KEY_EVENT_NAME = "eventName";
 
 	private static final String NEW_INTENT_KEY_EVENT_ID = "eventId";
@@ -55,6 +59,22 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			setActivityForNew();
 		}
 		setupActionBar();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID)) return;
+		primaryCurrencyId = savedInstanceState.getLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID);
+		currencyCode = savedInstanceState.getString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE);
+		primaryCurrencyBtn.setText(currencyCode);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID, primaryCurrencyId);
+		outState.putString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE, currencyCode);
 	}
 
 	private void setActivityForNew() {

@@ -1,8 +1,8 @@
 package com.dzebsu.acctrip;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class EditCurrencyPairDialog extends DialogFragment {
+public class EditCurrencyPairDialog extends BaseStableDialog {
 
 	private Currency primaryCurrency;
 
@@ -50,8 +50,21 @@ public class EditCurrencyPairDialog extends DialogFragment {
 		EditCurrencyPairDialog dialog = new EditCurrencyPairDialog();
 		dialog.setPrimaryCurrency(primaryCurrency);
 		dialog.setCurrencyPair(currencyPair);
-		dialog.setRetainInstance(true);
 		return dialog;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof SimpleDialogListener) {
+			this.listener = (SimpleDialogListener) activity;
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
 	}
 
 	@Override

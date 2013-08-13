@@ -428,25 +428,9 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	private void invokeSuggestEditCurrenciesDialog(final Currency currency) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		String message = String.format(getString(R.string.warning_first_time_curr), currency.getCode(),
-				event.getName(), event.getPrimaryCurrency().getCode());
-		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
-				.setNegativeButton(R.string.later, null).setPositiveButton(R.string.provide,
-						new DialogInterface.OnClickListener() {
+		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
+		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								invokeCurrencyRateEdit(currency.getId());
-							}
-						}).create().show();
-		// TODO on dismiss
 	}
 
-	private void invokeCurrencyRateEdit(long currencyId) {
-		EditCurrencyPairDialog newDialog = EditCurrencyPairDialog.newInstance(event.getPrimaryCurrency(),
-				new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId));
-		newDialog.setListener(this);
-		newDialog.show(getFragmentManager(), "EditDialog");
-	}
 }

@@ -24,9 +24,12 @@ import android.widget.Toast;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
+import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
@@ -41,6 +44,14 @@ import com.dzebsu.acctrip.models.dictionaries.Place;
 
 public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener,
 		SimpleDialogListener {
+
+	private static final String SAVE_STATE_KEY_PICKED_CURRENCY_ID = "pickedCurrencyId";
+
+	private static final String SAVE_STATE_KEY_PICKED_CATEGORY_ID = "pickedCategoryId";
+
+	private static final String SAVE_STATE_KEY_PICKED_PLACE_ID = "pickedPlaceId";
+
+	private static final String SAVE_STATE_KEY_PICKED_DATE = "pickedDate";
 
 	private class IdBox {
 
@@ -60,23 +71,50 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	}
 
 	// 1 place 2 cat 3 cur// what does user want to create now
-	private Button dictionaryBtnInQuestion;
+	private Button dictionaryBtnInQuestion = null;// need save but i changed
+													// picker instead of
 
 	private Event event;
 
-	private IdBox entityInQuestion;
+	private IdBox entityInQuestion;// need save, but same as above
 
-	private Date date;
+	private Date date;// need save
 
-	private IdBox placeId = new IdBox(-1);
+	private IdBox placeId = new IdBox(-1);// need save
 
-	private IdBox categoryId = new IdBox(-1);
+	private IdBox categoryId = new IdBox(-1);// need save
 
-	private IdBox currencyId = new IdBox(-1);
+	private IdBox currencyId = new IdBox(-1);// need save
 
 	private String mode = null;
 
 	private long opID;
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong(SAVE_STATE_KEY_PICKED_DATE, DateFormatter.convertDateToLong(date));
+		outState.putLong(SAVE_STATE_KEY_PICKED_PLACE_ID, placeId.getId());
+		outState.putLong(SAVE_STATE_KEY_PICKED_CATEGORY_ID, categoryId.getId());
+		outState.putLong(SAVE_STATE_KEY_PICKED_CURRENCY_ID, currencyId.getId());
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PICKED_DATE)) return;
+		date = DateFormatter.convertLongToDate(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_DATE));
+		((Button) findViewById(R.id.op_edit_date_btn)).setText(DateFormatter.formatDate(this, date));
+		placeId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_PLACE_ID));
+		categoryId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_CATEGORY_ID));
+		currencyId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_CURRENCY_ID));
+		((Button) findViewById(R.id.op_edit_place_btn)).setText(new PlaceDataSource(this)
+				.getEntityById(placeId.getId()).getName());
+		((Button) findViewById(R.id.op_edit_category_btn)).setText(new CategoryDataSource(this).getEntityById(
+				categoryId.getId()).getName());
+		((Button) findViewById(R.id.op_edit_currency_btn)).setText(new CurrencyDataSource(this).getEntityById(
+				currencyId.getId()).getCode());
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
