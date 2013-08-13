@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
@@ -16,10 +17,21 @@ public class NewPrimaryCurrencyAppearedDialog extends BaseStableDialog {
 
 	private Currency currency;
 
-	public static NewPrimaryCurrencyAppearedDialog newInstance(Event event, Currency currency) {
+	private long currencyIdBefore;
+
+	public long getCurrencyIdBefore() {
+		return currencyIdBefore;
+	}
+
+	public void setCurrencyIdBefore(long currencyIdBefore) {
+		this.currencyIdBefore = currencyIdBefore;
+	}
+
+	public static NewPrimaryCurrencyAppearedDialog newInstance(Event event, Currency currency, long currencyIdBefore) {
 		NewPrimaryCurrencyAppearedDialog dialog = new NewPrimaryCurrencyAppearedDialog();
 		dialog.setEvent(event);
 		dialog.setCurrency(currency);
+		dialog.setCurrencyIdBefore(currencyIdBefore);
 		return dialog;
 	}
 
@@ -44,21 +56,37 @@ public class NewPrimaryCurrencyAppearedDialog extends BaseStableDialog {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this.getActivity());
 		String message = String.format(getString(R.string.warning_new_prim_curr), currency.getCode(), event.getName());
 		alert.setIcon(android.R.drawable.ic_dialog_info).setTitle(R.string.warning_word).setMessage(message)
-				.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+				.setNegativeButton(R.string.defaults, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						updateCurrencyPairsWithDefRates();
 					}
 
-				}).setPositiveButton(R.string.provide, new DialogInterface.OnClickListener() {
+				}).setPositiveButton(R.string.new_prim_curr_appeared_auto_rates_btn,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						editRates();
-					}
-				});
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								autoEvolveRatesAndEditAll();
+							}
+						}).setNeutralButton(R.string.new_prim_curr_appeared_edit_all_with_auto_btn,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								autoEvolveRatesAndUpdate();
+
+							}
+						});
 		return alert.create();
+	}
+
+	protected void autoEvolveRatesAndUpdate() {
+		CurrencyPairDataSource cpData = new CurrencyPairDataSource(this.getActivity());
+		cpData.updateByList(event.getId(), CurrencyUtils.autoEvolveRates(event.getId(), cpData
+				.getCurrencyPairMapByEventId(event.getId())));
+		cpData.deleteCurrencyPairIfUnused(event.getId(), currencyIdBefore, currency.getId(), currency.getId());
 	}
 
 	@Override
@@ -67,8 +95,8 @@ public class NewPrimaryCurrencyAppearedDialog extends BaseStableDialog {
 		updateCurrencyPairsWithDefRates();
 	}
 
-	private void editRates() {
-		updateCurrencyPairsWithDefRates();
+	private void autoEvolveRatesAndEditAll() {
+		autoEvolveRatesAndUpdate();
 		startEditCurrencyPairsActivity();
 	}
 
@@ -83,8 +111,7 @@ public class NewPrimaryCurrencyAppearedDialog extends BaseStableDialog {
 
 	private void updateCurrencyPairsWithDefRates() {
 		CurrencyPairDataSource currpairsData = new CurrencyPairDataSource(this.getActivity());
-		currpairsData.deleteCurrencyPairIfUnused(event.getId(), event.getPrimaryCurrency().getId(), currency.getId(),
-				currency.getId());
+		currpairsData.deleteCurrencyPairIfUnused(event.getId(), currencyIdBefore, currency.getId(), currency.getId());
 		if (currpairsData.getCurrencyPairByValues(event.getId(), currency.getId()) == null) {
 			currpairsData.insert(event.getId(), currency.getId());
 		}

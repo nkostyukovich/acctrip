@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.models.Operation;
 
@@ -92,7 +93,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 		holder.date.setText(date);
 
-		holder.expenses.setText(objects.get(position).getValue() + " " + cur);
+		holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getValue()) + " " + cur);
 		s = place;
 		if (s.length() > 12) s = s.substring(0, 12) + "...";
 		holder.place.setText(s);

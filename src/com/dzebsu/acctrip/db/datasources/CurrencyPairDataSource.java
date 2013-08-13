@@ -195,6 +195,12 @@ public class CurrencyPairDataSource {
 		}
 	}
 
+	public void updateByList(long eventId, List<CurrencyPair> cps) {
+		for (CurrencyPair cp : cps) {
+			update(eventId, cp.getSecondCurrency().getId(), cp.getRate());
+		}
+	}
+
 	public Map<Long, CurrencyPair> getCurrencyPairMapByEventId(long eventId) {
 		open();
 		try {

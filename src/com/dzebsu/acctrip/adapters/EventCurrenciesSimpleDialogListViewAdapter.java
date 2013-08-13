@@ -22,11 +22,17 @@ public class EventCurrenciesSimpleDialogListViewAdapter extends ArrayAdapter<Cur
 
 	private LayoutInflater inflater;
 
+	private boolean leftOri[];
+
 	public EventCurrenciesSimpleDialogListViewAdapter(Context context, List<CurrencyPair> objects,
 			Currency primaryCurrency) {
 		super(context, R.layout.row_currency_pair_simple, objects);
 		this.objects = objects;
 		this.primaryCurrency = primaryCurrency;
+		leftOri = new boolean[objects.size()];
+		for (int i = 0; i < leftOri.length; i++) {
+			leftOri[i] = CurrencyUtils.isPrimaryLeftOrientation(objects.get(i).getRate());
+		}
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -57,9 +63,15 @@ public class EventCurrenciesSimpleDialogListViewAdapter extends ArrayAdapter<Cur
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		holder.firstCurrencyCode.setText(primaryCurrency.getCode());
-		holder.secondCurrencyCode.setText(objects.get(position).getSecondCurrency().getCode());
-		holder.rate.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getRate()));
+		if (leftOri[position]) {
+			holder.firstCurrencyCode.setText(primaryCurrency.getCode());
+			holder.secondCurrencyCode.setText(objects.get(position).getSecondCurrency().getCode());
+			holder.rate.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getRate()));
+		} else {
+			holder.firstCurrencyCode.setText(objects.get(position).getSecondCurrency().getCode());
+			holder.secondCurrencyCode.setText(primaryCurrency.getCode());
+			holder.rate.setText(CurrencyUtils.formatDecimalNotImportant(1 / objects.get(position).getRate()));
+		}
 		return rowView;
 	}
 

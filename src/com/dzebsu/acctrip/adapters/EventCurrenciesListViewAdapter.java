@@ -1,6 +1,5 @@
 package com.dzebsu.acctrip.adapters;
 
-import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
@@ -94,14 +93,19 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		super(context, com.dzebsu.acctrip.R.layout.row_currency_pair_list, objects);
 		this.objects = objects;
 		leftOri = new boolean[objects.size()];
-		Arrays.fill(leftOri, true);
 		firstValues = new double[objects.size()];
-		Arrays.fill(firstValues, 1.00);
 		secondValues = new double[objects.size()];
-		for (int i = 0; i < objects.size(); i++) {
-			secondValues[i] = objects.get(i).getRate();
-		}
 		this.primaryCurrency = primaryCurrency;
+		for (int i = 0; i < leftOri.length; i++) {
+			leftOri[i] = CurrencyUtils.isPrimaryLeftOrientation(objects.get(i).getRate());
+			if (leftOri[i]) {
+				secondValues[i] = objects.get(i).getRate();
+				firstValues[i] = 1.00;
+			} else {
+				firstValues[i] = 1 / objects.get(i).getRate();
+				secondValues[i] = 1.00;
+			}
+		}
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
