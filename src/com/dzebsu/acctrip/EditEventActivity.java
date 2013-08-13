@@ -168,8 +168,9 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		} else {
 			// TODO retrieve old values
 			if (primaryCurrencyId != editEvent.getPrimaryCurrency().getId()) {
+				long currencyIdBefore = editEvent.getPrimaryCurrency().getId();
 				updateEventInDB(name, desc);
-				startOperationListActivityWithNewPrimaryCurrency();
+				startOperationListActivityWithNewPrimaryCurrency(currencyIdBefore);
 			} else {
 				updateEventInDB(name, desc);
 				finish();
@@ -177,16 +178,18 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		}
 	}
 
-	private void startOperationListActivityWithNewPrimaryCurrency() {
+	private void startOperationListActivityWithNewPrimaryCurrency(long currencyIdBefore) {
 		// doesn't work
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		// work
 		LocalizedTripMoney.hideSoftKeyboard(this);
 		Bundle args = new Bundle();
 		args.putLong("currencyId", primaryCurrencyId);
+		args.putLong("currencyIdBefore", currencyIdBefore);
 		Intent intent = new Intent(this, OperationListActivity.class);
 		intent.putExtra("newPrimaryCurrencyAppeared", args);
 		intent.putExtra("eventId", editEvent.getId());
+
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 		finish();

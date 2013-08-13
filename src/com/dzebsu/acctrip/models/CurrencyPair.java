@@ -4,6 +4,7 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class CurrencyPair {
 
+	//TODO hashcode neeeeed
 	private Long eventId;
 
 	private Currency secondCurrency;

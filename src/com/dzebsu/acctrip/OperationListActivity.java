@@ -250,13 +250,16 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	private void newPrimaryCurrencyAppeared() {
 		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
-		invokeSuggestEditCurrenciesDialogPrimary(new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")));
+		invokeSuggestEditCurrenciesDialogPrimary(
+				new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")), args
+						.getLong("currencyIdBefore"));
 		getIntent().removeExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
 
 	}
 
-	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency) {
-		NewPrimaryCurrencyAppearedDialog dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency);
+	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency, long currencyIdBefore) {
+		NewPrimaryCurrencyAppearedDialog dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency,
+				currencyIdBefore);
 		dialog.show(getFragmentManager(), "newPrimaryCurrencyAppeared");
 
 	}

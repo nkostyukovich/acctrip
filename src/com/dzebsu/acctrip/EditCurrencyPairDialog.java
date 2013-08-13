@@ -98,13 +98,19 @@ public class EditCurrencyPairDialog extends BaseStableDialog {
 			}
 		});
 		firstCurrencyCode = ((TextView) view.findViewById(R.id.cur_row_cur1));
-		firstCurrencyCode.setText(primaryCurrency.getCode());
 		secondCurrencyCode = ((TextView) view.findViewById(R.id.cur_row_cur2));
-		secondCurrencyCode.setText(currencyPair.getSecondCurrency().getCode());
 		firstCurrencyValue = ((EditText) view.findViewById(R.id.cur_row_et_cur1));
-		firstCurrencyValue.setText("1.00");
 		secondCurrencyValue = ((EditText) view.findViewById(R.id.cur_row_et_cur2));
-		secondCurrencyValue.setText(CurrencyUtils.formatDecimalImportant(currencyPair.getRate()));
+		firstCurrencyValue.setText("1.00");
+		if (leftOri = CurrencyUtils.isPrimaryLeftOrientation(currencyPair.getRate())) {
+			firstCurrencyCode.setText(primaryCurrency.getCode());
+			secondCurrencyCode.setText(currencyPair.getSecondCurrency().getCode());
+			secondCurrencyValue.setText(CurrencyUtils.formatDecimalImportant(currencyPair.getRate()));
+		} else {
+			firstCurrencyCode.setText(currencyPair.getSecondCurrency().getCode());
+			secondCurrencyCode.setText(primaryCurrency.getCode());
+			secondCurrencyValue.setText(CurrencyUtils.formatDecimalImportant(1 / currencyPair.getRate()));
+		}
 		builder.setView(view);
 		return builder.create();
 	}

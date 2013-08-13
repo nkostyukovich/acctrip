@@ -161,4 +161,10 @@
 	
 	<string name="warning_word">Warning</string>
 	
+	<string name="defaults">Defaults</string>
+	
+	<string name="new_prim_curr_appeared_auto_rates_btn">Auto rates</string>
+	
+	<string name="new_prim_curr_appeared_edit_all_with_auto_btn">Edit all with auto</string>
+	
 </resources>
