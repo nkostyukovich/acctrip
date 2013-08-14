@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,7 +48,7 @@ import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
-
+import com.dzebsu.acctrip.settings.SettingsActivity;
 
 public class OperationListActivity extends Activity implements SimpleDialogListener {
 
@@ -159,10 +160,12 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		startActivity(intent);
 	}
 
+	public static final String INTENT_KEY_EVENT_ID = "eventId";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		long eventId = getIntent().getLongExtra("eventId", 0);
+		long eventId = getIntent().getLongExtra(INTENT_KEY_EVENT_ID, 0);
 		event = new EventDataSource(this).getEventById(eventId);
 		setContentView(R.layout.activity_operation_list);
 		ListView listView = (ListView) findViewById(R.id.op_list);
@@ -286,9 +289,12 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				Intent intent = new Intent(this, EventListActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				/*
+				 * Intent intent = new Intent(this, EventListActivity.class);
+				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				 * startActivity(intent);
+				 */
+				NavUtils.navigateUpFromSameTask(this);
 				return true;
 			case R.id.menu_edit_event_currs:
 				showEventCurrenciesSimpleDialog();
@@ -302,9 +308,18 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			case R.id.open_dictionaries:
 				onOpenDictionaries();
 				return true;
+			case R.id.settings:
+				startActivity(new Intent(this, SettingsActivity.class));
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		NavUtils.navigateUpFromSameTask(this);
 	}
 
 	private void showEventCurrenciesSimpleDialog() {

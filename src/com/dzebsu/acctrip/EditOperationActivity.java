@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.models.dictionaries.Place;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener,
 		SimpleDialogListener {
@@ -371,6 +373,8 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		OperationDataSource dataSource = new OperationDataSource(this);
 		dataSource.insert(date, desc, CurrencyUtils.getDouble(value), opType, event.getId(), categoryId.getId(),
 				currencyId.getId(), placeId.getId());
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(
+				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, event.getId()).commit();
 		Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
 	}
 

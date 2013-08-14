@@ -172,4 +172,6 @@
 	
 	<string name="new_prim_curr_edit_chooser">Choose one to enter ratio</string>
 	
+	<string name="current_event">"\nCurrent event: "</string>
+	
 </resources>

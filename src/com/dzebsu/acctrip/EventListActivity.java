@@ -156,7 +156,7 @@ public class EventListActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		// think itn't needed here
+		// think it's not needed here
 		fillEventList();
 		if (mListState != null) ((ListView) findViewById(R.id.event_list)).onRestoreInstanceState(mListState);
 		mListState = null;

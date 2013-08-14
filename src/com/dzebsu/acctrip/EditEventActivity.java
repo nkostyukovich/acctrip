@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class EditEventActivity extends FragmentActivity implements IDictionaryFragmentListener {
 
@@ -209,11 +211,12 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void updateEventInDB(final String name, final String desc) {
 		new EventDataSource(EditEventActivity.this).update(editEvent.getId(), name, desc, primaryCurrencyId);
-
 	}
 
 	private void writeNewEventToDb(final String name, final String desc) {
 		long eventId = new EventDataSource(this).insert(name, desc, primaryCurrencyId);
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(
+				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, eventId).commit();
 		// add primary currency to event currencies list with default rate
 		new CurrencyPairDataSource(this).insert(eventId, primaryCurrencyId);
 		startOperationListActivity(eventId);
