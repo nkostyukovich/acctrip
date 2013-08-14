@@ -306,6 +306,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	protected long currencyIdBefore = -1;
 
 	public void onSaveOperation() {
+		LocalizedTripMoney.hideSoftKeyboard(this);
 		value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
 		if (checkForNotEnteredData()) return;
 		desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
@@ -348,7 +349,6 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		// doesn't work
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		// work
-		LocalizedTripMoney.hideSoftKeyboard(this);
 		Bundle args = new Bundle();
 		args.putLong("currencyId", currencyId.getId());
 		Intent intent = new Intent(this, OperationListActivity.class);

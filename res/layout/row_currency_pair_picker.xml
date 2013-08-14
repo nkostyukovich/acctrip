@@ -36,15 +36,7 @@
     android:text="@string/cur_row_arrow"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:textSize="30sp" />
-<TextView
-    android:id="@+id/cur_row_rate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_marginLeft="10dp"
-    android:layout_toRightOf="@+id/cur_row_cur2"
-    android:text="135.35"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textSize="30sp" />
+
+
 
 </RelativeLayout>

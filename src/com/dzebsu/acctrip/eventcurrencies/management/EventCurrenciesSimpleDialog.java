@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.eventcurrencies.management;
 
 import java.util.List;
 
@@ -11,6 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListAdapter;
 
+import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.EventCurrenciesListActivity;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.adapters.EventCurrenciesSimpleDialogListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
@@ -27,7 +31,6 @@ public class EventCurrenciesSimpleDialog extends BaseStableDialog {
 	public static EventCurrenciesSimpleDialog newInstance(Event event) {
 		EventCurrenciesSimpleDialog dialog = new EventCurrenciesSimpleDialog();
 		dialog.setEvent(event);
-		dialog.setRetainInstance(true);
 		return dialog;
 	}
 

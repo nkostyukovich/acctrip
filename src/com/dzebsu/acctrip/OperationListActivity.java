@@ -38,10 +38,16 @@ import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.eventcurrencies.management.BaseNewPrimaryCurrencyDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.EventCurrenciesSimpleDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.NewCurrencyAppearedDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.NewPrimaryCurrencyAppearedDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.TotalNewPrimaryCurrencyDialog;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
+
 
 public class OperationListActivity extends Activity implements SimpleDialogListener {
 
@@ -250,6 +256,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	private void newPrimaryCurrencyAppeared() {
 		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+
 		invokeSuggestEditCurrenciesDialogPrimary(
 				new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")), args
 						.getLong("currencyIdBefore"));
@@ -258,8 +265,12 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency, long currencyIdBefore) {
-		NewPrimaryCurrencyAppearedDialog dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency,
-				currencyIdBefore);
+		BaseNewPrimaryCurrencyDialog dialog;
+		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), event.getPrimaryCurrency().getId()) != null) {
+			dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency, currencyIdBefore);
+		} else {
+			dialog = TotalNewPrimaryCurrencyDialog.newInstance(event, currency, currencyIdBefore);
+		}
 		dialog.show(getFragmentManager(), "newPrimaryCurrencyAppeared");
 
 	}

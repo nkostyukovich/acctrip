@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.eventcurrencies.management;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,6 +13,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;

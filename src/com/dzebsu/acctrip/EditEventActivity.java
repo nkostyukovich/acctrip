@@ -159,6 +159,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	}
 
 	public void onSaveEvent() {
+		LocalizedTripMoney.hideSoftKeyboard(this);
 		final String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
 		if (checkForNotEnteredData(name)) return;
 		final String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();

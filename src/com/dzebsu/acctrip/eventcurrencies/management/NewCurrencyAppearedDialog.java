@@ -1,10 +1,13 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.eventcurrencies.management;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.dictionaries.Currency;

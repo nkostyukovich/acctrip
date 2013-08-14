@@ -154,7 +154,8 @@
 	<string name="currency_rate_edited">Currency rate edited.</string>
 	
 	<string name="warning_first_time_curr">%1$s is being used first time in %2$s, do you want to provide its ratio to primary currency(%3$s) (default 1.00 to 1.00)?</string>
-	<string name="warning_new_prim_curr">%1$s is new primary currency in %2$s, do you want to provide its ratio to all other(default 1.00 to 1.00)?</string>
+	<string name="warning_new_prim_curr">%1$s is new primary currency in %2$s, you can provide rates by hand or have it auto calc.(default 1.00 to 1.00)</string>
+	<string name="warning_total_new_prim_curr">%1$s is new primary currency in %2$s, do you want to provide one ratio or edit all with defaults?</string>
 	<string name="provide">Provide</string>
 	
 	<string name="later">Later</string>
@@ -166,5 +167,9 @@
 	<string name="new_prim_curr_appeared_auto_rates_btn">Auto rates</string>
 	
 	<string name="new_prim_curr_appeared_edit_all_with_auto_btn">Edit all with auto</string>
+	
+	<string name="enter_one_ratio">Enter one ratio</string>
+	
+	<string name="new_prim_curr_edit_chooser">Choose one to enter ratio</string>
 	
 </resources>
