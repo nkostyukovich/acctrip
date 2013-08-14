@@ -174,4 +174,6 @@
 	
 	<string name="current_event">"\nCurrent event: "</string>
 	
+	<string name="current_event_star">Current Event</string>
+	
 </resources>
