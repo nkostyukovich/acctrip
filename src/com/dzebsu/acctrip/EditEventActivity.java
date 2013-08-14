@@ -94,14 +94,14 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	}
 
 	private void setButtonsListeners() {
-		((Button) findViewById(R.id.edit_event_save_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_save_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				onSaveEvent();
 			}
 		});
-		((Button) findViewById(R.id.edit_event_cancel_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_cancel_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

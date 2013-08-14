@@ -129,7 +129,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	}
 
 	private void fillDefaultValues() {
-		((Button) findViewById(R.id.edit_op_save_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_save_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -138,7 +138,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			}
 		});
 
-		((Button) findViewById(R.id.edit_op_cancel_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_cancel_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
