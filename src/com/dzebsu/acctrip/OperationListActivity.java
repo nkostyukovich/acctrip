@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -49,6 +50,7 @@ import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.settings.SettingsActivity;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class OperationListActivity extends Activity implements SimpleDialogListener {
 
@@ -353,12 +355,15 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
 						dataSource.delete(event.getId());
+						if (PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).getLong(
+								SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId())
+							PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).edit().putLong(
+									SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1).commit();
 						new CurrencyPairDataSource(OperationListActivity.this).deleteByEventId(event.getId());
-						Intent intent = new Intent(OperationListActivity.this, EventListActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intent.putExtra("toast", R.string.event_deleted);
-						startActivity(intent);
+
+						Toast.makeText(OperationListActivity.this, R.string.event_deleted, Toast.LENGTH_SHORT).show();
+						NavUtils.navigateUpFromSameTask(OperationListActivity.this);
+						finish();
 					}
 				}).setNegativeButton(android.R.string.no, null).show();
 	}

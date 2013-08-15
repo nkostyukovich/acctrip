@@ -75,6 +75,10 @@ public class EventCurrenciesSimpleDialog extends BaseStableDialog {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				if (cps.get(which).getSecondCurrency().getId() == event.getPrimaryCurrency().getId()) {
+					if (getDialog() != null && getRetainInstance()) getDialog().setDismissMessage(null);
+					return;
+				}
 				showFastEditDialog(cps.get(which));
 				// dismiss();
 			}

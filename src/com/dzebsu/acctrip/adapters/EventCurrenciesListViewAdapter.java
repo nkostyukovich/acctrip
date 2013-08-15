@@ -118,6 +118,8 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		public EditText firstCurrencyValue = null;
 
 		public EditText secondCurrencyValue = null;
+
+		public ImageButton reverseBtn = null;
 	}
 
 	@Override
@@ -148,6 +150,7 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 			rowViewHolder.secondCurrencyCode = (TextView) rowView.findViewById(R.id.cur_row_cur2);
 			rowViewHolder.firstCurrencyValue = (EditText) rowView.findViewById(R.id.cur_row_et_cur1);
 			rowViewHolder.secondCurrencyValue = (EditText) rowView.findViewById(R.id.cur_row_et_cur2);
+			rowViewHolder.reverseBtn = (ImageButton) rowView.findViewById(R.id.cur_row_reverse_button);
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
@@ -173,6 +176,15 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 		holder.secondCurrencyCode.setText(secondCurrencyCode);
 		holder.firstCurrencyValue.setText(firstCurrencyValue);
 		holder.secondCurrencyValue.setText(secondCurrencyValue);
+		if (objects.get(position).getSecondCurrency().getId() != primaryCurrency.getId()) {
+			holder.firstCurrencyValue.setVisibility(View.VISIBLE);
+			holder.secondCurrencyValue.setVisibility(View.VISIBLE);
+			holder.reverseBtn.setVisibility(View.VISIBLE);
+		} else {
+			holder.firstCurrencyValue.setVisibility(View.GONE);
+			holder.secondCurrencyValue.setVisibility(View.GONE);
+			holder.reverseBtn.setVisibility(View.GONE);
+		}
 
 		final int pos = position;
 		holder.firstCurrencyValue.addTextChangedListener(new TextWatcher() {
@@ -212,7 +224,7 @@ public class EventCurrenciesListViewAdapter extends ArrayAdapter<CurrencyPair> {
 
 			}
 		});
-		((ImageButton) rowView.findViewById(R.id.cur_row_reverse_button)).setOnClickListener(new OnClickListener() {
+		holder.reverseBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
