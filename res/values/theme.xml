@@ -12,7 +12,5 @@
     	<item name="android:textSize">13sp</item>
 		<item name="android:textColor">#333333</item>
 		<item name="android:fontFamily">Tahoma</item>
-		<item name="android:singleLine">false</item>		
-	</style>
-			
+	</style>			
 </resources>

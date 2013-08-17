@@ -73,9 +73,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
-		String s = objects.get(position).getDesc();
-		if (s.length() > 60) s = s.substring(0, 60) + "...";
-		holder.desc.setText(s);
+		holder.desc.setText(objects.get(position).getDesc());
 		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)
 				+ ((Long) objects.get(position).getId()).toString());
 		return rowView;

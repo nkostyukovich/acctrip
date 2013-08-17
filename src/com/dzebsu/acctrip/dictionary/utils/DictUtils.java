@@ -32,7 +32,7 @@ public class DictUtils {
 
 	public static <T extends BaseDictionary> IDictionaryDataSource<T> getEntityDataSourceInstance(Class<T> clazz,
 			Context cxt) {
-		if (Place.class.isAssignableFrom(clazz)) return (IDictionaryDataSource<T>) new PlaceDataSource(cxt);
+		if (clazz.equals(Place.class)) return (IDictionaryDataSource<T>) new PlaceDataSource(cxt);
 		if (Category.class.isAssignableFrom(clazz)) return (IDictionaryDataSource<T>) new CategoryDataSource(cxt);
 		if (Currency.class.isAssignableFrom(clazz)) return (IDictionaryDataSource<T>) new CurrencyDataSource(cxt);
 
