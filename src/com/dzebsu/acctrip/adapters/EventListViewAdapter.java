@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dzebsu.acctrip.models.Event;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class EventListViewAdapter extends ArrayAdapter<Event> {
 
@@ -23,8 +26,12 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 
 	private LayoutInflater inflater;
 
+	private long starId;
+
 	public EventListViewAdapter(Context context, List<Event> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_event_list, objects);
+		starId = PreferenceManager.getDefaultSharedPreferences(context).getLong(
+				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
 		this.context = context;
@@ -37,7 +44,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 
 		public TextView desc = null;
 
-		public TextView eventId = null;
+		public ImageView star = null;
 	}
 
 	@Override
@@ -68,14 +75,15 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 			RowViewHolder rowViewHolder = new RowViewHolder();
 			rowViewHolder.name = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.nameTextView);
 			rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.descTextView);
-			rowViewHolder.eventId = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.eventIdTextView);
+			rowViewHolder.star = (ImageView) rowView.findViewById(com.dzebsu.acctrip.R.id.row_event_list_star);
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
-		holder.desc.setText(objects.get(position).getDesc());
-		holder.eventId.setText(context.getString(com.dzebsu.acctrip.R.string.id_text_view)
-				+ ((Long) objects.get(position).getId()).toString());
+		String s = objects.get(position).getDesc();
+		if (s.length() > 60) s = s.substring(0, 60) + "...";
+		holder.desc.setText(s);
+		holder.star.setVisibility(objects.get(position).getId() == starId ? View.VISIBLE : View.GONE);
 		return rowView;
 	}
 

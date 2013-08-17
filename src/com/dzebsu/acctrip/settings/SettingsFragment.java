@@ -4,19 +4,26 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
+import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.settings.dialogs.BackupOnDeviceDialogPreference;
 import com.dzebsu.acctrip.settings.dialogs.BackupViaEmailDialogPreference;
 import com.dzebsu.acctrip.settings.dialogs.LanguagePickerListPreference;
 import com.dzebsu.acctrip.settings.dialogs.RestoreFromDeviceDialogPreference;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+
+	public static final String PREF_ALLOW_CURRENT_EVENT_MODE = "pref_allow_current_event_mode";
+
+	public static final String CURRENT_EVENT_MODE_EVENT_ID = "current_event_mode_event_id";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +43,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 				updateAllEntries((PreferenceScreen) ps.getPreference(i));
 				continue;
 			}
-
 			initSummary(sharedPreferences, ps.getPreference(i));
 		}
 	}
@@ -73,7 +79,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	}
 
 	private void updatePrefSummary(SharedPreferences sharedPreferences, Preference p) {
-		if (p instanceof LanguagePickerListPreference) {
+		if (p instanceof CheckBoxPreference) {
+			CheckBoxPreference box = (CheckBoxPreference) p;
+			long id = PreferenceManager.getDefaultSharedPreferences(this.getActivity()).getLong(
+					CURRENT_EVENT_MODE_EVENT_ID, -1);
+			String f = id != -1 ? new EventDataSource(this.getActivity()).getEventById(id).getName() : "no event";
+			String s = box.isChecked() ? getString(R.string.pref_curr_event_mode_summary)
+					+ getString(R.string.current_event) + f : getString(R.string.pref_curr_event_mode_summary);
+			p.setSummary(s);
+		} else if (p instanceof LanguagePickerListPreference) {
 			LanguagePickerListPreference picker = (LanguagePickerListPreference) p;
 			String s = picker.getEntry().toString();
 			p.setSummary(s);

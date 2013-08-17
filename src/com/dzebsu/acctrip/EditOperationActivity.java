@@ -7,21 +7,28 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
+import com.dzebsu.acctrip.db.datasources.CategoryDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.db.datasources.PlaceDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
@@ -33,8 +40,18 @@ import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.models.dictionaries.Place;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
-public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener {
+public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener,
+		SimpleDialogListener {
+
+	private static final String SAVE_STATE_KEY_PICKED_CURRENCY_ID = "pickedCurrencyId";
+
+	private static final String SAVE_STATE_KEY_PICKED_CATEGORY_ID = "pickedCategoryId";
+
+	private static final String SAVE_STATE_KEY_PICKED_PLACE_ID = "pickedPlaceId";
+
+	private static final String SAVE_STATE_KEY_PICKED_DATE = "pickedDate";
 
 	private class IdBox {
 
@@ -54,23 +71,50 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	}
 
 	// 1 place 2 cat 3 cur// what does user want to create now
-	private Button dictionaryBtnInQuestion;
+	private Button dictionaryBtnInQuestion = null;// need save but i changed
+													// picker instead of
 
 	private Event event;
 
-	private IdBox entityInQuestion;
+	private IdBox entityInQuestion;// need save, but same as above
 
-	private Date date;
+	private Date date;// need save
 
-	private IdBox placeId = new IdBox(-1);
+	private IdBox placeId = new IdBox(-1);// need save
 
-	private IdBox categoryId = new IdBox(-1);
+	private IdBox categoryId = new IdBox(-1);// need save
 
-	private IdBox currencyId = new IdBox(-1);
+	private IdBox currencyId = new IdBox(-1);// need save
 
 	private String mode = null;
 
 	private long opID;
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putLong(SAVE_STATE_KEY_PICKED_DATE, DateFormatter.convertDateToLong(date));
+		outState.putLong(SAVE_STATE_KEY_PICKED_PLACE_ID, placeId.getId());
+		outState.putLong(SAVE_STATE_KEY_PICKED_CATEGORY_ID, categoryId.getId());
+		outState.putLong(SAVE_STATE_KEY_PICKED_CURRENCY_ID, currencyId.getId());
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PICKED_DATE)) return;
+		date = DateFormatter.convertLongToDate(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_DATE));
+		((Button) findViewById(R.id.op_edit_date_btn)).setText(DateFormatter.formatDate(this, date));
+		placeId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_PLACE_ID));
+		categoryId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_CATEGORY_ID));
+		currencyId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_CURRENCY_ID));
+		((Button) findViewById(R.id.op_edit_place_btn)).setText(new PlaceDataSource(this)
+				.getEntityById(placeId.getId()).getName());
+		((Button) findViewById(R.id.op_edit_category_btn)).setText(new CategoryDataSource(this).getEntityById(
+				categoryId.getId()).getName());
+		((Button) findViewById(R.id.op_edit_currency_btn)).setText(new CurrencyDataSource(this).getEntityById(
+				currencyId.getId()).getCode());
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +129,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	}
 
 	private void fillDefaultValues() {
-		((Button) findViewById(R.id.edit_op_save_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_save_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -94,7 +138,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			}
 		});
 
-		((Button) findViewById(R.id.edit_op_cancel_btn)).setOnClickListener(new OnClickListener() {
+		((Button) findViewById(R.id.common_cancel_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -105,20 +149,22 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this)
 				.getEventById(event.getId()).getName());
-		((TextView) findViewById(R.id.op_edit_value_tv)).setText(getString(R.string.op_edit_value_tv));
-		date = Calendar.getInstance().getTime();
 		Operation defOP;
 		if (mode.equals("new")) {
 			defOP = new OperationDataSource(this).getLastOperationByEventId(event.getId());
+			date = Calendar.getInstance().getTime();
 		} else {
 			defOP = new OperationDataSource(this).getOperationById(opID);
 			((Spinner) this.findViewById(R.id.op_edit_type_spinner)).setSelection(defOP.getType().compareTo(
 					OperationType.EXPENSE) == 0 ? 0 : 1);
 			((EditText) this.findViewById(R.id.op_edit_value_et)).setText(String.valueOf(Math.abs(defOP.getValue())));
 			((EditText) this.findViewById(R.id.op_edit_desc_et)).setText(defOP.getDesc());
-
 			date = defOP.getDate();
 		}
+		setDefaultButtonsValues(defOP);
+	}
+
+	private void setDefaultButtonsValues(Operation defOP) {
 		String dateS = DateFormatter.formatDate(this, date);
 
 		String place = getString(R.string.edit_event_place_def);
@@ -129,6 +175,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			Place pl = defOP.getPlace();
 			Category ca = defOP.getCategory();
 			Currency cu = defOP.getCurrency();
+			currencyIdBefore = cu.getId();
 
 			currency = cu.getCode();
 			place = pl.getName();
@@ -252,8 +299,28 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		startActivity(intent);
 	}
 
+	private String desc;
+
+	private OperationType opType;
+
+	private String value;
+
+	protected long currencyIdBefore = -1;
+
 	public void onSaveOperation() {
-		String value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
+		LocalizedTripMoney.hideSoftKeyboard(this);
+		value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
+		if (checkForNotEnteredData()) return;
+		desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
+		opType = ((Spinner) this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString()
+				.equals("Expense") ? OperationType.EXPENSE : OperationType.INCOME;
+
+		value = opType.compareTo(OperationType.EXPENSE) == 0 ? "-" + value : value;
+		suggestEditCurrencyRate();
+
+	}
+
+	private boolean checkForNotEnteredData() {
 		if (value.isEmpty() || categoryId.getId() == -1 || currencyId.getId() == -1 || placeId.getId() == -1) {
 			String message;
 			message = value.isEmpty() ? getString(R.string.enter_value) : "";
@@ -263,25 +330,61 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			message = TextUtils
 					.addNewLine(message, categoryId.getId() == -1 ? getString(R.string.pick_category) : null);
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+			return true;
+		}
+		return false;
+	}
+
+	// add this in event edit
+	private void suggestEditCurrencyRate() {
+		writeOperationChangesToDB();
+		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), currencyId.getId()) != null) {
+			finish();
 			return;
 		}
-		String desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
-		OperationType opType = ((Spinner) this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString()
-				.equals("Expense") ? OperationType.EXPENSE : OperationType.INCOME;
-		OperationDataSource dataSource = new OperationDataSource(this);
-		value = opType.compareTo(OperationType.EXPENSE) == 0 ? "-" + value : value;
-		if (!mode.equals("edit")) {
-			dataSource.insert(date, desc, Double.parseDouble(value), opType, event.getId(), categoryId.getId(),
-					currencyId.getId(), placeId.getId());
-			finish();
-			Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
-		} else {
-			dataSource.update(opID, date, desc, Double.parseDouble(value), opType, event.getId(), categoryId.getId(),
-					currencyId.getId(), placeId.getId());
-			finish();
-			Toast.makeText(getApplicationContext(), R.string.op_changed, Toast.LENGTH_SHORT).show();
-		}
+		new CurrencyPairDataSource(this).insert(event.getId(), currencyId.getId());
+		startOperationListActivityWithNewCurrency();
+	}
 
+	private void startOperationListActivityWithNewCurrency() {
+		// TODO Auto-generated method stub
+		// doesn't work
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		// work
+		Bundle args = new Bundle();
+		args.putLong("currencyId", currencyId.getId());
+		Intent intent = new Intent(this, OperationListActivity.class);
+		intent.putExtra("newCurrencyAppeared", args);
+		intent.putExtra("eventId", event.getId());
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		finish();
+	}
+
+	private void writeOperationChangesToDB() {
+		if (mode.equals("edit")) {
+			updateOperation();
+		} else {
+			insertOperation();
+		}
+	}
+
+	private void insertOperation() {
+		OperationDataSource dataSource = new OperationDataSource(this);
+		dataSource.insert(date, desc, CurrencyUtils.getDouble(value), opType, event.getId(), categoryId.getId(),
+				currencyId.getId(), placeId.getId());
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(
+				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, event.getId()).commit();
+		Toast.makeText(getApplicationContext(), R.string.op_created, Toast.LENGTH_SHORT).show();
+	}
+
+	private void updateOperation() {
+		OperationDataSource dataSource = new OperationDataSource(this);
+		dataSource.update(opID, date, desc, CurrencyUtils.getDouble(value), opType, event.getId(), categoryId.getId(),
+				currencyId.getId(), placeId.getId());
+		new CurrencyPairDataSource(this).deleteCurrencyPairIfUnused(event.getId(), currencyIdBefore,
+				currencyId.getId(), event.getPrimaryCurrency().getId());
+		Toast.makeText(getApplicationContext(), R.string.op_changed, Toast.LENGTH_SHORT).show();
 	}
 
 	// finishes activity when cancel clicked
@@ -317,7 +420,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	public <T extends BaseDictionary> void invokeDictionaryPicker(Class<T> itemType) {
 		DictionaryElementPickerFragment<T> newFragment = DictionaryElementPickerFragment.newInstance(itemType, this);
-		newFragment.show(getSupportFragmentManager(), "dialog");
+		newFragment.show(getSupportFragmentManager(), "pickerDialog");
 		newFragment.setOnPickFragmentListener(this);
 	}
 
@@ -347,4 +450,23 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		date = c.getTime();
 		((Button) findViewById(R.id.op_edit_time_btn)).setText(DateFormatter.formatTime(this, date));
 	}
+
+	@Override
+	public void positiveButtonDialog(Bundle args) {
+		finish();
+
+	}
+
+	@Override
+	public void negativeButtonDialog(Bundle args) {
+		finish();
+
+	}
+
+	@Override
+	public void anotherDialogAction(Bundle args) {
+		finish();
+
+	}
+
 }

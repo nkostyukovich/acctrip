@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -36,6 +37,20 @@ public class TimePickerFragment extends DialogFragment implements OnTimeSetListe
 
 	public void setDatePickerListener(DatePickerListener listener) {
 		this.listener = listener;
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof DatePickerListener) {
+			listener = (DatePickerListener) activity;
+		}
 	}
 
 	@Override

@@ -7,30 +7,30 @@
 
     <TextView
         android:id="@+id/nameTextView"
+        style="@style/EventListItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        style="@style/EventListItemName"
-         />
+        android:layout_toLeftOf="@+id/row_event_list_star" />
 
     <TextView
         android:id="@+id/descTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/nameTextView"
         style="@style/EventListItemDesc"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/nameTextView"
+        android:layout_below="@+id/nameTextView" />
 
-    <TextView
-        android:id="@+id/eventIdTextView"
+    <ImageView
+        android:id="@+id/row_event_list_star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="@string/id_text_view"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:contentDescription="@string/current_event_star"
+        android:src="@drawable/star" />
 
 </RelativeLayout>

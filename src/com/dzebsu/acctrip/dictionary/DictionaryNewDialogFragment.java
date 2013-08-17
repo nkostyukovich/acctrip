@@ -1,11 +1,11 @@
 package com.dzebsu.acctrip.dictionary;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dzebsu.acctrip.BaseSupportStableDialog;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class DictionaryNewDialogFragment<T extends BaseDictionary> extends DialogFragment {
+public class DictionaryNewDialogFragment<T extends BaseDictionary> extends BaseSupportStableDialog {
 
 	private T entity;
 
@@ -33,6 +34,7 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 		DictionaryNewDialogFragment<T> fragment = new DictionaryNewDialogFragment<T>();
 		fragment.setEntity(entity);
 		fragment.setType(type);
+		fragment.setRetainInstance(true);
 		return fragment;
 	}
 
@@ -49,6 +51,21 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 
 	public void setOnPositiveBtnListener(IDialogListener<T> listener) {
 		this.listener = listener;
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof IDialogListener) {
+			listener = (IDialogListener<T>) activity;
+		}
 	}
 
 	@Override
@@ -75,7 +92,6 @@ public class DictionaryNewDialogFragment<T extends BaseDictionary> extends Dialo
 				((EditText) view.findViewById(R.id.dic_new_name_et2)).setText(((Currency) entity).getCode());
 			}
 		}
-		// TODO implement other dialog for Delete
 
 		builder.setView(view);
 		builder.setTitle(

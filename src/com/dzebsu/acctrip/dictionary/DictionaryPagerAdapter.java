@@ -25,18 +25,22 @@ public class DictionaryPagerAdapter extends FragmentPagerAdapter {
 			case 0:
 				DictionaryListFragment<Place> placeFrag = new DictionaryListFragment<Place>();
 				placeFrag.setDataSource(new PlaceDataSource());
+				// to prevent fragment from destruction on screen rotation
+				placeFrag.setRetainInstance(true);
 				data.putSerializable("class", Place.class);
 				placeFrag.setArguments(data);
 				return placeFrag;
 			case 1:
 				DictionaryListFragment<Category> catFrag = new DictionaryListFragment<Category>();
 				catFrag.setDataSource(new CategoryDataSource());
+				catFrag.setRetainInstance(true);
 				data.putSerializable("class", Category.class);
 				catFrag.setArguments(data);
 				return catFrag;
 			case 2:
 				DictionaryListFragment<Currency> curFrag = new DictionaryListFragment<Currency>();
 				curFrag.setDataSource(new CurrencyDataSource());
+				curFrag.setRetainInstance(true);
 				data.putSerializable("class", Currency.class);
 				curFrag.setArguments(data);
 				return curFrag;

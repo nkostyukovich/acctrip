@@ -1,6 +1,7 @@
 package com.dzebsu.acctrip;
 
 import java.util.List;
+import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,6 +12,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,18 +35,36 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
+import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
+import com.dzebsu.acctrip.eventcurrencies.management.BaseNewPrimaryCurrencyDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.EventCurrenciesSimpleDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.NewCurrencyAppearedDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.NewPrimaryCurrencyAppearedDialog;
+import com.dzebsu.acctrip.eventcurrencies.management.TotalNewPrimaryCurrencyDialog;
+import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
+import com.dzebsu.acctrip.settings.SettingsActivity;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
-public class OperationListActivity extends Activity {
+public class OperationListActivity extends Activity implements SimpleDialogListener {
+
+	private static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
 
 	ActionMode mActionMode;
 
 	private int selectedItem;
 
 	private Object selectedViewTag;
+
+	private List<Operation> operations;
+
+	private Map<Long, CurrencyPair> currencyPairs;
 
 	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
 
@@ -78,11 +99,11 @@ public class OperationListActivity extends Activity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 				case R.id.dic_edit:
-					onElementEdit(adapterZ.getItemId(selectedItem - 1));
+					onOperationEdit(adapterZ.getItemId(selectedItem - 1));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				case R.id.dic_del:
-					onDeleteElement(adapterZ.getItemId(selectedItem - 1));
+					onDeleteOperation(adapterZ.getItemId(selectedItem - 1));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				default:
@@ -99,6 +120,8 @@ public class OperationListActivity extends Activity {
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 
+	private static final String INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED = "newPrimaryCurrencyAppeared";
+
 	private Parcelable mListState = null;
 
 	private boolean dataChanged = false;
@@ -109,14 +132,18 @@ public class OperationListActivity extends Activity {
 		mListState = state.getParcelable(LIST_STATE);
 	}
 
-	protected void onDeleteElement(final long itemId) {
+	protected void onDeleteOperation(final long itemId) {
 		new AlertDialog.Builder(this).setTitle(R.string.delete_dialog_title).setMessage(
 				String.format(getString(R.string.confirm_del), getString(R.string.this_op))).setIcon(
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
-						new OperationDataSource(OperationListActivity.this).deleteById(itemId);
+						OperationDataSource opdata = new OperationDataSource(OperationListActivity.this);
+						Operation op = opdata.getOperationById(itemId);
+						opdata.deleteById(itemId);
+						new CurrencyPairDataSource(OperationListActivity.this).deleteCurrencyPairIfUnused(
+								event.getId(), op.getCurrency().getId(), -1, event.getPrimaryCurrency().getId());
 						Intent intent = new Intent(OperationListActivity.this, OperationListActivity.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.putExtra("toast", R.string.op_deleted);
@@ -127,7 +154,7 @@ public class OperationListActivity extends Activity {
 
 	}
 
-	protected void onElementEdit(long itemId) {
+	protected void onOperationEdit(long itemId) {
 		Intent intent = new Intent(OperationListActivity.this, EditOperationActivity.class);
 		intent.putExtra("eventId", event.getId());
 		intent.putExtra("mode", "edit");
@@ -135,10 +162,12 @@ public class OperationListActivity extends Activity {
 		startActivity(intent);
 	}
 
+	public static final String INTENT_KEY_EVENT_ID = "eventId";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		long eventId = getIntent().getLongExtra("eventId", 0);
+		long eventId = getIntent().getLongExtra(INTENT_KEY_EVENT_ID, 0);
 		event = new EventDataSource(this).getEventById(eventId);
 		setContentView(R.layout.activity_operation_list);
 		ListView listView = (ListView) findViewById(R.id.op_list);
@@ -171,7 +200,6 @@ public class OperationListActivity extends Activity {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -223,6 +251,33 @@ public class OperationListActivity extends Activity {
 		if (intent.hasExtra("toast"))
 			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
 					Toast.LENGTH_SHORT).show();
+		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
+			newCurrencyAppeared();
+		}
+		if (intent.hasExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
+			newPrimaryCurrencyAppeared();
+		}
+	}
+
+	private void newPrimaryCurrencyAppeared() {
+		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+
+		invokeSuggestEditCurrenciesDialogPrimary(
+				new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")), args
+						.getLong("currencyIdBefore"));
+		getIntent().removeExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+
+	}
+
+	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency, long currencyIdBefore) {
+		BaseNewPrimaryCurrencyDialog dialog;
+		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), event.getPrimaryCurrency().getId()) != null) {
+			dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency, currencyIdBefore);
+		} else {
+			dialog = TotalNewPrimaryCurrencyDialog.newInstance(event, currency, currencyIdBefore);
+		}
+		dialog.show(getFragmentManager(), "newPrimaryCurrencyAppeared");
+
 	}
 
 	@Override
@@ -236,9 +291,15 @@ public class OperationListActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				Intent intent = new Intent(this, EventListActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				/*
+				 * Intent intent = new Intent(this, EventListActivity.class);
+				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				 * startActivity(intent);
+				 */
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+			case R.id.menu_edit_event_currs:
+				showEventCurrenciesSimpleDialog();
 				return true;
 			case R.id.delete_event:
 				onDeleteEvent(item.getActionView());
@@ -249,9 +310,24 @@ public class OperationListActivity extends Activity {
 			case R.id.open_dictionaries:
 				onOpenDictionaries();
 				return true;
+			case R.id.settings:
+				startActivity(new Intent(this, SettingsActivity.class));
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		NavUtils.navigateUpFromSameTask(this);
+	}
+
+	private void showEventCurrenciesSimpleDialog() {
+		EventCurrenciesSimpleDialog newDialog = EventCurrenciesSimpleDialog.newInstance(event);
+		newDialog.setListenerToUse(this);
+		newDialog.show(getFragmentManager(), "SimpleCurrencyPairs");
 	}
 
 	public void onOpenDictionaries() {
@@ -279,11 +355,15 @@ public class OperationListActivity extends Activity {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
 						dataSource.delete(event.getId());
-						Intent intent = new Intent(OperationListActivity.this, EventListActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						intent.putExtra("toast", R.string.event_deleted);
-						startActivity(intent);
+						if (PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).getLong(
+								SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId())
+							PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).edit().putLong(
+									SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1).commit();
+						new CurrencyPairDataSource(OperationListActivity.this).deleteByEventId(event.getId());
+
+						Toast.makeText(OperationListActivity.this, R.string.event_deleted, Toast.LENGTH_SHORT).show();
+						NavUtils.navigateUpFromSameTask(OperationListActivity.this);
+						finish();
 					}
 				}).setNegativeButton(android.R.string.no, null).show();
 	}
@@ -317,8 +397,8 @@ public class OperationListActivity extends Activity {
 		event = new EventDataSource(this).getEventById(event.getId());
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
-			OperationDataSource dataSource = new OperationDataSource(this);
-			List<Operation> operations = dataSource.getOperationListByEventId(event.getId());
+			currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+			operations = new OperationDataSource(this).getOperationListByEventId(event.getId());
 			adapterZ = new OperationsListViewAdapter(this, operations);
 
 		}
@@ -362,12 +442,47 @@ public class OperationListActivity extends Activity {
 		((TextView) findViewById(R.id.op_desc_tv)).setText(event.getDesc());
 		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)
 				+ String.valueOf(event.getId()));
-		OperationDataSource opdata = new OperationDataSource(this);
-		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops)
-				+ opdata.getCountByEventId(event.getId()));
-		// TODO converts
-		((TextView) findViewById(R.id.op_all_expenses)).setText(opdata.getSumByEventId(event.getId()) + " "
-				+ event.getPrimaryCurrency().getCode());
+		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + operations.size());
+		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatDecimalNotImportant(getTotalSum())
+				+ " " + event.getPrimaryCurrency().getCode());
+	}
+
+	private double getTotalSum() {
+		double sum = 0.;
+		for (Operation op : operations) {
+			sum += op.getValue() / currencyPairs.get(op.getCurrency().getId()).getRate();
+		}
+		return sum;
+	}
+
+	@Override
+	public void positiveButtonDialog(Bundle args) {
+		currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+		fillEventInfo();
+	}
+
+	@Override
+	public void negativeButtonDialog(Bundle args) {
+		// nothing
+
+	}
+
+	@Override
+	public void anotherDialogAction(Bundle args) {
+		// nothing
+
+	}
+
+	private void newCurrencyAppeared() {
+		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
+		invokeSuggestEditCurrenciesDialog(new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")));
+		getIntent().removeExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
+	}
+
+	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
+		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
+		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
+
 	}
 
 }

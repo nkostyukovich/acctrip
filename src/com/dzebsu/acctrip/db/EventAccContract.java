@@ -96,13 +96,7 @@ public class EventAccContract {
 
 		public static final String EVENT_ID = "eventId";
 
-		public static final String FIRST_CURRENCY_ID = "first_curr_id";
-
 		public static final String SECOND_CURRENCY_ID = "second_curr_id";
-
-		public static final String ALIAS_FIRST_CODE = "first_cur_code";
-
-		public static final String ALIAS_FIRST_NAME = "first_cur_name";
 
 		public static final String ALIAS_SECOND_CODE = "second_cur_code";
 

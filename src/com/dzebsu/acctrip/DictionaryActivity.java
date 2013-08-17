@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.dzebsu.acctrip;
 
 import android.annotation.TargetApi;

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class EventAccDbHelper extends SQLiteOpenHelper {
 
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 6;
 
 	public static final String DATABASE_NAME = "EventAcc.db";
 
@@ -46,16 +46,13 @@ public class EventAccDbHelper extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_CUREENCY_PAIR_TABLE = "CREATE TABLE "
 			+ EventAccContract.CurrencyPair.TABLE_NAME + " (" + EventAccContract.CurrencyPair.EVENT_ID
-			+ " INTEGER NOT NULL, " + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " INTEGER NOT NULL, "
-			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " INTEGER NOT NULL, "
+			+ " INTEGER NOT NULL, " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " INTEGER NOT NULL, "
 			+ EventAccContract.CurrencyPair.RATE + " REAL NOT NULL, PRIMARY KEY ("
-			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + ", "
-			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + "), FOREIGN KEY ("
-			+ EventAccContract.CurrencyPair.EVENT_ID + ") REFERENCES " + EventAccContract.Event.TABLE_NAME + " ("
-			+ EventAccContract.Event._ID + "),  FOREIGN KEY (" + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID
-			+ ") REFERENCES " + EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID
-			+ "), FOREIGN KEY (" + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + ") REFERENCES "
-			+ EventAccContract.Currency.TABLE_NAME + " (" + EventAccContract.Currency._ID + ") " + " )";
+			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID
+			+ "), FOREIGN KEY (" + EventAccContract.CurrencyPair.EVENT_ID + ") REFERENCES "
+			+ EventAccContract.Event.TABLE_NAME + " (" + EventAccContract.Event._ID + "),  FOREIGN KEY ("
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + ") REFERENCES " + EventAccContract.Currency.TABLE_NAME
+			+ " (" + EventAccContract.Currency._ID + ")" + " )";
 
 	public EventAccDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

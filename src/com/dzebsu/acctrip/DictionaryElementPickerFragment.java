@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -20,16 +21,14 @@ import android.widget.SearchView;
 
 import com.dzebsu.acctrip.adapters.DictionaryListViewAdapter;
 import com.dzebsu.acctrip.db.datasources.IDictionaryDataSource;
-import com.dzebsu.acctrip.dictionary.DictionaryType;
 import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
+//must be not stable, in edit operation will crash and make bad code if is
 public class DictionaryElementPickerFragment<T extends BaseDictionary> extends DialogFragment {
 
 	private IDictionaryDataSource<T> dataSource;
-
-	private DictionaryType type;
 
 	public void setDataSource(IDictionaryDataSource<T> dataSource) {
 		this.dataSource = dataSource;
@@ -42,6 +41,10 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		return fragment;
 	}
 
+	public DictionaryElementPickerFragment() {
+		super();
+	}
+
 	public void setClass(Class<T> clazz) {
 		this.clazz = clazz;
 	}
@@ -52,18 +55,30 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 
 	private View view;
 
-	private int obj;
-
-	private DictionaryListViewAdapter adapterZ;
+	private DictionaryListViewAdapter<T> adapterZ;
 
 	public void setOnPickFragmentListener(IDictionaryFragmentListener listener) {
 		pickListener = listener;
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof IDictionaryFragmentListener) {
+			this.pickListener = (IDictionaryFragmentListener) activity;
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		pickListener = null;
+	}
+
+	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		// XXX BUG here on screen rotation NPE
+		// setRetainInstance(true) save us from NPE here
 		dataSource.setContext(this.getActivity());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -85,10 +100,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DictionaryElementPickerFragment.this.dismiss();
@@ -106,10 +119,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				DictionaryElementPickerFragment.this.dismiss();
@@ -143,7 +154,8 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 		super.onResume();
 		fillList();
 		Window window = getDialog().getWindow();
-		// XXX attention absolute value
+		// XXX attention absolute value, problem when list smaller than this
+		// area, it's not touchable
 		window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 400);
 
 	}

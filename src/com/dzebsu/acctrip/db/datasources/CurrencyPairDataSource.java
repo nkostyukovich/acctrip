@@ -1,7 +1,10 @@
 package com.dzebsu.acctrip.db.datasources;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,51 +22,40 @@ public class CurrencyPairDataSource {
 
 	private EventAccDbHelper dbHelper;
 
+	private Context cxt;
+
 	private final static String SELECT_OP_QUERY = "select c_pairs." + EventAccContract.CurrencyPair.EVENT_ID + " "
 			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + "c_pairs."
-			+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " " + EventAccContract.CurrencyPair.FIRST_CURRENCY_ID
-			+ ", " + "c_pairs." + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " "
-			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + ", " + "c_pairs." + EventAccContract.CurrencyPair.RATE
-			+ " " + EventAccContract.CurrencyPair.RATE + ", " + "first_cur." + EventAccContract.Currency.NAME + " "
-			+ EventAccContract.CurrencyPair.ALIAS_FIRST_NAME + ", " + "first_cur." + EventAccContract.Currency.CODE
-			+ " " + EventAccContract.CurrencyPair.ALIAS_FIRST_CODE + ", "
-			+ "second_cur."
-			+ EventAccContract.Currency.NAME
-			+ " "
-			+ EventAccContract.CurrencyPair.ALIAS_SECOND_NAME
-			+ ", "
-			+ "second_cur."
-			+ EventAccContract.Currency.CODE
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " " + EventAccContract.CurrencyPair.SECOND_CURRENCY_ID
+			+ ", " + "c_pairs." + EventAccContract.CurrencyPair.RATE + " " + EventAccContract.CurrencyPair.RATE + ", "
+			+ "second_cur." + EventAccContract.Currency.NAME + " " + EventAccContract.CurrencyPair.ALIAS_SECOND_NAME
+			+ ", " + "second_cur." + EventAccContract.Currency.CODE
 			+ " "
 			+ EventAccContract.CurrencyPair.ALIAS_SECOND_CODE
-			+ ", " /*
-					 * + "ev." + EventAccContract.Event._ID + " " +
-					 * EventAccContract.Event.ALIAS_ID + ", " + "ev." +
-					 * EventAccContract.Event.NAME + " " +
-					 * EventAccContract.Event.ALIAS_NAME + ", " + "ev." +
-					 * EventAccContract.Event.DESC + " " +
-					 * EventAccContract.Event.ALIAS_DESC + ", ev." +
-					 * EventAccContract.Event.PRIMARY_CURRENCY_ID + " " +
-					 * EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID
-					 */
+			/*
+			 * + "ev." + EventAccContract.Event._ID + " " +
+			 * EventAccContract.Event.ALIAS_ID + ", " + "ev." +
+			 * EventAccContract.Event.NAME + " " +
+			 * EventAccContract.Event.ALIAS_NAME + ", " + "ev." +
+			 * EventAccContract.Event.DESC + " " +
+			 * EventAccContract.Event.ALIAS_DESC + ", ev." +
+			 * EventAccContract.Event.PRIMARY_CURRENCY_ID + " " +
+			 * EventAccContract.Event.ALIAS_PRIMARY_CURRENCY_ID
+			 */
 			+ " from currency_pair c_pairs "
 			// +"left join "
 			// + EventAccContract.Event.TABLE_NAME + " ev on (c_pairs." +
 			// EventAccContract.CurrencyPair.EVENT_ID + " = ev._id) "
-			+ " left join " + EventAccContract.Currency.TABLE_NAME + " first_cur on (c_pairs."
-			+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " = first_cur._id) " + "left join "
-			+ EventAccContract.Currency.TABLE_NAME + " second_cur on (c_pairs."
+			+ "left join " + EventAccContract.Currency.TABLE_NAME + " second_cur on (c_pairs."
 			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = second_cur._id) ";
-
-	private Context ctx;
 
 	public static String getSelectConjunctionTableQuery() {
 		return SELECT_OP_QUERY;
 	}
 
-	public CurrencyPairDataSource(Context ctx) {
-		this.ctx = ctx;
-		dbHelper = new EventAccDbHelper(ctx);
+	public CurrencyPairDataSource(Context cxt) {
+		dbHelper = new EventAccDbHelper(cxt);
+		this.cxt = cxt;
 	}
 
 	public void open() {
@@ -74,39 +66,47 @@ public class CurrencyPairDataSource {
 		database.close();
 	}
 
-	public long insert(long eventId, long firstCurrencyId, long secondCurrencyId, double rate) {
+	public void insert(long eventId, long secondCurrencyId) {
+		insert(eventId, secondCurrencyId, 1.00);
+	}
+
+	public void insert(long eventId, long secondCurrencyId, double rate) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
 
 			values.put(EventAccContract.CurrencyPair.EVENT_ID, eventId);
-			values.put(EventAccContract.CurrencyPair.FIRST_CURRENCY_ID, firstCurrencyId);
 			values.put(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID, secondCurrencyId);
 			values.put(EventAccContract.CurrencyPair.RATE, rate);
 
-			long ir = database.insert(EventAccContract.CurrencyPair.TABLE_NAME, null, values);
-			return ir;
+			database.insert(EventAccContract.CurrencyPair.TABLE_NAME, null, values);
+
 		} finally {
 			close();
 		}
 	}
 
-	public CurrencyPair update(long eventId, long firstCurrencyId, long secondCurrencyId, double rate) {
+	public CurrencyPair update(long eventId, long secondCurrencyId, double rate) {
 		open();
 		try {
 			ContentValues values = new ContentValues();
 			values.put(EventAccContract.CurrencyPair.EVENT_ID, eventId);
-			values.put(EventAccContract.CurrencyPair.FIRST_CURRENCY_ID, firstCurrencyId);
 			values.put(EventAccContract.CurrencyPair.SECOND_CURRENCY_ID, secondCurrencyId);
 			values.put(EventAccContract.CurrencyPair.RATE, rate);
 			String whereClause = EventAccContract.CurrencyPair.EVENT_ID + " = ? AND "
-					+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " = ? AND "
 					+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = ?";
 			database.update(EventAccContract.CurrencyPair.TABLE_NAME, values, whereClause, new String[] {
-					Long.toString(eventId), Long.toString(firstCurrencyId), Long.toString(secondCurrencyId) });
-			return getCurrencyPairByValues(eventId, firstCurrencyId, secondCurrencyId);
+					Long.toString(eventId), Long.toString(secondCurrencyId) });
+			return getCurrencyPairByValues(eventId, secondCurrencyId);
 		} finally {
 			close();
+		}
+	}
+
+	public void updateRatesBunch(List<CurrencyPair> cps, double rates[]) {
+		for (int i = 0; i < cps.size(); i++) {
+			CurrencyPair cp = cps.get(i);
+			update(cp.getEventId(), cp.getSecondCurrency().getId(), rates[i]);
 		}
 	}
 
@@ -122,34 +122,34 @@ public class CurrencyPairDataSource {
 	}
 
 	public long deleteCurrencyPair(CurrencyPair cp) {
-		return deleteEntry(cp.getEventId(), cp.getFirstCurrency().getId(), cp.getSecondCurrency().getId());
+		return deleteEntry(cp.getEventId(), cp.getSecondCurrency().getId());
 	}
 
-	public long deleteByValues(long eventId, long firstCurrencyId, long secondCurrencyId) {
-		return deleteEntry(eventId, firstCurrencyId, secondCurrencyId);
+	public long deleteCurrencyPair(long eventId, long secondCurrencyId) {
+		return deleteEntry(eventId, secondCurrencyId);
 	}
 
-	private long deleteEntry(long eventId, long firstCurrencyId, long secondCurrencyId) {
+	private long deleteEntry(long eventId, long secondCurrencyId) {
 		open();
 		try {
 			String whereClause = EventAccContract.CurrencyPair.EVENT_ID + " = ? AND "
-					+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " = ? AND "
-					+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = ?";
+
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = ?";
 			return database.delete(EventAccContract.CurrencyPair.TABLE_NAME, whereClause, new String[] {
-					Long.toString(eventId), Long.toString(firstCurrencyId), Long.toString(secondCurrencyId) });
+					Long.toString(eventId), Long.toString(secondCurrencyId) });
 		} finally {
 			close();
 		}
 	}
 
-	public CurrencyPair getCurrencyPairByValues(long eventId, long firstCurrencyId, long secondCurrencyId) {
+	public CurrencyPair getCurrencyPairByValues(long eventId, long secondCurrencyId) {
 		open();
 		try {
 			String whereBatch = "where " + EventAccContract.CurrencyPair.EVENT_ID + " = ? AND "
-					+ EventAccContract.CurrencyPair.FIRST_CURRENCY_ID + " = ? AND "
-					+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = ?";
+
+			+ EventAccContract.CurrencyPair.SECOND_CURRENCY_ID + " = ?";
 			Cursor c = database.rawQuery(SELECT_OP_QUERY + whereBatch, new String[] { Long.toString(eventId),
-					Long.toString(firstCurrencyId), Long.toString(secondCurrencyId) });
+					Long.toString(secondCurrencyId) });
 			CurrencyPair cp = null;
 			if (c.getCount() > 0) {
 				c.moveToFirst();
@@ -195,4 +195,50 @@ public class CurrencyPairDataSource {
 		}
 	}
 
+	public void updateByList(long eventId, List<CurrencyPair> cps) {
+		for (CurrencyPair cp : cps) {
+			update(eventId, cp.getSecondCurrency().getId(), cp.getRate());
+		}
+	}
+
+	public Map<Long, CurrencyPair> getCurrencyPairMapByEventId(long eventId) {
+		open();
+		try {
+			Map<Long, CurrencyPair> result = new HashMap<Long, CurrencyPair>();
+			Cursor c = database.rawQuery(SELECT_OP_QUERY + " where " + EventAccContract.CurrencyPair.EVENT_ID + " = "
+					+ eventId, null);
+			c.moveToFirst();
+			while (!c.isAfterLast()) {
+				CurrencyPair cp = ConvertUtils.cursorToCurrencyPair(c);
+				result.put(cp.getSecondCurrency().getId(), cp);
+				c.moveToNext();
+			}
+			c.close();
+			return result;
+		} finally {
+			close();
+		}
+	}
+
+	public void updateRatesBunchToOneValueByEventId(Long eventId, double value) {
+		double rates[];
+		List<CurrencyPair> cps = getCurrencyPairListByEventId(eventId);
+		rates = new double[cps.size()];
+		Arrays.fill(rates, value);
+		updateRatesBunch(cps, rates);
+
+	}
+
+	public void updateRatesBunchToDefaultValueByEventId(Long eventId) {
+		updateRatesBunchToOneValueByEventId(eventId, 1.00);
+	}
+
+	public void deleteCurrencyPairIfUnused(long eventId, long currencyIdBefore, long currencyIdNow,
+			long primaryCurrencyIdNow) {
+		if (currencyIdBefore != currencyIdNow && currencyIdBefore != primaryCurrencyIdNow
+				&& new OperationDataSource(cxt).getCountByCurrencyOfEventId(eventId, currencyIdBefore) == 0) {
+			deleteCurrencyPair(eventId, currencyIdBefore);
+		}
+
+	}
 }

@@ -10,8 +10,6 @@ public class Event extends BaseModel {
 
 	private Currency primaryCurrency;
 
-	// TODO need Currency object
-
 	public Currency getPrimaryCurrency() {
 		return primaryCurrency;
 	}

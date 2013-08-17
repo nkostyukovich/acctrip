@@ -42,6 +42,7 @@
 	<string name="dic_new_title">New %s</string>
 	<string name="dic_edit_title">Edit %s</string>
 	<string name="used_by_ops">You can\'t delete this %1$s.\nIt used by %2$d operations.</string>	
+	<string name="used_by_events_prim">You can\'t delete this currency.\nIt used by %d events as primary currency.</string>
 	<string name="place">place</string>
 	<string name="category">category</string>
 	<string name="currency">currency</string>
@@ -138,5 +139,41 @@
 	<string name="edit_event_curr_def">Curr$</string>
 	<string name="edit_event_cat_def">Category</string>
 	<string name="edit_event_place_def">Place</string>
+	
+	
+	<string name="cur_row_arrow">-></string>
+	<string name="flip_currs">Flip currencies</string>
+	<string name="apply">Apply</string>
+	<string name="event_currencies_activity_title">Edit rates</string>
+	<string name="currency_rates_edited">Currency rates edited.</string>
+	<string name="edit_event_currs">Event currencies</string>
+	<string name="edit_all">Edit all</string>
+	<string name="event_currencies">Event currencies</string>
+	<string name="edit_currency_rate">Edit currency rate</string>
+	<string name="back">Back</string>
+	<string name="currency_rate_edited">Currency rate edited.</string>
+	
+	<string name="warning_first_time_curr">%1$s is being used first time in %2$s, do you want to provide its ratio to primary currency(%3$s) (default 1.00 to 1.00)?</string>
+	<string name="warning_new_prim_curr">%1$s is new primary currency in %2$s, you can provide rates by hand or have it auto calc.(default 1.00 to 1.00)</string>
+	<string name="warning_total_new_prim_curr">%1$s is new primary currency in %2$s, do you want to provide one ratio or edit all with defaults?</string>
+	<string name="provide">Provide</string>
+	
+	<string name="later">Later</string>
+	
+	<string name="warning_word">Warning</string>
+	
+	<string name="defaults">Defaults</string>
+	
+	<string name="new_prim_curr_appeared_auto_rates_btn">Auto rates</string>
+	
+	<string name="new_prim_curr_appeared_edit_all_with_auto_btn">Edit all with auto</string>
+	
+	<string name="enter_one_ratio">Enter one ratio</string>
+	
+	<string name="new_prim_curr_edit_chooser">Choose one to enter ratio</string>
+	
+	<string name="current_event">"\nCurrent event: "</string>
+	
+	<string name="current_event_star">Current Event</string>
 	
 </resources>

@@ -2,6 +2,7 @@ package com.dzebsu.acctrip;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -16,7 +17,7 @@ public class DatePickerFragment extends DialogFragment implements OnDateSetListe
 		// Use the current date as the default date in the picker
 		int year;
 		int month;
-		int day;// TODO do not work properly
+		int day;
 		if (!this.getArguments().containsKey("date")) {
 			final Calendar c = Calendar.getInstance();
 			year = c.get(Calendar.YEAR);
@@ -37,6 +38,20 @@ public class DatePickerFragment extends DialogFragment implements OnDateSetListe
 
 	public void setDataPickerListener(DatePickerListener listener) {
 		this.listener = listener;
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		listener = null;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof DatePickerListener) {
+			listener = (DatePickerListener) activity;
+		}
 	}
 
 	@Override

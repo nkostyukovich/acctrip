@@ -12,7 +12,6 @@ import com.dzebsu.acctrip.R;
 
 public class BackupOnDeviceDialogPreference extends BaseBackupConfirmDialogPreference {
 
-	// XXX maybe make abstract base class with perform action abstract method?
 	public BackupOnDeviceDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.setDialogMessage(String.format(cxt.getString(R.string.pref_backup_database_device_dialog_message),
