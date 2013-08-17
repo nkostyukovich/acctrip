@@ -22,8 +22,6 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 
 	private List<Event> objectsInit;
 
-	private final Context context;
-
 	private LayoutInflater inflater;
 
 	private long starId;
@@ -34,7 +32,6 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
-		this.context = context;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -80,9 +77,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 		holder.name.setText(objects.get(position).getName());
-		String s = objects.get(position).getDesc();
-		if (s.length() > 60) s = s.substring(0, 60) + "...";
-		holder.desc.setText(s);
+		holder.desc.setText(objects.get(position).getDesc());
 		holder.star.setVisibility(objects.get(position).getId() == starId ? View.VISIBLE : View.GONE);
 		return rowView;
 	}
