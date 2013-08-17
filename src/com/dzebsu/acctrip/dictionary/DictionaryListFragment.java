@@ -38,9 +38,9 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class DictionaryListFragment<T extends BaseDictionary> extends Fragment implements IDialogListener<T> {
 
-	private DictionaryListViewAdapter<T> adapterZ;
-
 	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
+
+	private DictionaryListViewAdapter<T> adapterZ;
 
 	private int selectedItem;
 
@@ -50,9 +50,11 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 	private IDictionaryDataSource<T> dataSource;
 
-	ActionMode mActionMode;
+	private ActionMode mActionMode;
 
 	private Object selectedViewTag;
+
+	private boolean dataChanged = false;
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -80,22 +82,18 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-				case R.id.dic_edit:
-					onElementEdit(adapterZ.getItemId(selectedItem));
-					mode.finish(); // Action picked, so close the CAB
-					return true;
-				case R.id.dic_del:
-					onDeleteElement(adapterZ.getItemId(selectedItem));
-					mode.finish(); // Action picked, so close the CAB
-					return true;
-				default:
-					return false;
+			if (item.getItemId() == R.id.dic_edit) {
+				onElementEdit(adapterZ.getItemId(selectedItem));
+				mode.finish(); // Action picked, so close the CAB
+				return true;
+			} else if (item.getItemId() == R.id.dic_del) {
+				onDeleteElement(adapterZ.getItemId(selectedItem));
+				mode.finish(); // Action picked, so close the CAB
+				return true;
 			}
+			return false;
 		}
 	};
-
-	private boolean dataChanged = false;
 
 	public DictionaryListFragment() {
 
@@ -141,7 +139,6 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 			@Override
 			public void onScrollStateChanged(AbsListView arg0, int arg1) {
 				if (mActionMode != null) mActionMode.finish();
-
 			}
 
 			@Override
@@ -153,9 +150,7 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-
 				if (mActionMode != null) mActionMode.finish();
-
 			}
 		});
 		return vi;
@@ -185,7 +180,6 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (mActionMode != null) mActionMode.finish();
-
 			}
 		});
 		objectsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -207,12 +201,10 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
 	}
 
 	@Override
 	public void onPause() {
-
 		super.onPause();
 		if (mActionMode != null) mActionMode.finish();
 	}
@@ -225,16 +217,14 @@ public class DictionaryListFragment<T extends BaseDictionary> extends Fragment i
 	}
 
 	public void onDeleteElement(final long id) {
-
-		long ops = dataSource.getOperationListByEntityId(id).size();
+		long opCount = dataSource.getOperationListByEntityId(id).size();
 		long pr;
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity()).setTitle(R.string.warning).setIcon(
 				android.R.drawable.stat_notify_error);
-		if (ops > 0) {
+		if (opCount > 0) {
 			alert.setTitle(R.string.sorry_confirm_del).setMessage(
-					String.format(getString(R.string.used_by_ops), getString(dictType.getElementName()), ops))
+					String.format(getString(R.string.used_by_ops), getString(dictType.getElementName()), opCount))
 					.setPositiveButton(R.string.okay, null);
-
 		} else if (Currency.class.isAssignableFrom(clazz)
 				&& (pr = new EventDataSource(this.getActivity()).countUsingAsPrimaryCurrency(id)) > 0) {
 			alert.setTitle(R.string.sorry_confirm_del).setMessage(

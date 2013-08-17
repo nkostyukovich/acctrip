@@ -4,17 +4,15 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class CurrencyPair {
 
-	//TODO hashcode neeeeed
+	// TODO hashcode neeeeed
 	private Long eventId;
 
 	private Currency secondCurrency;
 
-	private double rate;
+	private double rate = 1.;
 
 	public CurrencyPair() {
 		this.eventId = -1L;
-		this.secondCurrency = null;
-		this.rate = 1.;
 	}
 
 	public CurrencyPair(Long eventId, Currency secondCurrency, double rate) {
@@ -26,7 +24,6 @@ public class CurrencyPair {
 	public CurrencyPair(Long eventId, Currency secondCurrency) {
 		this.eventId = eventId;
 		this.secondCurrency = secondCurrency;
-		this.rate = 1;
 	}
 
 	public Long getEventId() {
@@ -52,5 +49,4 @@ public class CurrencyPair {
 	public void setRate(double rate) {
 		this.rate = rate;
 	}
-
 }

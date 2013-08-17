@@ -14,7 +14,6 @@ import com.dzebsu.acctrip.models.dictionaries.Place;
 public class ConvertUtils {
 
 	public static Event cursorToEvent(Cursor c) {
-		// XXX without info about primaryCurrency
 		Event ev = new Event();
 		ev.setId(c.getLong(c.getColumnIndex(EventAccContract.Event._ID)));
 		ev.setName(c.getString(c.getColumnIndex(EventAccContract.Event.NAME)));

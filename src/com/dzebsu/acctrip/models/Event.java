@@ -10,14 +10,6 @@ public class Event extends BaseModel {
 
 	private Currency primaryCurrency;
 
-	public Currency getPrimaryCurrency() {
-		return primaryCurrency;
-	}
-
-	public void setPrimaryCurrency(Currency primaryCurrency) {
-		this.primaryCurrency = primaryCurrency;
-	}
-
 	public Event() {
 		super();
 	}
@@ -47,6 +39,14 @@ public class Event extends BaseModel {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public Currency getPrimaryCurrency() {
+		return primaryCurrency;
+	}
+
+	public void setPrimaryCurrency(Currency primaryCurrency) {
+		this.primaryCurrency = primaryCurrency;
 	}
 
 	@Override

@@ -9,20 +9,14 @@ import android.support.v4.view.ViewPager;
 
 import com.dzebsu.acctrip.R;
 
-public class TabListener<T> implements ActionBar.TabListener {
+public class TabListener implements ActionBar.TabListener {
 
 	private Fragment fragment;
 
 	private final Activity hostActivity;
 
-	private final String fragmentTag;
-
-	private final Class<T> fragmentClass;
-
-	public TabListener(Activity activity, String tag, Class<T> clz) {
+	public TabListener(Activity activity) {
 		hostActivity = activity;
-		fragmentTag = tag;
-		fragmentClass = clz;
 	}
 
 	@Override

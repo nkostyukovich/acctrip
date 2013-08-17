@@ -12,7 +12,6 @@ public enum DictionaryType implements Serializable {
 
 	private DictionaryType(int elementName) {
 		this.elementName = elementName;
-
 	}
 
 	private int elementName;
