@@ -22,7 +22,7 @@ public class CurrencyPairDataSource {
 
 	private EventAccDbHelper dbHelper;
 
-	private Context cxt;
+	private Context ctx;
 
 	private final static String SELECT_OP_QUERY = "select c_pairs." + EventAccContract.CurrencyPair.EVENT_ID + " "
 			+ EventAccContract.CurrencyPair.EVENT_ID + ", " + "c_pairs."
@@ -55,7 +55,7 @@ public class CurrencyPairDataSource {
 
 	public CurrencyPairDataSource(Context cxt) {
 		dbHelper = new EventAccDbHelper(cxt);
-		this.cxt = cxt;
+		this.ctx = cxt;
 	}
 
 	public void open() {
@@ -236,7 +236,7 @@ public class CurrencyPairDataSource {
 	public void deleteCurrencyPairIfUnused(long eventId, long currencyIdBefore, long currencyIdNow,
 			long primaryCurrencyIdNow) {
 		if (currencyIdBefore != currencyIdNow && currencyIdBefore != primaryCurrencyIdNow
-				&& new OperationDataSource(cxt).getCountByCurrencyOfEventId(eventId, currencyIdBefore) == 0) {
+				&& new OperationDataSource(ctx).getCountByCurrencyOfEventId(eventId, currencyIdBefore) == 0) {
 			deleteCurrencyPair(eventId, currencyIdBefore);
 		}
 

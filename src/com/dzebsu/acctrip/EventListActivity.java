@@ -1,12 +1,10 @@
 package com.dzebsu.acctrip;
 
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -40,8 +38,6 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 	private Parcelable mListState = null;
 
 	private boolean dataChanged = false;
-
-	private AsyncTask<Void, Void, Map<Long, Double>> expensesLoader;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
@@ -143,7 +139,9 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 			EventDataSource dataSource = new EventDataSource(this);
 			List<Event> events = dataSource.getEventList();
 			adapterZ = new EventListViewAdapter(this, events);
-			expensesLoader = new EventExpensesAsyncLoader(this, this).execute();
+			for (Event e : events) {
+				new EventExpensesAsyncLoader(this, this).execute(e.getId());
+			}
 		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.event_list);
@@ -159,12 +157,6 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 		super.onRestart();
 		dataChanged = true;
 		// fillEventList();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (expensesLoader != null) expensesLoader.cancel(true);
 	}
 
 	@Override
@@ -186,15 +178,7 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 	}
 
 	@Override
-	public void allExpensesLoaded(Map<Long, Double> expenses) {
-		if (adapterZ != null) {
-			adapterZ.setAllExpenses(expenses);
-		}
-
-	}
-
-	@Override
-	public void oneExpensesLoaded(long eventId, double value) {
+	public void expensesLoaded(long eventId, double value) {
 		if (adapterZ != null) {
 			adapterZ.addExpensesNotify(eventId, value);
 		}

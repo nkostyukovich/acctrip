@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dzebsu.acctrip.models.CurrencyPair;
+import com.dzebsu.acctrip.models.Operation;
 
 public class CurrencyUtils {
 
@@ -58,5 +59,13 @@ public class CurrencyUtils {
 		}
 
 		return cpList;
+	}
+
+	public static double getTotalEventExpenses(List<Operation> operations, Map<Long, CurrencyPair> currencyPairs) {
+		double sum = 0.;
+		for (Operation op : operations) {
+			sum += op.getValue() / currencyPairs.get(op.getCurrency().getId()).getRate();
+		}
+		return sum;
 	}
 }
