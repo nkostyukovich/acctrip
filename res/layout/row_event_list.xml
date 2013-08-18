@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/row_event_list_star" />
+        android:layout_toLeftOf="@+id/expencesTextView" />
 
     <TextView
         android:id="@+id/descTextView"
@@ -20,17 +20,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/nameTextView"
+        android:layout_toLeftOf="@+id/row_event_list_star"
         android:layout_below="@+id/nameTextView" />
 
     <ImageView
         android:id="@+id/row_event_list_star"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/descTextView"
+        android:contentDescription="@string/current_event_star"
+        android:src="@drawable/star"
+        android:visibility="visible" />
+    
+    <TextView
+        android:id="@+id/expencesTextView"
+        style="@style/EventListItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:visibility="gone"
-        android:contentDescription="@string/current_event_star"
-        android:src="@drawable/star" />
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

@@ -1,10 +1,12 @@
 package com.dzebsu.acctrip;
 
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -19,13 +21,15 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.activity.DictionaryActivity;
+import com.dzebsu.acctrip.adapters.EventExpensesAsyncLoader;
+import com.dzebsu.acctrip.adapters.EventExpensesLoadListener;
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.settings.SettingsActivity;
 
-public class EventListActivity extends Activity {
+public class EventListActivity extends Activity implements EventExpensesLoadListener {
 
 	// Anonymous class wanted this adapter inside itself
 	private EventListViewAdapter adapterZ = null;
@@ -36,6 +40,8 @@ public class EventListActivity extends Activity {
 	private Parcelable mListState = null;
 
 	private boolean dataChanged = false;
+
+	private AsyncTask<Void, Void, Map<Long, Double>> expensesLoader;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
@@ -79,6 +85,7 @@ public class EventListActivity extends Activity {
 		if (intent.hasExtra("toast"))
 			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
 					Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override
@@ -136,6 +143,7 @@ public class EventListActivity extends Activity {
 			EventDataSource dataSource = new EventDataSource(this);
 			List<Event> events = dataSource.getEventList();
 			adapterZ = new EventListViewAdapter(this, events);
+			expensesLoader = new EventExpensesAsyncLoader(this, this).execute();
 		}
 		ListAdapter adapter = adapterZ;
 		ListView listView = (ListView) findViewById(R.id.event_list);
@@ -154,6 +162,12 @@ public class EventListActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (expensesLoader != null) expensesLoader.cancel(true);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 
@@ -169,5 +183,21 @@ public class EventListActivity extends Activity {
 		super.onSaveInstanceState(state);
 		mListState = ((ListView) findViewById(R.id.event_list)).onSaveInstanceState();
 		state.putParcelable(LIST_STATE, mListState);
+	}
+
+	@Override
+	public void allExpensesLoaded(Map<Long, Double> expenses) {
+		if (adapterZ != null) {
+			adapterZ.setAllExpenses(expenses);
+		}
+
+	}
+
+	@Override
+	public void oneExpensesLoaded(long eventId, double value) {
+		if (adapterZ != null) {
+			adapterZ.addExpensesNotify(eventId, value);
+		}
+
 	}
 }

@@ -19,7 +19,7 @@ public class EventDataSource {
 
 	private EventAccDbHelper dbHelper;
 
-	private Context ctx;
+	private Context cxt;
 
 	private final static String SELECT_OP_QUERY = "select ev." + EventAccContract.Event._ID + " "
 			+ EventAccContract.Event._ID + ", " + "ev." + EventAccContract.Event.NAME + " "
@@ -36,7 +36,7 @@ public class EventDataSource {
 
 	public EventDataSource(Context ctx) {
 		dbHelper = new EventAccDbHelper(ctx);
-		this.ctx = ctx;
+		this.cxt = ctx;
 	}
 
 	public void open() {
@@ -118,7 +118,7 @@ public class EventDataSource {
 		} finally {
 			close();
 		}
-		new OperationDataSource(ctx).deleteByEventId(id);
+		new OperationDataSource(cxt).deleteByEventId(id);
 		return c;
 	}
 

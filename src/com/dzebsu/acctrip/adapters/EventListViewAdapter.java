@@ -1,7 +1,9 @@
 package com.dzebsu.acctrip.adapters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
@@ -13,6 +15,7 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
@@ -21,6 +24,8 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 	private List<Event> objects;
 
 	private List<Event> objectsInit;
+
+	private Map<Long, Double> expenses;
 
 	private LayoutInflater inflater;
 
@@ -32,7 +37,22 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 				SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1);
 		this.objectsInit = objects;
 		this.objects = objectsInit;
+		this.expenses = new HashMap<Long, Double>(objects.size());
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	public void addExpenses(long eventId, double value) {
+		expenses.put(eventId, value);
+	}
+
+	public void addExpensesNotify(long eventId, double value) {
+		expenses.put(eventId, value);
+		this.notifyDataSetChanged();
+	}
+
+	public void setAllExpenses(Map<Long, Double> expenses) {
+		this.expenses = expenses;
+		this.notifyDataSetChanged();
 	}
 
 	static class RowViewHolder {
@@ -42,6 +62,8 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 		public TextView desc = null;
 
 		public ImageView star = null;
+
+		public TextView expenses = null;
 	}
 
 	@Override
@@ -73,12 +95,20 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 			rowViewHolder.name = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.nameTextView);
 			rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.descTextView);
 			rowViewHolder.star = (ImageView) rowView.findViewById(com.dzebsu.acctrip.R.id.row_event_list_star);
+			rowViewHolder.expenses = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.expencesTextView);
 			rowView.setTag(rowViewHolder);
 		}
+		Event event = objects.get(position);
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
-		holder.name.setText(objects.get(position).getName());
-		holder.desc.setText(objects.get(position).getDesc());
-		holder.star.setVisibility(objects.get(position).getId() == starId ? View.VISIBLE : View.GONE);
+		holder.name.setText(event.getName());
+		holder.desc.setText(event.getDesc());
+		holder.star.setVisibility(event.getId() == starId ? View.VISIBLE : View.GONE);
+		if (expenses.containsKey(event.getId())) {
+			holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(expenses.get(event.getId())) + " "
+					+ event.getPrimaryCurrency().getCode());
+		} else {
+			holder.expenses.setText("");
+		}
 		return rowView;
 	}
 
@@ -105,6 +135,7 @@ public class EventListViewAdapter extends ArrayAdapter<Event> {
 			return filter;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
 			objects = (ArrayList<Event>) results.values;
