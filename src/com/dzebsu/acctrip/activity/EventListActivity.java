@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.activity;
 
 import java.util.List;
 
@@ -18,19 +18,19 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.activity.DictionaryActivity;
+import com.dzebsu.acctrip.OperationListActivity;
+import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.EventExpensesAsyncLoader;
 import com.dzebsu.acctrip.adapters.EventExpensesLoadListener;
 import com.dzebsu.acctrip.adapters.EventListViewAdapter;
 import com.dzebsu.acctrip.db.EventAccDbHelper;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.models.Event;
-import com.dzebsu.acctrip.settings.SettingsActivity;
 
 public class EventListActivity extends Activity implements EventExpensesLoadListener {
 
 	// Anonymous class wanted this adapter inside itself
-	private EventListViewAdapter adapterZ = null;
+	private EventListViewAdapter listAdapter = null;
 
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
@@ -61,7 +61,15 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 				onSelectEvent(id);
 			}
 		});
-		// add filter_Event_Edittext for events names
+		createFilter();
+		Intent intent = getIntent();
+		if (intent.hasExtra("toast")) {
+			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void createFilter() {
 		SearchView eventsFilter = (SearchView) findViewById(R.id.event_SearchView);
 		eventsFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -72,23 +80,15 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				EventListActivity.this.adapterZ.getFilter().filter(newText);
+				EventListActivity.this.listAdapter.getFilter().filter(newText);
 				return true;
 			}
 		});
-		// end
-		Intent intent = getIntent();
-		if (intent.hasExtra("toast"))
-			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
-					Toast.LENGTH_SHORT).show();
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-
 		return true;
 	}
 
@@ -107,7 +107,6 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 	}
 
 	public void reCreateAllTables(View view) {
-
 		EventAccDbHelper dbHelper = new EventAccDbHelper(this);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		dbHelper.reCreateAllTables(db);
@@ -134,22 +133,21 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 	}
 
 	private void fillEventList() {
-		if (adapterZ == null || dataChanged) {
+		if (listAdapter == null || dataChanged) {
 			dataChanged = false;
 			EventDataSource dataSource = new EventDataSource(this);
 			List<Event> events = dataSource.getEventList();
-			adapterZ = new EventListViewAdapter(this, events);
+			listAdapter = new EventListViewAdapter(this, events);
 			for (Event e : events) {
 				new EventExpensesAsyncLoader(this, this).execute(e.getId());
 			}
 		}
-		ListAdapter adapter = adapterZ;
+		ListAdapter adapter = listAdapter;
 		ListView listView = (ListView) findViewById(R.id.event_list);
 		// trigger filter to it being applied on resume
 		listView.setAdapter(adapter);
-		EventListActivity.this.adapterZ.getFilter().filter(
+		EventListActivity.this.listAdapter.getFilter().filter(
 				((SearchView) findViewById(R.id.event_SearchView)).getQuery());
-
 	}
 
 	@Override
@@ -179,9 +177,8 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 
 	@Override
 	public void expensesLoaded(long eventId, double value) {
-		if (adapterZ != null) {
-			adapterZ.addExpensesNotify(eventId, value);
+		if (listAdapter != null) {
+			listAdapter.addExpensesNotify(eventId, value);
 		}
-
 	}
 }

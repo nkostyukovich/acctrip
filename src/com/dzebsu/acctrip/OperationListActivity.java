@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.activity.DictionaryActivity;
+import com.dzebsu.acctrip.activity.EditEventActivity;
+import com.dzebsu.acctrip.activity.SettingsActivity;
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
@@ -50,7 +52,6 @@ import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
-import com.dzebsu.acctrip.settings.SettingsActivity;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class OperationListActivity extends Activity implements SimpleDialogListener {

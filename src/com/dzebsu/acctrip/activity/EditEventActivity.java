@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -17,15 +17,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
+import com.dzebsu.acctrip.DictionaryElementPickerFragment;
+import com.dzebsu.acctrip.IDictionaryFragmentListener;
+import com.dzebsu.acctrip.LocalizedTripMoney;
+import com.dzebsu.acctrip.OperationListActivity;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.dictionary.DictionaryNewDialogFragment;
+import com.dzebsu.acctrip.dictionary.DictionaryType;
 import com.dzebsu.acctrip.dictionary.IDialogListener;
-import com.dzebsu.acctrip.dictionary.utils.DictUtils;
 import com.dzebsu.acctrip.dictionary.utils.TextUtils;
 import com.dzebsu.acctrip.models.Event;
-import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
@@ -68,7 +72,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID)) return;
 		primaryCurrencyId = savedInstanceState.getLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID);
 		currencyCode = savedInstanceState.getString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE);
-		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + currencyCode);
+		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + currencyCode);
 	}
 
 	@Override
@@ -80,14 +84,14 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void setActivityForNew() {
 		((EditText) this.findViewById(R.id.editEventName)).setText(getIntent().getStringExtra(INTENT_KEY_EVENT_NAME));
-		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr)
-				+ getString(R.string.edit_event_prim_curr_def));
+		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr)
+				+ getString(R.string.event_edit_prim_curr_def));
 	}
 
 	private void setActivityForEdit() {
 		editEvent = new EventDataSource(this).getEventById(getIntent().getLongExtra(INTENT_KEY_EDIT_ID, -1));
 		primaryCurrencyId = editEvent.getPrimaryCurrency().getId();
-		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + editEvent.getPrimaryCurrency().getCode());
+		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + editEvent.getPrimaryCurrency().getCode());
 		currencyCode = editEvent.getPrimaryCurrency().getCode();
 		((EditText) this.findViewById(R.id.editEventDesc)).setText(editEvent.getDesc());
 		((EditText) this.findViewById(R.id.editEventName)).setText(editEvent.getName());
@@ -108,18 +112,19 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 				onCancelBtn();
 			}
 		});
-		primaryCurrencyBtn = ((Button) this.findViewById(R.id.edit_event_primary_currency));
+		primaryCurrencyBtn = ((Button) this.findViewById(R.id.editEventPrimaryCurrency));
 		primaryCurrencyBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				invokeDictionaryPicker(Currency.class);
+				invokeCurrencyDictionaryPicker();
 			}
 		});
 	}
 
-	public <T extends BaseDictionary> void invokeDictionaryPicker(Class<T> itemType) {
-		DictionaryElementPickerFragment<T> newFragment = DictionaryElementPickerFragment.newInstance(itemType, this);
+	public void invokeCurrencyDictionaryPicker() {
+		DictionaryElementPickerFragment<Currency> newFragment = DictionaryElementPickerFragment.newInstance(
+				Currency.class, this);
 		newFragment.show(getSupportFragmentManager(), "dialog");
 		newFragment.setOnPickFragmentListener(this);
 	}
@@ -131,15 +136,15 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
-			getActionBar().setTitle(R.string.event_edit_act_title);
+			getActionBar().setTitle(R.string.event_edit_title);
 		}
 	}
 
+	// TODO what do lines below mean???
 	// due different ways how to get here
 	// getSupportParent
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_event, menu);
 		return true;
 	}
@@ -248,34 +253,31 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	private void changeBtnValue(String title, long id) {
 		primaryCurrencyId = id;
 		currencyCode = title;
-		primaryCurrencyBtn.setText(getString(R.string.edit_event_prim_curr) + title);
+		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + title);
 	}
 
-	private <T extends BaseDictionary> void createDictionaryEntryHelper(Class<T> clazz) throws InstantiationException,
-			IllegalAccessException {
-		DictionaryNewDialogFragment<T> newFragment = null;
-		newFragment = DictionaryNewDialogFragment.newInstance(clazz.newInstance(), DictUtils.getDictionaryType(clazz));
+	private void createDictionaryEntryHelper() throws InstantiationException, IllegalAccessException {
+		DictionaryNewDialogFragment<Currency> newFragment = null;
+		newFragment = DictionaryNewDialogFragment.newInstance(new Currency(), DictionaryType.CURRENCY);
 		newFragment.show(getSupportFragmentManager(), "dialog");
-		newFragment.setOnPositiveBtnListener(new IDialogListener<T>() {
+		newFragment.setOnPositiveBtnListener(new IDialogListener<Currency>() {
 
 			@Override
-			public void onSuccess(T entity) {
-				long id = ((BaseDictionaryDataSource<T>) DictUtils.getEntityDataSourceInstance(entity.getClass(),
-						EditEventActivity.this)).insertEntity(entity);
+			public void onSuccess(Currency entity) {
+				long id = new CurrencyDataSource(EditEventActivity.this).insertEntity(entity);
 				changeBtnValue(entity instanceof Currency ? ((Currency) entity).getCode() : entity.getName(), id);
 			}
 		});
 	}
 
-	private void createDictionaryEntry(Class<? extends BaseDictionary> clazz) throws InstantiationException,
-			IllegalAccessException {
-		createDictionaryEntryHelper(clazz);
+	private void createDictionaryEntry() throws InstantiationException, IllegalAccessException {
+		createDictionaryEntryHelper();
 	}
 
 	@Override
 	public void onActionPerformed(Bundle args) throws InstantiationException, IllegalAccessException {
 		if (args.getBoolean("requestNew", false)) {
-			createDictionaryEntry((Class<? extends BaseDictionary>) args.getSerializable("clazz"));
+			createDictionaryEntry();
 		} else {
 			changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
 		}

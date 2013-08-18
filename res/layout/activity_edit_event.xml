@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
-        android:text="@string/lbl_event_name"
+        android:text="@string/event_edit_lbl_name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/event_name_hint"
+        android:hint="@string/event_edit_name_hint"
         android:imeOptions="actionNext|actionDone"
         android:inputType="text"
         android:maxLines="1"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        android:text="@string/lbl_event_desc"
+        android:text="@string/event_edit_lbl_desc"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -47,17 +47,17 @@
         android:layout_height="150dp"
         android:ems="10"
         android:gravity="top"
-        android:hint="@string/event_description_hint"
+        android:hint="@string/event_edit_desc_hint"
         android:imeOptions="normal|actionDone"
         android:inputType="textMultiLine"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/edit_event_primary_currency"
+        android:id="@+id/editEventPrimaryCurrency"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
-        android:text="@string/edit_event_prim_curr" />
+        android:text="@string/event_edit_prim_curr" />
 
  <include layout="@layout/common_save_cancel_btns"/>
 

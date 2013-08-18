@@ -1,10 +1,11 @@
-package com.dzebsu.acctrip.settings;
+package com.dzebsu.acctrip.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class SettingsActivity extends Activity {
 
