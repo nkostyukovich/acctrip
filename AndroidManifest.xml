@@ -30,21 +30,26 @@
             
             android:name="com.dzebsu.acctrip.activity.EventListActivity"
             android:label="@string/app_name" />
+        
+        
         <activity android:configChanges="locale"
             android:name="com.dzebsu.acctrip.activity.EditEventActivity"
             android:label="@string/event_edit_title"
             android:parentActivityName="com.dzebsu.acctrip.activity.EventListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.dzebsu.acctrip.MainActivity" />
+                android:value="com.dzebsu.acctrip.activity.EventListActivity" />
         </activity>
+        
+        
         <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.OperationListActivity"
             android:parentActivityName="com.dzebsu.acctrip.activity.EventListActivity" >
-        <!-- The meta-data element is needed for versions lower than 4.1 -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.dzebsu.acctrip.EventListActivity" />             
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dzebsu.acctrip.activity.EventListActivity" />           
         </activity>
+        
+        
         <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.EditOperationActivity" >
         </activity>
         <activity android:configChanges="locale"

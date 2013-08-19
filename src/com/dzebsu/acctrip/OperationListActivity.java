@@ -322,8 +322,8 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		NavUtils.navigateUpFromSameTask(this);
+		super.onBackPressed();	
 	}
 
 	private void showEventCurrenciesSimpleDialog() {
