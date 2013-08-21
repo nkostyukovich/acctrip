@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.OperationListActivity;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.EventExpensesAsyncLoader;
 import com.dzebsu.acctrip.adapters.EventExpensesLoadListener;

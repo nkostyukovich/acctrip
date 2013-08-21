@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:background="@drawable/list_view_selector">
 
     <TextView
         android:id="@+id/op_list_date_tv"
@@ -10,44 +11,43 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/op_list_expenses"
-        android:text="15.30 pm, 27/07"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        style="@style/OpListItemDate"
+	/>
 
+    <TextView
+        android:id="@+id/op_list_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/op_list_date_tv"
+        android:layout_alignParentLeft="true"
+        style="@style/OpListItemCategory"
+        />
+    
     <TextView
         android:id="@+id/op_list_desc_tv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/op_list_category"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_list_date_tv"
-        android:layout_toLeftOf="@+id/op_list_place"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Desc65423152123354132134534131243535" />
+        android:layout_below="@+id/op_list_category"
+        android:layout_toLeftOf="@+id/op_list_expenses_primary"
+        style="@style/OpListItemDesc"
+        />
 
     <TextView
         android:id="@+id/op_list_expenses"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="-$320"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@+id/op_list_date_tv"
+        style="@style/OpListSum"
+        />
 
     <TextView
-        android:id="@+id/op_list_place"
+        android:id="@+id/op_list_expenses_primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/op_list_expenses"
-        android:text="Tokyo Tower" />
-
-    <TextView
-        android:id="@+id/op_list_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/op_list_place"
-        android:text="Exposition" />
+        style="@style/OpListPrimary"
+        />    
 
 </RelativeLayout>

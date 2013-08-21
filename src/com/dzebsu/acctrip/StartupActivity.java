@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.dzebsu.acctrip.activity.EventListActivity;
+import com.dzebsu.acctrip.activity.OperationListActivity;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class StartupActivity extends Activity {

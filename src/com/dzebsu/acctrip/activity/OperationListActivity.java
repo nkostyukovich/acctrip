@@ -1,9 +1,8 @@
-package com.dzebsu.acctrip;
+package com.dzebsu.acctrip.activity;
 
 import java.util.List;
 import java.util.Map;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,9 +33,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.activity.DictionaryActivity;
-import com.dzebsu.acctrip.activity.EditEventActivity;
-import com.dzebsu.acctrip.activity.SettingsActivity;
+import com.dzebsu.acctrip.EditOperationActivity;
+import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
@@ -58,7 +57,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	private static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
 
-	ActionMode mActionMode;
+	private ActionMode mActionMode;
 
 	private int selectedItem;
 
@@ -68,7 +67,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	private Map<Long, CurrencyPair> currencyPairs;
 
-	private final static int SELECTION_COLOR = android.R.color.holo_red_dark;
+	private final static int SELECTION_COLOR = android.R.color.holo_blue_dark;
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -196,8 +195,9 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				if (mActionMode != null) mActionMode.finish();
-
+				if (mActionMode != null) {
+					mActionMode.finish();
+				}
 			}
 
 			@Override
@@ -209,9 +209,9 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-
-				if (mActionMode != null) mActionMode.finish();
-
+				if (mActionMode != null) {
+					mActionMode.finish();
+				}
 			}
 		});
 
@@ -220,10 +220,23 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			@Override
 			public void onClick(View v) {
 				onNewOperation();
-
 			}
 		});
-		// add filter_Event_Edittext for events names
+		createFilter();
+		setupActionBar();
+		Intent intent = getIntent();
+		if (intent.hasExtra("toast"))
+			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
+					Toast.LENGTH_SHORT).show();
+		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
+			newCurrencyAppeared();
+		}
+		if (intent.hasExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
+			newPrimaryCurrencyAppeared();
+		}
+	}
+
+	private void createFilter() {
 		SearchView eventsFilter = (SearchView) findViewById(R.id.uni_op_searchView);
 		eventsFilter.setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
 
@@ -247,18 +260,6 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 				return true;
 			}
 		});
-		// end
-		setupActionBar();
-		Intent intent = getIntent();
-		if (intent.hasExtra("toast"))
-			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
-					Toast.LENGTH_SHORT).show();
-		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
-			newCurrencyAppeared();
-		}
-		if (intent.hasExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
-			newPrimaryCurrencyAppeared();
-		}
 	}
 
 	private void newPrimaryCurrencyAppeared() {
@@ -284,7 +285,6 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.operation_list, menu);
 		return true;
 	}
@@ -323,7 +323,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	@Override
 	public void onBackPressed() {
 		NavUtils.navigateUpFromSameTask(this);
-		super.onBackPressed();	
+		super.onBackPressed();
 	}
 
 	private void showEventCurrenciesSimpleDialog() {
@@ -417,7 +417,6 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		return inflater.inflate(com.dzebsu.acctrip.R.layout.operations_header, null, false);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -477,7 +476,5 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
 		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
 		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
-
 	}
-
 }

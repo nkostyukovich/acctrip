@@ -41,7 +41,7 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 		public TextView expenses = null;
 
-		public TextView place = null;
+		public TextView expensesPrimary = null;
 
 		public TextView category = null;
 	}
@@ -75,31 +75,25 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 			rowViewHolder.date = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_date_tv);
 			rowViewHolder.desc = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_desc_tv);
 			rowViewHolder.expenses = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_expenses);
-			rowViewHolder.place = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_place);
+			rowViewHolder.expensesPrimary = (TextView) rowView
+					.findViewById(com.dzebsu.acctrip.R.id.op_list_expenses_primary);
 			rowViewHolder.category = (TextView) rowView.findViewById(com.dzebsu.acctrip.R.id.op_list_category);
 			rowView.setTag(rowViewHolder);
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 
-		String s = objects.get(position).getDesc();
-		if (s.length() > 80) s = s.substring(0, 80) + "...";
-		holder.desc.setText(s);
-
-		String cur = objects.get(position).getCurrency().getCode();
-		String place = objects.get(position).getPlace().getName();
-		String cat = objects.get(position).getCategory().getName();
+		holder.desc.setText(objects.get(position).getDesc());
 
 		String date = DateFormatter.formatDateAndTime(context, objects.get(position).getDate());
+		String place = objects.get(position).getPlace().getName();
 
-		holder.date.setText(date);
-
+		String cur = objects.get(position).getCurrency().getCode();
 		holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getValue()) + " " + cur);
-		s = place;
-		if (s.length() > 12) s = s.substring(0, 12) + "...";
-		holder.place.setText(s);
-		s = cat;
-		if (s.length() > 12) s = s.substring(0, 12) + "...";
-		holder.category.setText(s);
+		// TODO add value in primary currency
+		holder.expensesPrimary.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getValue()) + " "
+				+ cur);
+		holder.category.setText(objects.get(position).getCategory().getName());
+		holder.date.setText(place + ", " + date);
 
 		return rowView;
 	}

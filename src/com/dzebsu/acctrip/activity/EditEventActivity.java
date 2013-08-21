@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.dzebsu.acctrip.DictionaryElementPickerFragment;
 import com.dzebsu.acctrip.IDictionaryFragmentListener;
 import com.dzebsu.acctrip.LocalizedTripMoney;
-import com.dzebsu.acctrip.OperationListActivity;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
