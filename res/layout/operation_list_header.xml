@@ -4,65 +4,48 @@
     android:layout_height="wrap_content" >
 
     <TextView
-        android:id="@+id/op_name_tv"
+        android:id="@+id/op_list_header_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/op_all_expenses"
-        android:text="@string/op_name_tv"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_toLeftOf="@+id/op_list_header_sum"
+        style="@style/OpHeaderEventName"
+        />
 
     <TextView
-        android:id="@+id/op_desc_tv"
+        android:id="@+id/op_list_header_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_name_tv"
-        android:text="@string/op_desc_tv"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@+id/op_list_header_name"
+        style="@style/OpHeaderEventDesc"
+        />
 
     <TextView
-        android:id="@+id/op_event_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_desc_tv"
-        android:text="@string/op_event_id"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/op_total_ops"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_event_id"
-        android:text="@string/op_total_ops"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/op_all_expenses"
+        android:id="@+id/op_list_header_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="@string/op_all_expenses"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+ 	    android:text="@string/op_all_expenses"
+ 		style="@style/OpHeaderEventSum"
+        />
 
     <SearchView
         android:id="@+id/uni_op_searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/lin_lay"
+        android:layout_below="@+id/op_list_main_layout"
         android:iconifiedByDefault="false"
         android:queryHint="@string/filter_hint_start_typing" >
     </SearchView>
 
     <LinearLayout
-        android:id="@+id/lin_lay"
+        android:id="@+id/op_list_main_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/op_total_ops" >
+        android:layout_below="@+id/op_list_header_desc" >
 
         <Button
             android:id="@+id/op_new_btn"

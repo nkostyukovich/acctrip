@@ -26,8 +26,6 @@
     <string name="erase_all_data">Clear all data</string>    
     <string name="op_name_tv">Name</string>
     <string name="op_desc_tv">Description</string>
-    <string name="op_event_id">Event id: </string>
-	<string name="op_total_ops">Total operations: </string>
 	<string name="filter_hint_start_typing">Start typing here.. </string>
 	<string name="op_all_expenses">Expenses: </string>	
 	<string name="op_id_tv">Id: </string>

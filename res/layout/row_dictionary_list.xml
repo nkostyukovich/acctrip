@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/dictionary_name_list"
-         style="@style/EventListItemName"
+         style="@style/DictListItemName"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"

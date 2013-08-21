@@ -82,17 +82,18 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 		}
 		RowViewHolder holder = (RowViewHolder) rowView.getTag();
 
-		holder.desc.setText(objects.get(position).getDesc());
+		Operation op = objects.get(position);
 
-		String date = DateFormatter.formatDateAndTime(context, objects.get(position).getDate());
-		String place = objects.get(position).getPlace().getName();
+		holder.desc.setText(op.getDesc());
 
-		String cur = objects.get(position).getCurrency().getCode();
-		holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getValue()) + " " + cur);
+		String date = DateFormatter.formatDateAndTime(context, op.getDate());
+		String place = op.getPlace().getName();
+
+		String cur = op.getCurrency().getCode();
+		holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(op.getValue()) + " " + cur);
 		// TODO add value in primary currency
-		holder.expensesPrimary.setText(CurrencyUtils.formatDecimalNotImportant(objects.get(position).getValue()) + " "
-				+ cur);
-		holder.category.setText(objects.get(position).getCategory().getName());
+		holder.expensesPrimary.setText(CurrencyUtils.formatDecimalNotImportant(op.getValue()) + " " + cur);
+		holder.category.setText(op.getCategory().getName());
 		holder.date.setText(place + ", " + date);
 
 		return rowView;

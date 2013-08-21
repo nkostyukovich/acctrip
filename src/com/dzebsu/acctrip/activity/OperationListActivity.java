@@ -414,7 +414,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 
 	public View createListHeader() {
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(com.dzebsu.acctrip.R.layout.operations_header, null, false);
+		return inflater.inflate(com.dzebsu.acctrip.R.layout.operation_list_header, null, false);
 	}
 
 	private void setupActionBar() {
@@ -439,13 +439,10 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	public void fillEventInfo() {
-		((TextView) findViewById(R.id.op_name_tv)).setText(event.getName());
-		((TextView) findViewById(R.id.op_desc_tv)).setText(event.getDesc());
-		((TextView) findViewById(R.id.op_event_id)).setText(getString(R.string.op_event_id)
-				+ String.valueOf(event.getId()));
-		((TextView) findViewById(R.id.op_total_ops)).setText(getString(R.string.op_total_ops) + operations.size());
-		((TextView) findViewById(R.id.op_all_expenses)).setText(CurrencyUtils.formatDecimalNotImportant(CurrencyUtils
-				.getTotalEventExpenses(operations, currencyPairs))
+		((TextView) findViewById(R.id.op_list_header_name)).setText(event.getName());
+		((TextView) findViewById(R.id.op_list_header_desc)).setText(event.getDesc());
+		((TextView) findViewById(R.id.op_list_header_sum)).setText(CurrencyUtils
+				.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(operations, currencyPairs))
 				+ " " + event.getPrimaryCurrency().getCode());
 	}
 

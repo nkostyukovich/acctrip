@@ -27,7 +27,7 @@
             
         </SearchView>
 
-             <ImageButton
+            <ImageButton
             android:id="@+id/dic_new"
             android:contentDescription="@string/add_event"
             android:layout_width="wrap_content"
