@@ -68,4 +68,9 @@ public class CurrencyUtils {
 		}
 		return sum;
 	}
+
+	public static double getOperationExpensesInPrimary(Operation op, Map<Long, CurrencyPair> currencyPairRates) {
+
+		return op.getValue() / currencyPairRates.get(op.getCurrency().getId()).getRate();
+	}
 }

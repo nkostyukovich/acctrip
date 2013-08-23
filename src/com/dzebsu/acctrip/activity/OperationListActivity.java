@@ -402,6 +402,8 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
 			operations = new OperationDataSource(this).getOperationListByEventId(event.getId());
 			adapterZ = new OperationsListViewAdapter(this, operations);
+			adapterZ.setCurrencyPairRates(currencyPairs);
+			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
 
 		}
 		ListAdapter adapter = adapterZ;
@@ -449,6 +451,11 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	@Override
 	public void positiveButtonDialog(Bundle args) {
 		currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+		if (adapterZ != null) {
+			adapterZ.setCurrencyPairRates(currencyPairs);
+			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
+			adapterZ.notifyDataSetChanged();
+		}
 		fillEventInfo();
 	}
 

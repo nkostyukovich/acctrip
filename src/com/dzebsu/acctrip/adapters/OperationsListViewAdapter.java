@@ -2,6 +2,7 @@ package com.dzebsu.acctrip.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
+import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Operation;
+import com.dzebsu.acctrip.models.dictionaries.Currency;
 
 public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
@@ -24,6 +27,18 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	private final Context context;
 
 	private LayoutInflater inflater;
+
+	private Map<Long, CurrencyPair> currencyPairRates;
+
+	private Currency primaryCurrency;
+
+	public Currency getPrimaryCurrency() {
+		return primaryCurrency;
+	}
+
+	public void setPrimaryCurrency(Currency primaryCurrency) {
+		this.primaryCurrency = primaryCurrency;
+	}
 
 	public OperationsListViewAdapter(Context context, List<Operation> objects) {
 		super(context, com.dzebsu.acctrip.R.layout.row_operation_list, objects);
@@ -91,8 +106,9 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 
 		String cur = op.getCurrency().getCode();
 		holder.expenses.setText(CurrencyUtils.formatDecimalNotImportant(op.getValue()) + " " + cur);
-		// TODO add value in primary currency
-		holder.expensesPrimary.setText(CurrencyUtils.formatDecimalNotImportant(op.getValue()) + " " + cur);
+		holder.expensesPrimary.setText(CurrencyUtils.formatDecimalNotImportant(CurrencyUtils
+				.getOperationExpensesInPrimary(op, currencyPairRates))
+				+ " " + primaryCurrency.getCode());
 		holder.category.setText(op.getCategory().getName());
 		holder.date.setText(place + ", " + date);
 
@@ -102,6 +118,14 @@ public class OperationsListViewAdapter extends ArrayAdapter<Operation> {
 	@Override
 	public Filter getFilter() {
 		return new OperationFilter();
+	}
+
+	public Map<Long, CurrencyPair> getCurrencyPairRates() {
+		return currencyPairRates;
+	}
+
+	public void setCurrencyPairRates(Map<Long, CurrencyPair> currencyPairRates) {
+		this.currencyPairRates = currencyPairRates;
 	}
 
 	// custom filter
