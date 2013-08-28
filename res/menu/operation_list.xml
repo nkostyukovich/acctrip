@@ -4,16 +4,11 @@
         android:orderInCategory="6"
         android:showAsAction="never"
         android:title="@string/open_dictionaries" android:icon="@drawable/dictionaries"/>
-    <item
-        android:id="@+id/settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/settings"/>
     <item android:id="@+id/delete_event" 
         android:orderInCategory="5"
         android:showAsAction="never"
         android:title="@string/op_del_menu" android:icon="@drawable/dic_del"/>
-    <item android:title="@string/dic_edit" 
+    <item android:title="@string/edit_event" 
         android:id="@+id/event_edit"
         android:showAsAction="never" 
         android:icon="@drawable/dic_edit"

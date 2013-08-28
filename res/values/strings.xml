@@ -182,4 +182,20 @@
 	
 	<string name="op_tabs_statistics">Statistics</string>
 	
+	<string name="edit_event">Edit event</string>
+	
+	<string name="st_head_total_expenses_">Total expenses:</string>
+	
+	<string name="st_head_total_operations_">Total operations:</string>
+	
+	<string name="st_head_today_spent_">Today spent:</string>
+	
+	<!-- DO NOT CHANGE ORDER // StatisticsFragment said-->
+	<string-array name="statistics_groups">
+        <item>By day</item>
+        <item>By category</item>
+        <item>By currency</item>
+        <item>By place</item>
+    </string-array>
+	
 </resources>

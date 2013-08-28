@@ -24,7 +24,8 @@ public class OperationsPagerAdapter extends FragmentPagerAdapter {
 				fr.setArguments(intent);
 				return fr;
 			case 1:
-				OperationListFragment fr2 = new OperationListFragment();
+				// OperationListFragment fr2 = new OperationListFragment();
+				StatisticsFragment fr2 = new StatisticsFragment();
 				fr2.setArguments(intent);
 				return fr2;
 			default:
