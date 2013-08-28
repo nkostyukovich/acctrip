@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.BaseSupportStableDialog;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
@@ -21,7 +21,7 @@ import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public class EditCurrencyPairDialog extends BaseStableDialog {
+public class EditCurrencyPairDialog extends BaseSupportStableDialog {
 
 	private Currency primaryCurrency;
 

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.activity.DictionaryActivity;
-import com.dzebsu.acctrip.activity.OperationListActivity;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
@@ -42,6 +41,7 @@ import com.dzebsu.acctrip.models.dictionaries.BaseDictionary;
 import com.dzebsu.acctrip.models.dictionaries.Category;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.models.dictionaries.Place;
+import com.dzebsu.acctrip.operations.OperationListFragment;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class EditOperationActivity extends FragmentActivity implements DatePickerListener, IDictionaryFragmentListener,
@@ -355,7 +355,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		// work
 		Bundle args = new Bundle();
 		args.putLong("currencyId", currencyId.getId());
-		Intent intent = new Intent(this, OperationListActivity.class);
+		Intent intent = new Intent(this, OperationListFragment.class);
 		intent.putExtra("newCurrencyAppeared", args);
 		intent.putExtra("eventId", event.getId());
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

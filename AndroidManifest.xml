@@ -42,7 +42,7 @@
         </activity>
         
         
-        <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.activity.OperationListActivity"
+        <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.activity.OperationsActivity"
             android:parentActivityName="com.dzebsu.acctrip.activity.EventListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListAdapter;
 
-import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.BaseSupportStableDialog;
 import com.dzebsu.acctrip.EventCurrenciesListActivity;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.SimpleDialogListener;
@@ -20,7 +20,7 @@ import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 
-public class EventCurrenciesSimpleDialog extends BaseStableDialog {
+public class EventCurrenciesSimpleDialog extends BaseSupportStableDialog {
 
 	private Event event;
 

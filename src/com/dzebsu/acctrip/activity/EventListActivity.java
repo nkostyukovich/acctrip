@@ -126,7 +126,7 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 	}
 
 	public void onSelectEvent(long eventId) {
-		Intent intent = new Intent(this, OperationListActivity.class);
+		Intent intent = new Intent(this, OperationsActivity.class);
 		intent.putExtra("eventId", eventId);
 		startActivity(intent);
 	}
