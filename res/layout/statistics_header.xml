@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp" >
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/st_head_total_exp_title"
@@ -11,6 +10,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/st_head_total_expenses_"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -18,6 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_alignParentTop="true"
         android:text="-567 USD"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -27,6 +31,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_below="@+id/st_head_total_exp_title"
         android:text="@string/st_head_today_spent_"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -35,6 +42,8 @@
         android:id="@+id/st_head_total_today_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/st_head_total_exp_title"
         android:text="+35 USD"
