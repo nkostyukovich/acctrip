@@ -15,6 +15,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.SimpleDialogListener;
@@ -45,10 +46,12 @@ public class OperationsActivity extends FragmentActivity implements TabUpdater, 
 			ab.setDisplayShowHomeEnabled(false);
 			ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-			Tab tab = ab.newTab().setText(R.string.op_tabs_operations).setTabListener(new TabListener(this));
+			Tab tab = ab.newTab().setText(R.string.op_tabs_operations).setIcon(R.drawable.operations).setTabListener(
+					new TabListener(this));
 			ab.addTab(tab);
 
-			tab = ab.newTab().setText(R.string.op_tabs_statistics).setTabListener(new TabListener(this));
+			tab = ab.newTab().setText(R.string.op_tabs_statistics).setIcon(R.drawable.stats).setTabListener(
+					new TabListener(this));
 			ab.addTab(tab);
 
 		}
@@ -89,12 +92,20 @@ public class OperationsActivity extends FragmentActivity implements TabUpdater, 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.open_dictionaries:
+				onOpenDictionaries(item.getActionView());
+				return true;
 			case R.id.settings:
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public void onOpenDictionaries(View view) {
+		Intent intent = new Intent(this, DictionaryActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

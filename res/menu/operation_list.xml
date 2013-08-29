@@ -1,9 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/open_dictionaries"
-        android:orderInCategory="6"
-        android:showAsAction="never"
-        android:title="@string/open_dictionaries" android:icon="@drawable/dictionaries"/>
     <item android:id="@+id/delete_event" 
         android:orderInCategory="5"
         android:showAsAction="never"

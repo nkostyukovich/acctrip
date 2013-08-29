@@ -86,6 +86,10 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 		return inflater.inflate(com.dzebsu.acctrip.R.layout.statistics_header, null, false);
 	}
 
+	private String getCent(double value, double total) {
+		return " (" + CurrencyUtils.formatDecimalNotImportant(value / total * 100.) + "%)";
+	}
+
 	private void fillSortCategories() {
 		groups = getResources().getStringArray(R.array.statistics_groups);
 		sortGroupsList = new HashMap<String, List<SortItemPair>>(groups.length);
@@ -93,6 +97,9 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 		List<Operation> ops;
 		List<SortItemPair> items;
 		StatisticsQueryParams params;
+		double value;
+		double total = CurrencyUtils.getTotalEventExpenses(new OperationDataSource(this.getActivity())
+				.getOperationListByEventId(event.getId()), currs);
 
 		// by day
 		List<String> days = data.getEventDays(event.getId());
@@ -100,9 +107,10 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 		for (String day : days) {
 			params = StatisticsQueryParams.createParamsByDay(event.getId(), day);
 			ops = data.getFilteredOperationList(params);
+			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
 			items.add(new SortItemPair(DateFormatter.formatDate(this.getActivity(), ops.get(0).getDate()),
-					CurrencyUtils.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(ops, currs)) + " "
-							+ event.getPrimaryCurrency().getCode()));
+					CurrencyUtils.formatDecimalNotImportant(value) + " " + event.getPrimaryCurrency().getCode()
+							+ getCent(value, total)));
 		}
 		sortGroupsList.put(groups[0], items);
 
@@ -114,9 +122,10 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 			set.add(category);
 			params = StatisticsQueryParams.createParamsByCategory(event.getId(), set);
 			ops = data.getFilteredOperationList(params);
-			items.add(new SortItemPair(ops.get(0).getCategory().getName() + ":", CurrencyUtils
-					.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(ops, currs))
-					+ " " + event.getPrimaryCurrency().getCode()));
+			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
+			items.add(new SortItemPair(ops.get(0).getCategory().getName(), CurrencyUtils
+					.formatDecimalNotImportant(value)
+					+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total)));
 		}
 		sortGroupsList.put(groups[1], items);
 
@@ -128,10 +137,10 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 			set.add(currency);
 			params = StatisticsQueryParams.createParamsByCurrency(event.getId(), set);
 			ops = data.getFilteredOperationList(params);
+			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
 			items.add(new SortItemPair(CurrencyUtils.formatDecimalNotImportant(CurrencyUtils.TotalSum(ops)) + " "
-					+ ops.get(0).getCurrency().getCode() + ":", CurrencyUtils.formatDecimalNotImportant(CurrencyUtils
-					.getTotalEventExpenses(ops, currs))
-					+ " " + event.getPrimaryCurrency().getCode()));
+					+ ops.get(0).getCurrency().getCode(), CurrencyUtils.formatDecimalNotImportant(value) + " "
+					+ event.getPrimaryCurrency().getCode() + getCent(value, total)));
 		}
 		sortGroupsList.put(groups[2], items);
 
@@ -143,9 +152,9 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 			set.add(place);
 			params = StatisticsQueryParams.createParamsByPlace(event.getId(), set);
 			ops = data.getFilteredOperationList(params);
-			items.add(new SortItemPair(ops.get(0).getPlace().getName() + ":", CurrencyUtils
-					.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(ops, currs))
-					+ " " + event.getPrimaryCurrency().getCode()));
+			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
+			items.add(new SortItemPair(ops.get(0).getPlace().getName(), CurrencyUtils.formatDecimalNotImportant(value)
+					+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total)));
 		}
 		sortGroupsList.put(groups[3], items);
 	}
@@ -181,15 +190,17 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 		((TextView) getView().findViewById(R.id.st_head_total_exp_title)).setText(R.string.st_head_total_expenses_);
 		List<Operation> operations = new OperationDataSource(getActivity()).getOperationListByEventId(event.getId());
 		currs = new CurrencyPairDataSource(getActivity()).getCurrencyPairMapByEventId(event.getId());
+		double total = CurrencyUtils.getTotalEventExpenses(operations, currs);
 		((TextView) getView().findViewById(R.id.st_head_total_exp_value)).setText(CurrencyUtils
-				.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(operations, currs))
+				.formatDecimalNotImportant(total)
 				+ " " + event.getPrimaryCurrency().getCode());
 		((TextView) getView().findViewById(R.id.st_head_total_today_title)).setText(R.string.st_head_today_spent_);
+		double value = CurrencyUtils.getTotalEventExpenses(new StatisticsDataSource(getActivity())
+				.getFilteredOperationList(StatisticsQueryParams.createParamsByDate(event.getId(), DateFormatter
+						.getStartOfDay(), DateFormatter.getEndOfDay())), currs);
 		((TextView) getView().findViewById(R.id.st_head_total_today_value)).setText(CurrencyUtils
-				.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(new StatisticsDataSource(getActivity())
-						.getFilteredOperationList(StatisticsQueryParams.createParamsByDate(event.getId(), DateFormatter
-								.getStartOfDay(), DateFormatter.getEndOfDay())), currs))
-				+ " " + event.getPrimaryCurrency().getCode());
+				.formatDecimalNotImportant(value)
+				+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total));
 	}
 
 	@Override

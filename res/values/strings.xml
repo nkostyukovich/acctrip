@@ -178,7 +178,7 @@
 	
 	<string name="current_event_star">Current Event</string>
 	
-	<string name="op_tabs_operations">Operations</string>
+	<string name="op_tabs_operations">" Operations"</string>
 	
 	<string name="op_tabs_statistics">Statistics</string>
 	
