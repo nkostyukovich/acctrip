@@ -146,6 +146,8 @@ public class EditCurrencyPairDialog extends BaseSupportStableDialog {
 		}
 		c1 = CurrencyUtils.getDouble(s1);
 		c2 = CurrencyUtils.getDouble(s2);
+		if (c1 == 0.) c1 = 1.;
+		if (c2 == 0.) c2 = 1.;
 		new CurrencyPairDataSource(getActivity()).update(currencyPair.getEventId(), currencyPair.getSecondCurrency()
 				.getId(), c2 / c1);
 	}

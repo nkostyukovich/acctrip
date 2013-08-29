@@ -134,6 +134,14 @@ public class EventCurrenciesListActivity extends Activity {
 	protected void saveRates() {
 		double firstValues[] = adapterZ.getFirstValues();
 		double rates[] = adapterZ.getSecondValues();
+		for (int i = 0; i < rates.length; i++) {
+			if (rates[i] == 0.) {
+				rates[i] = 1.;
+			}
+			if (firstValues[i] == 0.) {
+				firstValues[i] = 1.;
+			}
+		}
 		for (int i = 0; i < firstValues.length; i++)
 			rates[i] /= firstValues[i];
 		new CurrencyPairDataSource(this).updateRatesBunch(adapterZ.getObjects(), rates);
