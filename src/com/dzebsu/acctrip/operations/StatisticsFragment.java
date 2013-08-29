@@ -1,11 +1,7 @@
 package com.dzebsu.acctrip.operations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +18,6 @@ import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.adapters.OperationsStatisticsListViewAdapter;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
-import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.db.datasources.EventDataSource;
 import com.dzebsu.acctrip.db.datasources.OperationDataSource;
 import com.dzebsu.acctrip.db.datasources.StatisticsDataSource;
@@ -33,35 +28,7 @@ import com.dzebsu.acctrip.models.Operation;
 
 public class StatisticsFragment extends Fragment implements TabUpdateListener {
 
-	public class SortItemPair {
-
-		String title;
-
-		String value;
-
-		public SortItemPair(String title, String value) {
-			this.title = title;
-			this.value = value;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-	}
-
-	private Map<String, List<SortItemPair>> sortGroupsList;
+	private Map<String, List<StatListItem>> sortGroupsList;
 
 	private Event event;
 
@@ -86,79 +53,6 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 		return inflater.inflate(com.dzebsu.acctrip.R.layout.statistics_header, null, false);
 	}
 
-	private String getCent(double value, double total) {
-		return " (" + CurrencyUtils.formatDecimalNotImportant(value / total * 100.) + "%)";
-	}
-
-	private void fillSortCategories() {
-		groups = getResources().getStringArray(R.array.statistics_groups);
-		sortGroupsList = new HashMap<String, List<SortItemPair>>(groups.length);
-		StatisticsDataSource data = new StatisticsDataSource(this.getActivity());
-		List<Operation> ops;
-		List<SortItemPair> items;
-		StatisticsQueryParams params;
-		double value;
-		double total = CurrencyUtils.getTotalEventExpenses(new OperationDataSource(this.getActivity())
-				.getOperationListByEventId(event.getId()), currs);
-
-		// by day
-		List<String> days = data.getEventDays(event.getId());
-		items = new ArrayList<SortItemPair>();
-		for (String day : days) {
-			params = StatisticsQueryParams.createParamsByDay(event.getId(), day);
-			ops = data.getFilteredOperationList(params);
-			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
-			items.add(new SortItemPair(DateFormatter.formatDate(this.getActivity(), ops.get(0).getDate()),
-					CurrencyUtils.formatDecimalNotImportant(value) + " " + event.getPrimaryCurrency().getCode()
-							+ getCent(value, total)));
-		}
-		sortGroupsList.put(groups[0], items);
-
-		// by categories
-		List<Long> categories = data.getEventCategories(event.getId());
-		items = new ArrayList<SortItemPair>();
-		for (Long category : categories) {
-			Set<Long> set = new HashSet<Long>(1);
-			set.add(category);
-			params = StatisticsQueryParams.createParamsByCategory(event.getId(), set);
-			ops = data.getFilteredOperationList(params);
-			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
-			items.add(new SortItemPair(ops.get(0).getCategory().getName(), CurrencyUtils
-					.formatDecimalNotImportant(value)
-					+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total)));
-		}
-		sortGroupsList.put(groups[1], items);
-
-		// by currencies
-		List<Long> currencies = data.getEventCurrencies(event.getId());
-		items = new ArrayList<SortItemPair>();
-		for (Long currency : currencies) {
-			Set<Long> set = new HashSet<Long>(1);
-			set.add(currency);
-			params = StatisticsQueryParams.createParamsByCurrency(event.getId(), set);
-			ops = data.getFilteredOperationList(params);
-			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
-			items.add(new SortItemPair(CurrencyUtils.formatDecimalNotImportant(CurrencyUtils.TotalSum(ops)) + " "
-					+ ops.get(0).getCurrency().getCode(), CurrencyUtils.formatDecimalNotImportant(value) + " "
-					+ event.getPrimaryCurrency().getCode() + getCent(value, total)));
-		}
-		sortGroupsList.put(groups[2], items);
-
-		// by categories
-		List<Long> places = data.getEventPlaces(event.getId());
-		items = new ArrayList<SortItemPair>();
-		for (Long place : places) {
-			Set<Long> set = new HashSet<Long>(1);
-			set.add(place);
-			params = StatisticsQueryParams.createParamsByPlace(event.getId(), set);
-			ops = data.getFilteredOperationList(params);
-			value = CurrencyUtils.getTotalEventExpenses(ops, currs);
-			items.add(new SortItemPair(ops.get(0).getPlace().getName(), CurrencyUtils.formatDecimalNotImportant(value)
-					+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total)));
-		}
-		sortGroupsList.put(groups[3], items);
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -166,9 +60,15 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 	}
 
 	private void fillData() {
+		getData();
 		fillHeaderInfo();
-		fillSortCategories();
 		fillList();
+	}
+
+	private void getData() {
+		groups = StatisticsUtils.getSortCategories(this.getActivity());
+		currs = StatisticsUtils.getCurrenciesRates(this.getActivity(), event.getId());
+		sortGroupsList = StatisticsUtils.getFilteredStatValues(this.getActivity(), event, currs);
 
 	}
 
@@ -190,7 +90,6 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 
 		((TextView) getView().findViewById(R.id.st_head_total_exp_title)).setText(R.string.st_head_total_expenses_);
 		List<Operation> operations = new OperationDataSource(getActivity()).getOperationListByEventId(event.getId());
-		currs = new CurrencyPairDataSource(getActivity()).getCurrencyPairMapByEventId(event.getId());
 		double total = CurrencyUtils.getTotalEventExpenses(operations, currs);
 		((TextView) getView().findViewById(R.id.st_head_total_exp_value)).setText(CurrencyUtils
 				.formatDecimalNotImportant(total)
@@ -201,7 +100,7 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 						.getStartOfDay(), DateFormatter.getEndOfDay())), currs);
 		((TextView) getView().findViewById(R.id.st_head_total_today_value)).setText(CurrencyUtils
 				.formatDecimalNotImportant(value)
-				+ " " + event.getPrimaryCurrency().getCode() + getCent(value, total));
+				+ " " + event.getPrimaryCurrency().getCode() + StatisticsUtils.getCent(value, total));
 	}
 
 	@Override

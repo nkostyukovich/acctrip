@@ -15,13 +15,13 @@ import android.widget.TextView;
 
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.operations.GraphStatActivity;
-import com.dzebsu.acctrip.operations.StatisticsFragment.SortItemPair;
+import com.dzebsu.acctrip.operations.StatListItem;
 
 public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapter {
 
 	private String[] sortCategories;
 
-	private Map<String, List<SortItemPair>> sortedValues;
+	private Map<String, List<StatListItem>> sortedValues;
 
 	private LayoutInflater inflater;
 
@@ -30,7 +30,7 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 	private long eventId;
 
 	public OperationsStatisticsListViewAdapter(Context ctx, long eventId, String[] sortCategories,
-			Map<String, List<SortItemPair>> sortedValues) {
+			Map<String, List<StatListItem>> sortedValues) {
 		super();
 		this.eventId = eventId;
 		this.sortCategories = sortCategories;
@@ -62,7 +62,7 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 		this.sortCategories = sortCategories;
 	}
 
-	public void setSortedValues(Map<String, List<SortItemPair>> sortedValues) {
+	public void setSortedValues(Map<String, List<StatListItem>> sortedValues) {
 		this.sortedValues = sortedValues;
 		this.notifyDataSetChanged();
 	}
