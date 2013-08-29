@@ -122,7 +122,7 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 
 		GroupViewHolder holder = (GroupViewHolder) rowView.getTag();
 		holder.title.setText(sortCategories[groupPosition]);
-
+		holder.graph.setFocusable(false);
 		holder.graph.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -140,11 +140,6 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 		intent.putExtra(GraphStatActivity.INTENT_KEY_SORT_CATEGORY, groupPosition);
 		intent.putExtra(GraphStatActivity.INTENT_KEY_EVENT_ID, eventId);
 		ctx.startActivity(intent);
-
-		/*
-		 * TimeGraph graph = new TimeGraph(); Intent intent =
-		 * graph.getIntent(ctx); ctx.startActivity(intent);
-		 */
 	}
 
 	@Override
