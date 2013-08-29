@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ import com.dzebsu.acctrip.models.CurrencyPair;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.Operation;
 
-public class StatisticsFragment extends Fragment {
+public class StatisticsFragment extends Fragment implements TabUpdateListener {
 
 	public class SortItemPair {
 
@@ -127,9 +128,10 @@ public class StatisticsFragment extends Fragment {
 			set.add(currency);
 			params = StatisticsQueryParams.createParamsByCurrency(event.getId(), set);
 			ops = data.getFilteredOperationList(params);
-			items.add(new SortItemPair(CurrencyUtils.TotalSum(ops) + " " + ops.get(0).getCurrency().getCode() + ":",
-					CurrencyUtils.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(ops, currs)) + " "
-							+ event.getPrimaryCurrency().getCode()));
+			items.add(new SortItemPair(CurrencyUtils.formatDecimalNotImportant(CurrencyUtils.TotalSum(ops)) + " "
+					+ ops.get(0).getCurrency().getCode() + ":", CurrencyUtils.formatDecimalNotImportant(CurrencyUtils
+					.getTotalEventExpenses(ops, currs))
+					+ " " + event.getPrimaryCurrency().getCode()));
 		}
 		sortGroupsList.put(groups[2], items);
 
@@ -149,8 +151,8 @@ public class StatisticsFragment extends Fragment {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
 		fillData();
 	}
 
@@ -164,11 +166,14 @@ public class StatisticsFragment extends Fragment {
 	private void fillList() {
 		if (listAdapter == null) {
 			listAdapter = new OperationsStatisticsListViewAdapter(this.getActivity(), groups, sortGroupsList);
+
+			ExpandableListAdapter adapter = listAdapter;
+			ExpandableListView listView = (ExpandableListView) getView().findViewById(R.id.stat_expandableList);
+			// trigger filter to it being applied on resume
+			listView.setAdapter(adapter);
+		} else {
+			listAdapter.setSortedValues(sortGroupsList);
 		}
-		ExpandableListAdapter adapter = listAdapter;
-		ExpandableListView listView = (ExpandableListView) getView().findViewById(R.id.stat_expandableList);
-		// trigger filter to it being applied on resume
-		listView.setAdapter(adapter);
 	}
 
 	private void fillHeaderInfo() {
@@ -186,4 +191,28 @@ public class StatisticsFragment extends Fragment {
 								.getStartOfDay(), DateFormatter.getEndOfDay())), currs))
 				+ " " + event.getPrimaryCurrency().getCode());
 	}
+
+	@Override
+	public void update() {
+		fillData();
+	}
+
+	private TabUpdater updater;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof TabUpdater) {
+			(updater = (TabUpdater) activity).registerTab(this);
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		if (updater != null) {
+			updater.unregisterTab(this);
+		}
+	}
+
 }

@@ -1,5 +1,8 @@
 package com.dzebsu.acctrip.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -14,11 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.operations.OperationListFragment;
 import com.dzebsu.acctrip.operations.OperationsPagerAdapter;
 import com.dzebsu.acctrip.operations.TabListener;
+import com.dzebsu.acctrip.operations.TabUpdateListener;
+import com.dzebsu.acctrip.operations.TabUpdater;
 
-public class OperationsActivity extends FragmentActivity {
+public class OperationsActivity extends FragmentActivity implements TabUpdater, SimpleDialogListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,4 +106,49 @@ public class OperationsActivity extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 	}
+
+	private List<TabUpdateListener> tabs;
+
+	@Override
+	public void registerTab(TabUpdateListener tab) {
+		if (tabs == null) {
+			tabs = new ArrayList<TabUpdateListener>();
+		}
+		tabs.add(tab);
+	}
+
+	@Override
+	public void updateTabs() {
+		for (TabUpdateListener tab : tabs) {
+			tab.update();
+		}
+
+	}
+
+	@Override
+	public void unregisterTab(TabUpdateListener tab) {
+		if (tabs != null) {
+			tabs.remove(tab);
+		}
+
+	}
+
+	@Override
+	public void positiveButtonDialog(Bundle args) {
+		updateTabs();
+
+	}
+
+	@Override
+	public void negativeButtonDialog(Bundle args) {
+		updateTabs();
+
+	}
+
+	@Override
+	public void anotherDialogAction(Bundle args) {
+		updateTabs();
+
+	}
+
 }

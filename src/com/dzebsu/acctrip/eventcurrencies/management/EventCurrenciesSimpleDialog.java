@@ -102,8 +102,8 @@ public class EventCurrenciesSimpleDialog extends BaseSupportStableDialog {
 		this.event = event;
 	}
 
-	public void setListenerToUse(SimpleDialogListener listener) {
-		this.listener = listener;
+	public void setListenerToUse(Activity listener) {
+		if (listener instanceof SimpleDialogListener) this.listener = (SimpleDialogListener) listener;
 	}
 
 }

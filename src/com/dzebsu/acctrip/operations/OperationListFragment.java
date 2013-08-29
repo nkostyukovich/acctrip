@@ -3,6 +3,7 @@ package com.dzebsu.acctrip.operations;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,7 +35,6 @@ import android.widget.Toast;
 
 import com.dzebsu.acctrip.EditOperationActivity;
 import com.dzebsu.acctrip.R;
-import com.dzebsu.acctrip.SimpleDialogListener;
 import com.dzebsu.acctrip.activity.EditEventActivity;
 import com.dzebsu.acctrip.activity.OperationsActivity;
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
@@ -54,7 +54,7 @@ import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
-public class OperationListFragment extends Fragment implements SimpleDialogListener {
+public class OperationListFragment extends Fragment implements TabUpdateListener {
 
 	public static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
 
@@ -325,7 +325,7 @@ public class OperationListFragment extends Fragment implements SimpleDialogListe
 
 	private void showEventCurrenciesSimpleDialog() {
 		EventCurrenciesSimpleDialog newDialog = EventCurrenciesSimpleDialog.newInstance(event);
-		newDialog.setListenerToUse(this);
+		newDialog.setListenerToUse(this.getActivity());
 		newDialog.show(getFragmentManager(), "SimpleCurrencyPairs");
 	}
 
@@ -433,29 +433,6 @@ public class OperationListFragment extends Fragment implements SimpleDialogListe
 				+ " " + event.getPrimaryCurrency().getCode());
 	}
 
-	@Override
-	public void positiveButtonDialog(Bundle args) {
-		currencyPairs = new CurrencyPairDataSource(this.getActivity()).getCurrencyPairMapByEventId(event.getId());
-		if (adapterZ != null) {
-			adapterZ.setCurrencyPairRates(currencyPairs);
-			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
-			adapterZ.notifyDataSetChanged();
-		}
-		fillEventInfo();
-	}
-
-	@Override
-	public void negativeButtonDialog(Bundle args) {
-		// nothing
-
-	}
-
-	@Override
-	public void anotherDialogAction(Bundle args) {
-		// nothing
-
-	}
-
 	private void newCurrencyAppeared() {
 		Bundle args = intent.getBundle(INTENT_KEY_NEW_CURRENCY_APPEARED);
 		invokeSuggestEditCurrenciesDialog(new CurrencyDataSource(this.getActivity()).getEntityById(args
@@ -466,5 +443,34 @@ public class OperationListFragment extends Fragment implements SimpleDialogListe
 	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
 		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
 		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
+	}
+
+	@Override
+	public void update() {
+		currencyPairs = new CurrencyPairDataSource(this.getActivity()).getCurrencyPairMapByEventId(event.getId());
+		if (adapterZ != null) {
+			adapterZ.setCurrencyPairRates(currencyPairs);
+			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
+			adapterZ.notifyDataSetChanged();
+		}
+		fillEventInfo();
+	}
+
+	private TabUpdater updater;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof TabUpdater) {
+			(updater = (TabUpdater) activity).registerTab(this);
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		if (updater != null) {
+			updater.unregisterTab(this);
+		}
 	}
 }

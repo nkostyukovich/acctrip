@@ -52,6 +52,7 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 
 	public void setSortedValues(Map<String, List<SortItemPair>> sortedValues) {
 		this.sortedValues = sortedValues;
+		this.notifyDataSetChanged();
 	}
 
 	@Override
