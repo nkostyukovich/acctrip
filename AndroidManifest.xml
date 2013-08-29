@@ -57,11 +57,14 @@
         </activity>
         <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.OperationDetailsActivity" >
         </activity>
+        <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.operations.GraphStatActivity" >
+        </activity>
         <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.activity.SettingsActivity" >
         </activity>
         <activity android:configChanges="locale" android:name="com.dzebsu.acctrip.EventCurrenciesListActivity" android:windowSoftInputMode="adjustPan">
         </activity>
-        
+        <activity android:configChanges="locale" android:name="org.achartengine.GraphicalActivity" android:windowSoftInputMode="adjustPan">
+        </activity>
     </application>
 
 </manifest>

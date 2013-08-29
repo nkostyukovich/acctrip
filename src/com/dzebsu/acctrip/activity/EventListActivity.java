@@ -116,7 +116,6 @@ public class EventListActivity extends Activity implements EventExpensesLoadList
 		Intent intent = new Intent(this, EditEventActivity.class);
 		String name = ((SearchView) findViewById(R.id.event_SearchView)).getQuery().toString();
 		intent.putExtra("eventName", name);
-		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivity(intent);
 	}
 

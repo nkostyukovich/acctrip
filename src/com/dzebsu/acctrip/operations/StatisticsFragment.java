@@ -174,7 +174,8 @@ public class StatisticsFragment extends Fragment implements TabUpdateListener {
 
 	private void fillList() {
 		if (listAdapter == null) {
-			listAdapter = new OperationsStatisticsListViewAdapter(this.getActivity(), groups, sortGroupsList);
+			listAdapter = new OperationsStatisticsListViewAdapter(this.getActivity(), event.getId(), groups,
+					sortGroupsList);
 
 			ExpandableListAdapter adapter = listAdapter;
 			ExpandableListView listView = (ExpandableListView) getView().findViewById(R.id.stat_expandableList);

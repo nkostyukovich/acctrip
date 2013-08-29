@@ -197,5 +197,6 @@
         <item>By currency</item>
         <item>By place</item>
     </string-array>
+        <string name="show_statistics_graph">Show statistics graph</string>
 	
 </resources>

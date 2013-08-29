@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dzebsu.acctrip.R;
+import com.dzebsu.acctrip.operations.GraphStatActivity;
 import com.dzebsu.acctrip.operations.StatisticsFragment.SortItemPair;
 
 public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapter {
@@ -21,11 +25,17 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 
 	private LayoutInflater inflater;
 
-	public OperationsStatisticsListViewAdapter(Context ctx, String[] sortCategories,
+	private Context ctx;
+
+	private long eventId;
+
+	public OperationsStatisticsListViewAdapter(Context ctx, long eventId, String[] sortCategories,
 			Map<String, List<SortItemPair>> sortedValues) {
 		super();
+		this.eventId = eventId;
 		this.sortCategories = sortCategories;
 		this.sortedValues = sortedValues;
+		this.ctx = ctx;
 		inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -39,6 +49,8 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 	static class GroupViewHolder {
 
 		public TextView title = null;
+
+		public ImageButton graph = null;
 	}
 
 	@Override
@@ -98,18 +110,41 @@ public class OperationsStatisticsListViewAdapter extends BaseExpandableListAdapt
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		View rowView = convertView;
 		if (rowView == null) {
 			rowView = inflater.inflate(R.layout.statistics_group_item, parent, false);
 			GroupViewHolder groupViewHolder = new GroupViewHolder();
 			groupViewHolder.title = (TextView) rowView.findViewById(R.id.stat_group_item_title);
+			groupViewHolder.graph = (ImageButton) rowView.findViewById(R.id.stat_group_item_graph_btn);
 			rowView.setTag(groupViewHolder);
 		}
 
 		GroupViewHolder holder = (GroupViewHolder) rowView.getTag();
 		holder.title.setText(sortCategories[groupPosition]);
+
+		holder.graph.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showChartActivity(groupPosition);
+
+			}
+		});
 		return rowView;
+	}
+
+	protected void showChartActivity(int groupPosition) {
+
+		Intent intent = new Intent(ctx, GraphStatActivity.class);
+		intent.putExtra(GraphStatActivity.INTENT_KEY_SORT_CATEGORY, groupPosition);
+		intent.putExtra(GraphStatActivity.INTENT_KEY_EVENT_ID, eventId);
+		ctx.startActivity(intent);
+
+		/*
+		 * TimeGraph graph = new TimeGraph(); Intent intent =
+		 * graph.getIntent(ctx); ctx.startActivity(intent);
+		 */
 	}
 
 	@Override
