@@ -68,6 +68,7 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 
 	private Map<Long, CurrencyPair> currencyPairs;
 
+	// TODO FIXME set color from style but not this
 	private final static int SELECTION_COLOR = android.R.color.holo_blue_dark;
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
