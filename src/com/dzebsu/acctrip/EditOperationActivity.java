@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.activity.DictionaryActivity;
-import com.dzebsu.acctrip.activity.OperationListActivity;
+import com.dzebsu.acctrip.activity.OperationsActivity;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.date.utils.DateFormatter;
 import com.dzebsu.acctrip.db.datasources.BaseDictionaryDataSource;
@@ -355,7 +355,7 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		// work
 		Bundle args = new Bundle();
 		args.putLong("currencyId", currencyId.getId());
-		Intent intent = new Intent(this, OperationListActivity.class);
+		Intent intent = new Intent(this, OperationsActivity.class);
 		intent.putExtra("newCurrencyAppeared", args);
 		intent.putExtra("eventId", event.getId());
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

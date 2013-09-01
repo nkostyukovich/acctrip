@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<item
+        android:id="@+id/open_dictionaries"
+        android:orderInCategory="60"
+        android:showAsAction="never"
+        android:title="@string/open_dictionaries" android:icon="@drawable/dictionaries"/>
+   
+     <item
+        android:id="@+id/settings"
+        android:orderInCategory="111"
+        android:showAsAction="never"
+        android:title="@string/settings"/>
+</menu>

@@ -1,4 +1,4 @@
-package com.dzebsu.acctrip.activity;
+package com.dzebsu.acctrip.operations;
 
 import java.util.List;
 import java.util.Map;
@@ -8,11 +8,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -35,7 +35,8 @@ import android.widget.Toast;
 
 import com.dzebsu.acctrip.EditOperationActivity;
 import com.dzebsu.acctrip.R;
-import com.dzebsu.acctrip.SimpleDialogListener;
+import com.dzebsu.acctrip.activity.EditEventActivity;
+import com.dzebsu.acctrip.activity.OperationsActivity;
 import com.dzebsu.acctrip.adapters.OperationsListViewAdapter;
 import com.dzebsu.acctrip.currency.utils.CurrencyUtils;
 import com.dzebsu.acctrip.db.datasources.CurrencyDataSource;
@@ -53,9 +54,9 @@ import com.dzebsu.acctrip.models.Operation;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
-public class OperationListActivity extends Activity implements SimpleDialogListener {
+public class OperationListFragment extends Fragment implements TabUpdateListener {
 
-	private static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
+	public static final String INTENT_KEY_NEW_CURRENCY_APPEARED = "newCurrencyAppeared";
 
 	private ActionMode mActionMode;
 
@@ -79,18 +80,14 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			mActionMode = null;
-			final ListView list = (ListView) findViewById(R.id.op_list);
+			final ListView list = (ListView) getView().findViewById(R.id.op_list);
 			list.findViewWithTag(selectedViewTag).setBackgroundColor(
-					getApplication().getResources().getColor(android.R.color.transparent));
-			// list.clearChoices();
-			// list.getChildAt(selectedItem).setBackgroundColor(
-			// getApplication().getResources().getColor(android.R.color.transparent));
+					getActivity().getApplication().getResources().getColor(android.R.color.transparent));
 
 		}
 
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// Inflate a menu resource providing context menu items
 			MenuInflater inflater = mode.getMenuInflater();
 			inflater.inflate(R.menu.context_action_bar_dictionary, menu);
 			return true;
@@ -121,31 +118,35 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	// for restoring list scroll position
 	private static final String LIST_STATE = "listState";
 
-	private static final String INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED = "newPrimaryCurrencyAppeared";
+	public static final String INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED = "newPrimaryCurrencyAppeared";
 
 	private Parcelable mListState = null;
 
 	private boolean dataChanged = false;
 
+	private Bundle intent;
+
 	@Override
-	protected void onRestoreInstanceState(Bundle state) {
-		super.onRestoreInstanceState(state);
-		mListState = state.getParcelable(LIST_STATE);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null && savedInstanceState.containsKey(LIST_STATE))
+			mListState = savedInstanceState.getParcelable(LIST_STATE);
 	}
 
 	protected void onDeleteOperation(final long itemId) {
-		new AlertDialog.Builder(this).setTitle(R.string.delete_dialog_title).setMessage(
+		new AlertDialog.Builder(this.getActivity()).setTitle(R.string.delete_dialog_title).setMessage(
 				String.format(getString(R.string.confirm_del), getString(R.string.this_op))).setIcon(
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
-						OperationDataSource opdata = new OperationDataSource(OperationListActivity.this);
+						OperationDataSource opdata = new OperationDataSource(OperationListFragment.this.getActivity());
 						Operation op = opdata.getOperationById(itemId);
 						opdata.deleteById(itemId);
-						new CurrencyPairDataSource(OperationListActivity.this).deleteCurrencyPairIfUnused(
-								event.getId(), op.getCurrency().getId(), -1, event.getPrimaryCurrency().getId());
-						Intent intent = new Intent(OperationListActivity.this, OperationListActivity.class);
+						new CurrencyPairDataSource(OperationListFragment.this.getActivity())
+								.deleteCurrencyPairIfUnused(event.getId(), op.getCurrency().getId(), -1, event
+										.getPrimaryCurrency().getId());
+						Intent intent = new Intent(OperationListFragment.this.getActivity(), OperationsActivity.class);
 						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						intent.putExtra("toast", R.string.op_deleted);
 						intent.putExtra("eventId", event.getId());
@@ -156,7 +157,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	protected void onOperationEdit(long itemId) {
-		Intent intent = new Intent(OperationListActivity.this, EditOperationActivity.class);
+		Intent intent = new Intent(OperationListFragment.this.getActivity(), EditOperationActivity.class);
 		intent.putExtra("eventId", event.getId());
 		intent.putExtra("mode", "edit");
 		intent.putExtra("opID", itemId);
@@ -166,12 +167,23 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	public static final String INTENT_KEY_EVENT_ID = "eventId";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		long eventId = getIntent().getLongExtra(INTENT_KEY_EVENT_ID, 0);
-		event = new EventDataSource(this).getEventById(eventId);
-		setContentView(R.layout.activity_operation_list);
-		ListView listView = (ListView) findViewById(R.id.op_list);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.activity_operation_list, container, false);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		initValues();
+	}
+
+	private void initValues() {
+		intent = getArguments();
+
+		long eventId = intent.getLong(INTENT_KEY_EVENT_ID, 0);
+		event = new EventDataSource(this.getActivity()).getEventById(eventId);
+
+		ListView listView = (ListView) getView().findViewById(R.id.op_list);
 		listView.addHeaderView(createListHeader());
 		fillOperationList();
 
@@ -185,9 +197,9 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 					return false;
 				}
 				selectedViewTag = view.getTag();
-				mActionMode = startActionMode(mActionModeCallback);
+				mActionMode = getActivity().startActionMode(mActionModeCallback);
 				selectedItem = pos;
-				view.setBackgroundColor(getApplication().getResources().getColor(SELECTION_COLOR));
+				view.setBackgroundColor(getActivity().getApplication().getResources().getColor(SELECTION_COLOR));
 				return true;
 			}
 		});
@@ -215,7 +227,7 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			}
 		});
 
-		((Button) findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
+		((Button) getView().findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -223,21 +235,20 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			}
 		});
 		createFilter();
-		setupActionBar();
-		Intent intent = getIntent();
-		if (intent.hasExtra("toast"))
-			Toast.makeText(getApplicationContext(), intent.getIntExtra("toast", R.string.not_message),
+		if (intent.containsKey("toast"))
+			Toast.makeText(getActivity().getApplicationContext(), intent.getInt("toast", R.string.not_message),
 					Toast.LENGTH_SHORT).show();
-		if (intent.hasExtra(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
+		if (intent.containsKey(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
 			newCurrencyAppeared();
 		}
-		if (intent.hasExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
+		if (intent.containsKey(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED)) {
 			newPrimaryCurrencyAppeared();
 		}
+
 	}
 
 	private void createFilter() {
-		SearchView eventsFilter = (SearchView) findViewById(R.id.uni_op_searchView);
+		SearchView eventsFilter = (SearchView) getView().findViewById(R.id.uni_op_searchView);
 		eventsFilter.setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
@@ -256,25 +267,25 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			@Override
 			public boolean onQueryTextChange(String newText) {
 
-				OperationListActivity.this.adapterZ.getFilter().filter(newText);
+				OperationListFragment.this.adapterZ.getFilter().filter(newText);
 				return true;
 			}
 		});
 	}
 
 	private void newPrimaryCurrencyAppeared() {
-		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+		Bundle args = intent.getBundle(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
 
-		invokeSuggestEditCurrenciesDialogPrimary(
-				new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")), args
-						.getLong("currencyIdBefore"));
-		getIntent().removeExtra(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
+		invokeSuggestEditCurrenciesDialogPrimary(new CurrencyDataSource(this.getActivity()).getEntityById(args
+				.getLong("currencyId")), args.getLong("currencyIdBefore"));
+		intent.remove(INTENT_KEY_NEW_PRIMARY_CURRENCY_APPEARED);
 
 	}
 
 	private void invokeSuggestEditCurrenciesDialogPrimary(Currency currency, long currencyIdBefore) {
 		BaseNewPrimaryCurrencyDialog dialog;
-		if (new CurrencyPairDataSource(this).getCurrencyPairByValues(event.getId(), event.getPrimaryCurrency().getId()) != null) {
+		if (new CurrencyPairDataSource(this.getActivity()).getCurrencyPairByValues(event.getId(), event
+				.getPrimaryCurrency().getId()) != null) {
 			dialog = NewPrimaryCurrencyAppearedDialog.newInstance(event, currency, currencyIdBefore);
 		} else {
 			dialog = TotalNewPrimaryCurrencyDialog.newInstance(event, currency, currencyIdBefore);
@@ -284,22 +295,20 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.operation_list, menu);
-		return true;
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.operation_list, menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				/*
-				 * Intent intent = new Intent(this, EventListActivity.class);
-				 * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				 * startActivity(intent);
-				 */
-				NavUtils.navigateUpFromSameTask(this);
-				return true;
 			case R.id.menu_edit_event_currs:
 				showEventCurrenciesSimpleDialog();
 				return true;
@@ -309,36 +318,19 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 			case R.id.event_edit:
 				onEventEdit(item.getActionView());
 				return true;
-			case R.id.open_dictionaries:
-				onOpenDictionaries();
-				return true;
-			case R.id.settings:
-				startActivity(new Intent(this, SettingsActivity.class));
-				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		NavUtils.navigateUpFromSameTask(this);
-		super.onBackPressed();
-	}
-
 	private void showEventCurrenciesSimpleDialog() {
 		EventCurrenciesSimpleDialog newDialog = EventCurrenciesSimpleDialog.newInstance(event);
-		newDialog.setListenerToUse(this);
+		newDialog.setListenerToUse(this.getActivity());
 		newDialog.show(getFragmentManager(), "SimpleCurrencyPairs");
 	}
 
-	public void onOpenDictionaries() {
-		Intent intent = new Intent(this, DictionaryActivity.class);
-		startActivity(intent);
-	}
-
 	private void onEventEdit(View actionView) {
-		Intent intent = new Intent(this, EditEventActivity.class);
+		Intent intent = new Intent(this.getActivity(), EditEventActivity.class);
 
 		intent.putExtra("editId", event.getId());
 		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -346,49 +338,50 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	public void onDeleteEvent(View view) {
-		long ops = new OperationDataSource(this).getCountByEventId(event.getId());
-		String message = ops > 0 ? String.format(getString(R.string.ev_used_by_ops), new EventDataSource(this)
-				.getEventById(event.getId()).getName(), ops) : String.format(getString(R.string.confirm_del),
-				new EventDataSource(this).getEventById(event.getId()).getName());
-		new AlertDialog.Builder(this).setTitle(R.string.delete_dialog_title).setMessage(message).setIcon(
+		long ops = new OperationDataSource(this.getActivity()).getCountByEventId(event.getId());
+		String message = ops > 0 ? String.format(getString(R.string.ev_used_by_ops), new EventDataSource(this
+				.getActivity()).getEventById(event.getId()).getName(), ops) : String.format(
+				getString(R.string.confirm_del), new EventDataSource(this.getActivity()).getEventById(event.getId())
+						.getName());
+		new AlertDialog.Builder(this.getActivity()).setTitle(R.string.delete_dialog_title).setMessage(message).setIcon(
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int whichButton) {
-						EventDataSource dataSource = new EventDataSource(OperationListActivity.this);
+						EventDataSource dataSource = new EventDataSource(OperationListFragment.this.getActivity());
 						dataSource.delete(event.getId());
-						if (PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).getLong(
-								SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId())
-							PreferenceManager.getDefaultSharedPreferences(OperationListActivity.this).edit().putLong(
-									SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1).commit();
-						new CurrencyPairDataSource(OperationListActivity.this).deleteByEventId(event.getId());
+						if (PreferenceManager.getDefaultSharedPreferences(OperationListFragment.this.getActivity())
+								.getLong(SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId())
+							PreferenceManager.getDefaultSharedPreferences(OperationListFragment.this.getActivity())
+									.edit().putLong(SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1).commit();
+						new CurrencyPairDataSource(OperationListFragment.this.getActivity()).deleteByEventId(event
+								.getId());
 
-						Toast.makeText(OperationListActivity.this, R.string.event_deleted, Toast.LENGTH_SHORT).show();
-						NavUtils.navigateUpFromSameTask(OperationListActivity.this);
-						finish();
+						Toast.makeText(OperationListFragment.this.getActivity(), R.string.event_deleted,
+								Toast.LENGTH_SHORT).show();
+						OperationListFragment.this.getActivity().onBackPressed();
 					}
 				}).setNegativeButton(android.R.string.no, null).show();
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		fillOperationList();
-		if (mListState != null) ((ListView) findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
+		if (mListState != null) ((ListView) getView().findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
 		mListState = null;
 	}
 
 	// scroll position saving
 	@Override
-	protected void onSaveInstanceState(Bundle state) {
+	public void onSaveInstanceState(Bundle state) {
 		super.onSaveInstanceState(state);
-		mListState = ((ListView) findViewById(R.id.op_list)).onSaveInstanceState();
+		mListState = ((ListView) getView().findViewById(R.id.op_list)).onSaveInstanceState();
 		state.putParcelable(LIST_STATE, mListState);
-		setupActionBar();
 	}
 
 	public void onNewOperation() {
-		Intent intent = new Intent(this, EditOperationActivity.class);
+		Intent intent = new Intent(this.getActivity(), EditOperationActivity.class);
 		intent.putExtra("eventId", event.getId());
 		intent.putExtra("mode", "new");
 		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -396,40 +389,32 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	private void fillOperationList() {
-		event = new EventDataSource(this).getEventById(event.getId());
+		event = new EventDataSource(this.getActivity()).getEventById(event.getId());
 		if (adapterZ == null || dataChanged) {
 			dataChanged = false;
-			currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
-			operations = new OperationDataSource(this).getOperationListByEventId(event.getId());
-			adapterZ = new OperationsListViewAdapter(this, operations);
+			currencyPairs = new CurrencyPairDataSource(this.getActivity()).getCurrencyPairMapByEventId(event.getId());
+			operations = new OperationDataSource(this.getActivity()).getOperationListByEventId(event.getId());
+			adapterZ = new OperationsListViewAdapter(this.getActivity(), operations);
 			adapterZ.setCurrencyPairRates(currencyPairs);
 			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
 
 		}
 		ListAdapter adapter = adapterZ;
-		ListView listView = (ListView) findViewById(R.id.op_list);
+		ListView listView = (ListView) getView().findViewById(R.id.op_list);
 		fillEventInfo();
 		listView.setAdapter(adapter);
-		OperationListActivity.this.adapterZ.getFilter().filter(
-				((SearchView) findViewById(R.id.uni_op_searchView)).getQuery());
+		OperationListFragment.this.adapterZ.getFilter().filter(
+				((SearchView) getView().findViewById(R.id.uni_op_searchView)).getQuery());
 	}
 
 	public View createListHeader() {
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(com.dzebsu.acctrip.R.layout.operation_list_header, null, false);
 	}
 
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-			getActionBar().setTitle(R.string.event_title);
-			getActionBar().setHomeButtonEnabled(true);
-		}
-	}
-
 	@Override
-	protected void onRestart() {
-		super.onRestart();
+	public void onStart() {
+		super.onStart();
 		dataChanged = true;
 	}
 
@@ -441,16 +426,28 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 	}
 
 	public void fillEventInfo() {
-		((TextView) findViewById(R.id.op_list_header_name)).setText(event.getName());
-		((TextView) findViewById(R.id.op_list_header_desc)).setText(event.getDesc());
-		((TextView) findViewById(R.id.op_list_header_sum)).setText(CurrencyUtils
+		((TextView) getView().findViewById(R.id.op_list_header_name)).setText(event.getName());
+		((TextView) getView().findViewById(R.id.op_list_header_desc)).setText(event.getDesc());
+		((TextView) getView().findViewById(R.id.op_list_header_sum)).setText(CurrencyUtils
 				.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(operations, currencyPairs))
 				+ " " + event.getPrimaryCurrency().getCode());
 	}
 
+	private void newCurrencyAppeared() {
+		Bundle args = intent.getBundle(INTENT_KEY_NEW_CURRENCY_APPEARED);
+		invokeSuggestEditCurrenciesDialog(new CurrencyDataSource(this.getActivity()).getEntityById(args
+				.getLong("currencyId")));
+		intent.remove(INTENT_KEY_NEW_CURRENCY_APPEARED);
+	}
+
+	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
+		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
+		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
+	}
+
 	@Override
-	public void positiveButtonDialog(Bundle args) {
-		currencyPairs = new CurrencyPairDataSource(this).getCurrencyPairMapByEventId(event.getId());
+	public void update() {
+		currencyPairs = new CurrencyPairDataSource(this.getActivity()).getCurrencyPairMapByEventId(event.getId());
 		if (adapterZ != null) {
 			adapterZ.setCurrencyPairRates(currencyPairs);
 			adapterZ.setPrimaryCurrency(event.getPrimaryCurrency());
@@ -459,26 +456,21 @@ public class OperationListActivity extends Activity implements SimpleDialogListe
 		fillEventInfo();
 	}
 
-	@Override
-	public void negativeButtonDialog(Bundle args) {
-		// nothing
-
-	}
+	private TabUpdater updater;
 
 	@Override
-	public void anotherDialogAction(Bundle args) {
-		// nothing
-
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof TabUpdater) {
+			(updater = (TabUpdater) activity).registerTab(this);
+		}
 	}
 
-	private void newCurrencyAppeared() {
-		Bundle args = getIntent().getBundleExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
-		invokeSuggestEditCurrenciesDialog(new CurrencyDataSource(this).getEntityById(args.getLong("currencyId")));
-		getIntent().removeExtra(INTENT_KEY_NEW_CURRENCY_APPEARED);
-	}
-
-	private void invokeSuggestEditCurrenciesDialog(Currency currency) {
-		NewCurrencyAppearedDialog dialog = NewCurrencyAppearedDialog.newInstance(event, currency);
-		dialog.show(getFragmentManager(), "newCurrencyAppearedDialog");
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		if (updater != null) {
+			updater.unregisterTab(this);
+		}
 	}
 }

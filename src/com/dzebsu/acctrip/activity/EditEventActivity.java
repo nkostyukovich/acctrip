@@ -193,7 +193,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		Bundle args = new Bundle();
 		args.putLong("currencyId", primaryCurrencyId);
 		args.putLong("currencyIdBefore", currencyIdBefore);
-		Intent intent = new Intent(this, OperationListActivity.class);
+		Intent intent = new Intent(this, OperationsActivity.class);
 		intent.putExtra("newPrimaryCurrencyAppeared", args);
 		intent.putExtra("eventId", editEvent.getId());
 
@@ -229,7 +229,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void startOperationListActivity(long eventId) {
 		// go right to new event
-		Intent intent = new Intent(this, OperationListActivity.class);
+		Intent intent = new Intent(this, OperationsActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		// edited intent.putExtra("toast", R.string.op_deleted);
 		intent.putExtra(NEW_INTENT_KEY_EVENT_ID, eventId);

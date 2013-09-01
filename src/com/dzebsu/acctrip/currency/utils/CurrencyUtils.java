@@ -76,4 +76,12 @@ public class CurrencyUtils {
 
 		return op.getValue() / currencyPairRates.get(op.getCurrency().getId()).getRate();
 	}
+
+	public static double TotalSum(List<Operation> operations) {
+		double sum = 0.;
+		for (Operation op : operations) {
+			sum += op.getValue();
+		}
+		return sum;
+	}
 }

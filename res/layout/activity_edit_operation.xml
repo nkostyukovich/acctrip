@@ -130,12 +130,12 @@
             
             android:text="24/7/2013" />
         </LinearLayout>
-        
-       <include android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/edit_ll"
-        layout="@layout/common_save_cancel_btns"/>
 
+       <include
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:layout_alignParentLeft="true"
+           layout="@layout/common_save_cancel_btns" />
 
     </RelativeLayout>

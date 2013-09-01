@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.dzebsu.acctrip.activity.EventListActivity;
-import com.dzebsu.acctrip.activity.OperationListActivity;
+import com.dzebsu.acctrip.activity.OperationsActivity;
+import com.dzebsu.acctrip.operations.OperationListFragment;
 import com.dzebsu.acctrip.settings.SettingsFragment;
 
 public class StartupActivity extends Activity {
@@ -27,8 +28,8 @@ public class StartupActivity extends Activity {
 				finish();
 				return;
 			}
-			intent = new Intent(this, OperationListActivity.class);
-			intent.putExtra(OperationListActivity.INTENT_KEY_EVENT_ID, id);
+			intent = new Intent(this, OperationsActivity.class);
+			intent.putExtra(OperationListFragment.INTENT_KEY_EVENT_ID, id);
 		}
 		startActivity(intent);
 		finish();

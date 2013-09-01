@@ -11,6 +11,8 @@ public class EventAccContract {
 
 		public static final String TABLE_NAME = "event";
 
+		public static final String ALIAS_TABLE_NAME = "ev";
+
 		public static final String NAME = "name";
 
 		public static final String DESC = "description";
@@ -40,6 +42,8 @@ public class EventAccContract {
 		public static final String ALIAS_ID = "cat_id";
 
 		public static final String ALIAS_NAME = "cat_name";
+
+		public static final String ALIAS_TABLE_NAME = "cat";
 	}
 
 	public static abstract class Currency implements BaseColumns {
@@ -55,6 +59,8 @@ public class EventAccContract {
 		public static final String ALIAS_CODE = "cur_code";
 
 		public static final String ALIAS_NAME = "cur_name";
+
+		public static final String ALIAS_TABLE_NAME = "cur";
 	}
 
 	public static abstract class Place implements BaseColumns {
@@ -66,6 +72,8 @@ public class EventAccContract {
 		public static final String ALIAS_ID = "place_id";
 
 		public static final String ALIAS_NAME = "place_name";
+
+		public static final String ALIAS_TABLE_NAME = "pl";
 	}
 
 	public static abstract class Operation implements BaseColumns {
@@ -88,6 +96,8 @@ public class EventAccContract {
 
 		public static final String PLACE_ID = "placeId";
 
+		public static final String ALIAS_TABLE_NAME = "op";
+
 	}
 
 	public static abstract class CurrencyPair implements BaseColumns {
@@ -103,6 +113,7 @@ public class EventAccContract {
 		public static final String ALIAS_SECOND_NAME = "second_cur_name";
 
 		public static final String RATE = "rate";
+
 	}
 
 }

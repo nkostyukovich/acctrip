@@ -4,14 +4,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.dzebsu.acctrip.BaseStableDialog;
+import com.dzebsu.acctrip.BaseSupportStableDialog;
 import com.dzebsu.acctrip.EventCurrenciesListActivity;
 import com.dzebsu.acctrip.R;
 import com.dzebsu.acctrip.db.datasources.CurrencyPairDataSource;
 import com.dzebsu.acctrip.models.Event;
 import com.dzebsu.acctrip.models.dictionaries.Currency;
 
-public abstract class BaseNewPrimaryCurrencyDialog extends BaseStableDialog {
+public abstract class BaseNewPrimaryCurrencyDialog extends BaseSupportStableDialog {
 
 	protected void setFields(Event event, Currency currency, long currencyIdBefore) {
 		this.event = event;

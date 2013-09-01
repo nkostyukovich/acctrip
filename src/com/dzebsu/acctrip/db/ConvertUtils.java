@@ -78,4 +78,12 @@ public class ConvertUtils {
 		cp.setRate(c.getDouble(c.getColumnIndex(EventAccContract.CurrencyPair.RATE)));
 		return cp;
 	}
+
+	public static Long cursorToLong(Cursor c) {
+		return c.getLong(0);
+	}
+
+	public static String cursorToString(Cursor c) {
+		return c.getString(0);
+	}
 }
