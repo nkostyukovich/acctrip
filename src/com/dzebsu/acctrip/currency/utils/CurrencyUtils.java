@@ -38,9 +38,12 @@ public class CurrencyUtils {
 	}
 
 	public static double getDouble(String s) {
-		if (s.isEmpty())
+		if (s.isEmpty()) {
 			return 0.;
-		else return Double.parseDouble(s);
+		} else {
+			return Double.parseDouble(s.replace(',', '.'));
+		}
+
 	}
 
 	public static boolean isPrimaryLeftOrientation(double rate) {
