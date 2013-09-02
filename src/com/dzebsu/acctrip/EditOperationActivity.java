@@ -82,11 +82,11 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 
 	private Date date;// need save
 
-	private IdBox placeId = new IdBox(-1);// need save
+	private final IdBox placeId = new IdBox(-1);// need save
 
-	private IdBox categoryId = new IdBox(-1);// need save
+	private final IdBox categoryId = new IdBox(-1);// need save
 
-	private IdBox currencyId = new IdBox(-1);// need save
+	private final IdBox currencyId = new IdBox(-1);// need save
 
 	private String mode = null;
 
@@ -104,7 +104,9 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PICKED_DATE)) return;
+		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PICKED_DATE)) {
+			return;
+		}
 		date = DateFormatter.convertLongToDate(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_DATE));
 		((Button) findViewById(R.id.op_edit_date_btn)).setText(DateFormatter.formatDate(this, date));
 		placeId.setId(savedInstanceState.getLong(SAVE_STATE_KEY_PICKED_PLACE_ID));
@@ -312,7 +314,9 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 	public void onSaveOperation() {
 		LocalizedTripMoney.hideSoftKeyboard(this);
 		value = ((EditText) this.findViewById(R.id.op_edit_value_et)).getText().toString();
-		if (checkForNotEnteredData()) return;
+		if (checkForNotEnteredData()) {
+			return;
+		}
 		desc = ((EditText) this.findViewById(R.id.op_edit_desc_et)).getText().toString();
 		opType = ((Spinner) this.findViewById(R.id.op_edit_type_spinner)).getSelectedItem().toString()
 				.equals("Expense") ? OperationType.EXPENSE : OperationType.INCOME;
@@ -431,7 +435,8 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 		if (args.getBoolean("requestNew", false)) {
 			createDictionaryEntry((Class<? extends BaseDictionary>) args.getSerializable("clazz"));
 		} else {
-			changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
+			changeBtnValue(args.getString(DictionaryElementPickerFragment.ARG_CODE), args
+					.getLong(DictionaryElementPickerFragment.ARG_ID));
 		}
 	}
 

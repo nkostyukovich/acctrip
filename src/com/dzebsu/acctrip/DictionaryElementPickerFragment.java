@@ -28,6 +28,12 @@ import com.dzebsu.acctrip.models.dictionaries.Currency;
 //must be not stable, in edit operation will crash and make bad code if is
 public class DictionaryElementPickerFragment<T extends BaseDictionary> extends DialogFragment {
 
+	public final static String ARG_ID = "pickedId";
+
+	public final static String ARG_NAME = "name";
+
+	public final static String ARG_CODE = "code";
+
 	private IDictionaryDataSource<T> dataSource;
 
 	public void setDataSource(IDictionaryDataSource<T> dataSource) {
@@ -90,13 +96,12 @@ public class DictionaryElementPickerFragment<T extends BaseDictionary> extends D
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 				Bundle args = new Bundle();
-				args.putLong("pickedId", id);
+				args.putLong(ARG_ID, id);
 				BaseDictionary entry = adapterZ.getItem(pos);
-				String title = entry.getName();
 				if (entry instanceof Currency) {
-					title = ((Currency) entry).getCode();
+					args.putString(ARG_CODE, ((Currency) entry).getCode());
 				}
-				args.putString("picked", title);
+				args.putString(ARG_NAME, entry.getName());
 				try {
 					pickListener.onActionPerformed(args);
 				} catch (java.lang.InstantiationException e) {

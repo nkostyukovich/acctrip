@@ -13,8 +13,8 @@
     <string name="event_edit_lbl_desc">Event Description</string>
     <string name="event_edit_name_hint">Name</string>
     <string name="event_edit_desc_hint">Description</string>
-	<string name="event_edit_prim_curr">Primary Currency: </string>
-	<string name="event_edit_prim_curr_def">no</string>
+	<string name="event_edit_prim_curr">Primary Currency</string>
+	<string name="event_edit_prim_curr_def">.....</string>
     <!--   -->
     <string name="action_settings">Settings</string>        
     

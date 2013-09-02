@@ -4,60 +4,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".EditEventActivity" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="@string/event_edit_lbl_name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"	    
+	    android:background="@drawable/edit_panel_selector">
+    
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"   
+	        android:text="@string/event_edit_lbl_name"
+	        style="@style/EditFieldLabel" />
+	
+	    <EditText
+	        android:id="@+id/editEventName"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        style="@style/EditTextField"	       
+	        android:imeOptions="actionNext|actionDone"
+	        android:inputType="text"
+	        android:maxLines="1"
+	        android:singleLine="true" >
+	
+	        <requestFocus />
+	    </EditText>
+    </LinearLayout>
+    
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"	    
+	    android:background="@drawable/edit_panel_selector">
 
-    <EditText
-        android:id="@+id/editEventName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/event_edit_name_hint"
-        android:imeOptions="actionNext|actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/event_edit_lbl_desc"
+	        style="@style/EditFieldLabel" />
+	
+	    <EditText
+	        android:id="@+id/editEventDesc"
+	        android:layout_width="fill_parent"
+	        android:layout_height="100dp"
+	        android:gravity="top"
+	        android:imeOptions="normal|actionDone"
+	        android:inputType="textMultiLine"
+	        style="@style/EditTextField" />	       
+    </LinearLayout>
 
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:gravity="center_vertical"
-        android:text="@string/event_edit_lbl_desc"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editEventDesc"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="@string/event_edit_desc_hint"
-        android:imeOptions="normal|actionDone"
-        android:inputType="textMultiLine"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/editEventPrimaryCurrency"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:text="@string/event_edit_prim_curr" />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"	    
+	    android:background="@drawable/edit_panel_selector">
+	
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/event_edit_prim_curr"
+	        style="@style/EditFieldLabel" />
+	    
+	    <Button
+	        android:id="@+id/editEventPrimaryCurrency"
+	        style="@style/EditDictionaryButton"
+	        android:layout_width="fill_parent"	        
+	        android:layout_height="wrap_content"	        
+	        android:text="@string/event_edit_prim_curr" />
+	</LinearLayout>
 
     <include layout="@layout/common_save_cancel_btns" />
 

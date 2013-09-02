@@ -48,7 +48,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private Button primaryCurrencyBtn;
 
-	private String currencyCode;
+	private String currencyTitle;
 
 	private Event editEvent;
 
@@ -68,30 +68,31 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID)) return;
+		if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID)) {
+			return;
+		}
 		primaryCurrencyId = savedInstanceState.getLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID);
-		currencyCode = savedInstanceState.getString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE);
-		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + currencyCode);
+		currencyTitle = savedInstanceState.getString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE);
+		primaryCurrencyBtn.setText(currencyTitle);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putLong(SAVE_STATE_KEY_PRIMARY_CURRENCY_ID, primaryCurrencyId);
-		outState.putString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE, currencyCode);
+		outState.putString(SAVE_STATE_KEY_PRIMARY_CURRENCY_CODE, currencyTitle);
 	}
 
 	private void setActivityForNew() {
 		((EditText) this.findViewById(R.id.editEventName)).setText(getIntent().getStringExtra(INTENT_KEY_EVENT_NAME));
-		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr)
-				+ getString(R.string.event_edit_prim_curr_def));
+		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr_def));
 	}
 
 	private void setActivityForEdit() {
 		editEvent = new EventDataSource(this).getEventById(getIntent().getLongExtra(INTENT_KEY_EDIT_ID, -1));
 		primaryCurrencyId = editEvent.getPrimaryCurrency().getId();
 		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + editEvent.getPrimaryCurrency().getCode());
-		currencyCode = editEvent.getPrimaryCurrency().getCode();
+		currencyTitle = editEvent.getPrimaryCurrency().getName();
 		((EditText) this.findViewById(R.id.editEventDesc)).setText(editEvent.getDesc());
 		((EditText) this.findViewById(R.id.editEventName)).setText(editEvent.getName());
 	}
@@ -167,7 +168,9 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 	public void onSaveEvent() {
 		LocalizedTripMoney.hideSoftKeyboard(this);
 		final String name = ((EditText) this.findViewById(R.id.editEventName)).getText().toString();
-		if (checkForNotEnteredData(name)) return;
+		if (checkForNotEnteredData(name)) {
+			return;
+		}
 		final String desc = ((EditText) this.findViewById(R.id.editEventDesc)).getText().toString();
 		Intent inthere = getIntent();
 		if (!inthere.hasExtra(INTENT_KEY_EDIT_ID)) {
@@ -251,8 +254,8 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 
 	private void changeBtnValue(String title, long id) {
 		primaryCurrencyId = id;
-		currencyCode = title;
-		primaryCurrencyBtn.setText(getString(R.string.event_edit_prim_curr) + title);
+		currencyTitle = title;
+		primaryCurrencyBtn.setText(title);
 	}
 
 	private void createDictionaryEntryHelper() throws InstantiationException, IllegalAccessException {
@@ -264,7 +267,7 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 			@Override
 			public void onSuccess(Currency entity) {
 				long id = new CurrencyDataSource(EditEventActivity.this).insertEntity(entity);
-				changeBtnValue(entity instanceof Currency ? ((Currency) entity).getCode() : entity.getName(), id);
+				changeBtnValue(entity.getName(), id);
 			}
 		});
 	}
@@ -278,8 +281,8 @@ public class EditEventActivity extends FragmentActivity implements IDictionaryFr
 		if (args.getBoolean("requestNew", false)) {
 			createDictionaryEntry();
 		} else {
-			changeBtnValue(args.getString("picked"), args.getLong("pickedId"));
+			changeBtnValue(args.getString(DictionaryElementPickerFragment.ARG_NAME), args
+					.getLong(DictionaryElementPickerFragment.ARG_ID));
 		}
 	}
-
 }
