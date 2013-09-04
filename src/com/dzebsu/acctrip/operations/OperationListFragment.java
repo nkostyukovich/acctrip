@@ -5,7 +5,6 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -71,7 +70,7 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 	// TODO FIXME set color from style but not this
 	private final static int SELECTION_COLOR = android.R.color.holo_blue_dark;
 
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+	private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -98,11 +97,11 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 				case R.id.dic_edit:
-					onOperationEdit(adapterZ.getItemId(selectedItem - 1));
+					onOperationEdit(adapterZ.getItemId(selectedItem));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				case R.id.dic_del:
-					onDeleteOperation(adapterZ.getItemId(selectedItem - 1));
+					onDeleteOperation(adapterZ.getItemId(selectedItem));
 					mode.finish(); // Action picked, so close the CAB
 					return true;
 				default:
@@ -130,8 +129,9 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState != null && savedInstanceState.containsKey(LIST_STATE))
+		if (savedInstanceState != null && savedInstanceState.containsKey(LIST_STATE)) {
 			mListState = savedInstanceState.getParcelable(LIST_STATE);
+		}
 	}
 
 	protected void onDeleteOperation(final long itemId) {
@@ -140,6 +140,7 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
+					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
 						OperationDataSource opdata = new OperationDataSource(OperationListFragment.this.getActivity());
 						Operation op = opdata.getOperationById(itemId);
@@ -185,7 +186,6 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 		event = new EventDataSource(this.getActivity()).getEventById(eventId);
 
 		ListView listView = (ListView) getView().findViewById(R.id.op_list);
-		listView.addHeaderView(createListHeader());
 		fillOperationList();
 
 		listView.setLongClickable(true);
@@ -228,7 +228,7 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 			}
 		});
 
-		((Button) getView().findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
+		((ImageButton) getView().findViewById(R.id.op_new_btn)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -236,9 +236,10 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 			}
 		});
 		createFilter();
-		if (intent.containsKey("toast"))
+		if (intent.containsKey("toast")) {
 			Toast.makeText(getActivity().getApplicationContext(), intent.getInt("toast", R.string.not_message),
 					Toast.LENGTH_SHORT).show();
+		}
 		if (intent.containsKey(INTENT_KEY_NEW_CURRENCY_APPEARED)) {
 			newCurrencyAppeared();
 		}
@@ -254,7 +255,9 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (mActionMode != null) mActionMode.finish();
+				if (mActionMode != null) {
+					mActionMode.finish();
+				}
 
 			}
 		});
@@ -348,13 +351,15 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 				android.R.drawable.ic_dialog_alert).setPositiveButton(R.string.dic_del,
 				new DialogInterface.OnClickListener() {
 
+					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
 						EventDataSource dataSource = new EventDataSource(OperationListFragment.this.getActivity());
 						dataSource.delete(event.getId());
 						if (PreferenceManager.getDefaultSharedPreferences(OperationListFragment.this.getActivity())
-								.getLong(SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId())
+								.getLong(SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1) == event.getId()) {
 							PreferenceManager.getDefaultSharedPreferences(OperationListFragment.this.getActivity())
 									.edit().putLong(SettingsFragment.CURRENT_EVENT_MODE_EVENT_ID, -1).commit();
+						}
 						new CurrencyPairDataSource(OperationListFragment.this.getActivity()).deleteByEventId(event
 								.getId());
 
@@ -369,7 +374,9 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 	public void onResume() {
 		super.onResume();
 		fillOperationList();
-		if (mListState != null) ((ListView) getView().findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
+		if (mListState != null) {
+			((ListView) getView().findViewById(R.id.op_list)).onRestoreInstanceState(mListState);
+		}
 		mListState = null;
 	}
 
@@ -408,11 +415,6 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 				((SearchView) getView().findViewById(R.id.uni_op_searchView)).getQuery());
 	}
 
-	public View createListHeader() {
-		LayoutInflater inflater = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(com.dzebsu.acctrip.R.layout.operation_list_header, null, false);
-	}
-
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -423,12 +425,13 @@ public class OperationListFragment extends Fragment implements TabUpdateListener
 	public void onPause() {
 
 		super.onPause();
-		if (mActionMode != null) mActionMode.finish();
+		if (mActionMode != null) {
+			mActionMode.finish();
+		}
 	}
 
 	public void fillEventInfo() {
 		((TextView) getView().findViewById(R.id.op_list_header_name)).setText(event.getName());
-		((TextView) getView().findViewById(R.id.op_list_header_desc)).setText(event.getDesc());
 		((TextView) getView().findViewById(R.id.op_list_header_sum)).setText(CurrencyUtils
 				.formatDecimalNotImportant(CurrencyUtils.getTotalEventExpenses(operations, currencyPairs))
 				+ " " + event.getPrimaryCurrency().getCode());

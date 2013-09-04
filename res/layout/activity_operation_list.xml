@@ -2,9 +2,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/activity">
 
-    <ListView
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:background="@drawable/event_desc_header_selector">	    
+	
+	    <TextView
+	        android:id="@+id/op_list_header_name"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_toLeftOf="@+id/op_list_header_sum"
+	        style="@style/OpHeaderEventName"
+	        />
+	
+	    <TextView
+	        android:id="@+id/op_list_header_sum"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	 	    android:text="@string/op_all_expenses"
+	 		style="@style/OpHeaderEventSum"
+	        />
+	</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:descendantFocusability="beforeDescendants"
+		android:focusableInTouchMode="true" 
+        >
+        
+        
+		<SearchView
+    		android:id="@+id/uni_op_searchView"
+	        android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:queryHint="@string/search_hint"
+            android:iconifiedByDefault="false">
+            
+            
+        </SearchView>
+
+        <ImageButton
+	        android:id="@+id/op_new_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_add"
+			android:contentDescription="@string/add_operation"						
+            />       
+
+    	</LinearLayout>
+		    	
+	<ListView
         android:id="@+id/op_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" 

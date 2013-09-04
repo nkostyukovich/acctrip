@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dzebsu.acctrip.activity.DictionaryActivity;
@@ -151,8 +150,6 @@ public class EditOperationActivity extends FragmentActivity implements DatePicke
 			}
 		});
 
-		((TextView) findViewById(R.id.op_edit_event_name)).setText(new EventDataSource(this)
-				.getEventById(event.getId()).getName());
 		Operation defOP;
 		if (mode.equals("new")) {
 			defOP = new OperationDataSource(this).getLastOperationByEventId(event.getId());

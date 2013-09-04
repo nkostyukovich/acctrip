@@ -141,25 +141,21 @@ public class OperationsActivity extends FragmentActivity implements TabUpdater, 
 		if (tabs != null) {
 			tabs.remove(tab);
 		}
-
 	}
 
 	@Override
 	public void positiveButtonDialog(Bundle args) {
 		updateTabs();
-
 	}
 
 	@Override
 	public void negativeButtonDialog(Bundle args) {
 		updateTabs();
-
 	}
 
 	@Override
 	public void anotherDialogAction(Bundle args) {
 		updateTabs();
-
 	}
 
 }

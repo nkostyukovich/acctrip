@@ -7,6 +7,7 @@
     <string name="cancel">Cancel</string>    
     <string name="search_hint">Search</string>
     <!-- Event List -->
+    <string name="add_event">Add Event</string>
     <!-- Event Edit -->
     <string name="event_edit_title">Edit Event</string>
     <string name="event_edit_lbl_name">Event Name</string>    
@@ -15,21 +16,31 @@
     <string name="event_edit_desc_hint">Description</string>
 	<string name="event_edit_prim_curr">Primary Currency</string>
 	<string name="event_edit_prim_curr_def">.....</string>
-    <!--   -->
-    <string name="action_settings">Settings</string>        
+    <!-- Operation Edit  -->
+	<string name="op_edit_lbl_sum">Sum</string>
+	<string-array name="op_edit_types">
+        <item>Expense</item>
+        <item>Income</item>
+    </string-array>
+	<string name="op_edit_lbl_desc">Description</string>
+	<string name="op_edit_lbl_category">Category</string>
+	<string name="op_edit_lbl_place">Place</string>
+	<string name="op_edit_lbl_datetime">Date and Time</string>
+	<!-- Operation List -->
+	<string name="add_operation">Add operation</string>
+	<!--  -->
+	<string name="action_settings">Settings</string>        
     
     <string name="title_activity_edit_operation">Edit operation</string>
     <string name="id_text_view">Id: </string>     
     <string name="open_dictionaries">Dictionaries</string>    
     <string name="add_element">New Entry</string>
-    <string name="add_event">New Event</string>
     <string name="erase_all_data">Clear all data</string>    
     <string name="op_name_tv">Name</string>
     <string name="op_desc_tv">Description</string>
 	<string name="filter_hint_start_typing">Start typing here.. </string>
 	<string name="op_all_expenses">Expenses: </string>	
 	<string name="op_id_tv">Id: </string>
-	<string name="op_new_btn">New operation</string>
 	<string name="op_del_menu">Delete event</string>
 	<string name="enter_name">Please enter name.</string>
 	<string name="event_deleted">Event deleted.</string>
@@ -57,11 +68,6 @@
 	<string name="sorry_confirm_del">We are sorry.</string>
 	<string name="warning">Warning</string>
 	<string name="okay">Okay</string>
-	<string name="op_edit_value_tv">Value</string>
-	<string-array name="operation_type_spinner">
-        <item>Expense</item>
-        <item>Income</item>
-    </string-array>
    	<string name="enter_value">Please, enter value.</string>
    	<string name="pick_place">Please, pick place.</string>
    	<string name="pick_category">Please, pick category.</string>

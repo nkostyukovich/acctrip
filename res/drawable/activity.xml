@@ -6,4 +6,7 @@
         android:top="1px"
         android:bottom="1px"
         />
+    <gradient 
+        android:startColor="#FFFFFF"
+        android:endColor="#FFFFFF"/>
 </shape>

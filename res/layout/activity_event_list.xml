@@ -15,8 +15,7 @@
         >
         
         
-	<!-- do not focus on search view on startup -->
-	<SearchView
+		<SearchView
             android:id="@+id/event_SearchView"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -27,7 +26,7 @@
             
         </SearchView>
 
-            <ImageButton
+        <ImageButton
             android:id="@+id/dic_new"
             android:contentDescription="@string/add_event"
             android:layout_width="wrap_content"

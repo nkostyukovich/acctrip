@@ -4,7 +4,13 @@
         <item name="android:fontFamily">Tahoma</item>
     </style>
 
-	<style name="EditFieldLabel">
+	<style name="EventHeaderNameLabel">
+    	<item name="android:textSize">20sp</item>
+		<item name="android:textColor">#67316A</item>
+		<item name="android:fontFamily">Tahoma</item>
+		<item name="android:paddingBottom">10px</item>
+	</style>
+    <style name="EditFieldLabel">
     	<item name="android:textSize">20sp</item>
 		<item name="android:textColor">#1A5163</item>
 		<item name="android:fontFamily">Tahoma</item>
